@@ -1,0 +1,43 @@
+<h1 style="text-align: center; margin-bottom: 30px;">Painel do Administrador</h1>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+  <%# Botão Blocos %>
+  <%= link_to blocks_path, style: "text-decoration: none; color: #333;" do %>
+    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
+      <div style="font-size: 30px;">🏢</div>
+      <strong>Prédios/Blocos</strong>
+    </div>
+  <% end %>
+
+  <%# Botão Unidades %>
+  <%= link_to units_path, style: "text-decoration: none; color: #333;" do %>
+    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
+      <div style="font-size: 30px;">🔑</div>
+      <strong>Unidades</strong>
+    </div>
+  <% end %>
+
+  <%# Botão Vincular Morador %>
+  <%= link_to user_units_path, style: "text-decoration: none; color: #333;" do %>
+    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
+      <div style="font-size: 30px;">👥</div>
+      <strong>Vincular Morador</strong>
+    </div>
+  <% end %>
+
+  <%# Botão SLA %>
+  <%= link_to ticket_types_path, style: "text-decoration: none; color: #333;" do %>
+    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
+      <div style="font-size: 30px;">⏱️</div>
+      <strong>Configurar SLA</strong>
+    </div>
+  <% end %>
+
+  <%# Botão Chamados %>
+  <%= link_to tickets_path, style: "text-decoration: none; color: #333;" do %>
+    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
+      <div style="font-size: 30px;">🛠️</div>
+      <strong>Todos os Chamados</strong>
+    </div>
+  <% end %>
+</div>

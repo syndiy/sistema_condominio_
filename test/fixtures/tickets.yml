@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  description: MyText
+  user: one
+  unit: one
+  ticket_type: one
+  status: one
+  finished_at: 2026-04-10 17:42:46
+
+two:
+  title: MyString
+  description: MyText
+  user: two
+  unit: two
+  ticket_type: two
+  status: two
+  finished_at: 2026-04-10 17:42:46

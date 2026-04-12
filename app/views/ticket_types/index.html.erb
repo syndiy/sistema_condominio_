@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<% content_for :title, "Ticket types" %>
+
+<h1>Ticket types</h1>
+
+<div id="ticket_types">
+  <% @ticket_types.each do |ticket_type| %>
+    <%= render ticket_type %>
+    <p>
+      <%= link_to "Show this ticket type", ticket_type %>
+    </p>
+  <% end %>
+</div>
+
+<%= link_to "New ticket type", new_ticket_type_path %>

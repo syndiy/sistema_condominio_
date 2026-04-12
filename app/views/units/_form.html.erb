@@ -1,0 +1,22 @@
+<%= form_with(model: unit) do |form| %>
+  <div>
+    <%= form.label :number, "Número da Unidade" %>
+    <%= form.text_field :number %>
+  </div>
+
+  <div>
+    <%= form.label :floor, "Andar" %>
+    <%= form.number_field :floor %>
+  </div>
+
+  <div>
+    <%= form.label :block_id, "Bloco" %>
+    <%= form.collection_select :block_id, Block.all, :id, :identification %>
+  </div>
+
+  <div>
+    <%= form.submit "Salvar Unidade" %>
+  </div>
+
+  <%= button_to "Destroy this unit", @unit, method: :delete %>
+<% end %>

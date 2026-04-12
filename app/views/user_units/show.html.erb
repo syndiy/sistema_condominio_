@@ -1,0 +1,16 @@
+<p style="color: green"><%= notice %></p>
+
+<h1>Detalhes do Vínculo</h1>
+
+<div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: #f9f9f9;">
+  <%= render @user_unit %>
+</div>
+
+<div style="margin-top: 20px;">
+  <%= link_to "Editar este vínculo", edit_user_unit_path(@user_unit) %> |
+  <%= link_to "Voltar para a lista", user_units_path %>
+
+  <div style="margin-top: 10px;">
+    <%= button_to "Remover este vínculo", @user_unit, method: :delete, data: { confirm: "Tem certeza?" }, style: "color: red;" %>
+  </div>
+</div>

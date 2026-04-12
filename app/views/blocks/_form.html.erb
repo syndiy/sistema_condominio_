@@ -1,0 +1,32 @@
+<%= form_with(model: block) do |form| %>
+  <% if block.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(block.errors.count, "error") %> prohibited this block from being saved:</h2>
+
+      <ul>
+        <% block.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :identification, style: "display: block" %>
+    <%= form.text_field :identification%>
+  </div>
+
+  <div>
+  <%= form.label :floors_count, "Quantidade de Andares" %>
+  <%= form.number_field :floors_count, min: 1, max: 99, style: "display: block;" %>
+</div>
+
+<div style="margin-top: 10px;">
+  <%= form.label :apartments_per_floor, "Apartamentos por Andar" %>
+  <%= form.number_field :apartments_per_floor, min: 1, max: 99, style: "display: block;" %>
+</div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

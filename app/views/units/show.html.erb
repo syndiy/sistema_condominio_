@@ -1,0 +1,19 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @unit %>
+
+<div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
+  <h1>Detalhes da Unidade</h1>
+  
+  <p><strong>Número da Unidade:</strong> <%= @unit.number %></p>
+<p><strong>Andar:</strong> <%= @unit.floor %></p>
+<p><strong>Pertence ao Bloco:</strong> <%= @unit.block.identification %></p>
+<p><strong>Configuração do Bloco:</strong> 
+  Este prédio tem <%= @unit.block.floors_count %> andares e 
+  <%= @unit.block.apartments_per_floor %> apartamentos por andar.
+</p>
+  <hr>
+  <%= link_to "Editar esta unidade", edit_unit_path(@unit) %> |
+  <%= link_to "Voltar para a lista", units_path %>
+  <%= button_to "Destroy this unit", @unit, method: :delete %>
+</div>

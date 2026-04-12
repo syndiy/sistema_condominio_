@@ -1,0 +1,35 @@
+<h1>Blocos do Condomínio</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Identificação</th>
+      <th>Qtd. Andares</th>
+      <th>Apartamentos por Andar</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @blocks.each do |bloco_individual| %>
+      <tr>
+        <td><%= bloco_individual.identification %></td>
+        <%# Aqui estava o erro: troquei floors por floors_count %>
+        <td><%= bloco_individual.floors_count %></td>
+        <%# E aqui troquei units_per_floor por apartments_per_floor %>
+        <td><%= bloco_individual.apartments_per_floor %></td>
+        <td>
+          <%= link_to "Ver", bloco_individual %> |
+          <%= link_to "Editar", edit_block_path(bloco_individual) %> |
+          <%= button_to "Excluir", bloco_individual, 
+              method: :delete, 
+              data: { confirm: "Deseja excluir o #{bloco_individual.identification}?" },
+              style: "color: red; display: inline;" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to "Novo Bloco", new_block_path %>

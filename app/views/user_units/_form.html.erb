@@ -1,0 +1,13 @@
+<%= form_with(model: user_unit) do |form| %>
+  <div>
+    <%= form.label :user_id, "Selecione o Morador" %>
+    <%= form.collection_select :user_id, User.where(role: :morador), :id, :email %>
+  </div>
+
+  <div>
+    <%= form.label :unit_id, "Selecione a Unidade (Ex: A101)" %>
+    <%= form.collection_select :unit_id, Unit.all, :id, :number %>
+  </div>
+
+  <%= form.submit "Vincular Morador" %>
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Moradores e suas Unidades</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>E-mail do Morador</th>
+      <th>Unidade (Apartamento)</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @user_units.each do |vinculo| %>
+      <tr>
+        <td><%= vinculo.user.email %></td>
+        <td><%= vinculo.unit.number %></td>
+        <td>
+          <%= link_to "Ver", vinculo %> |
+          <%= button_to "Remover Vínculo", vinculo, method: :delete, data: { confirm: "Tem certeza?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to "Vincular Novo Morador", new_user_unit_path %>

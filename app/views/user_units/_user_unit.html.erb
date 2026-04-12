@@ -1,0 +1,21 @@
+<div id="<%= dom_id user_unit %>" style="line-height: 1.8;">
+  <p>
+    <strong>Morador:</strong> 
+    <%= user_unit.user.email %>
+  </p>
+
+  <p>
+    <strong>Cargo:</strong> 
+    <%= user_unit.user.role.capitalize %>
+  </p>
+
+  <p>
+    <strong>Unidade (Apartamento):</strong> 
+    <%= user_unit.unit.number %>
+  </p>
+
+  <p>
+    <strong>Bloco/Prédio:</strong> 
+    <%= user_unit.unit.block.identification %>
+  </p>
+</div>

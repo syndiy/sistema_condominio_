@@ -1,0 +1,42 @@
+<h1 style="margin-bottom: 20px;">Unidades (Apartamentos)</h1>
+
+<table style="width: 100%; border-collapse: collapse;">
+  <thead>
+    <tr style="background-color: #333; color: white; text-align: left;">
+      <th style="padding: 12px;">Etiqueta</th>
+      <th style="padding: 12px;">Bloco (Nome Real)</th>
+      <th style="padding: 12px;">Andar</th>
+      <th style="padding: 12px;">Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% 
+      current_block = nil
+      row_color = "#f2f2f2" # Cor inicial
+    %>
+    
+    <% @units.each do |unit| %>
+      <% 
+        # Se o bloco mudar, alternamos a cor entre cinza claro e branco
+        if unit.block_id != current_block
+          current_block = unit.block_id
+          row_color = (row_color == "#ffffff" ? "#f2f2f2" : "#ffffff")
+        end 
+      %>
+
+      <tr style="background-color: <%= row_color %>; border-bottom: 1px solid #ddd;">
+        <td style="padding: 10px;"><strong><%= unit.number %></strong></td>
+        <td style="padding: 10px;"><%= unit.block.identification %></td>
+        <td style="padding: 10px;"><%= unit.floor %></td>
+        <td style="padding: 10px;">
+          <%= link_to "Ver Detalhes", unit %> |
+          <%= link_to "Editar", edit_unit_path(unit) %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<div style="margin-top: 20px;">
+  <%= link_to "Nova Unidade", new_unit_path, style: "background: #28a745; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;" %>
+</div>

@@ -1,0 +1,35 @@
+<h1>Meus Chamados de Manutenção</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Assunto</th>
+      <th>Apartamento</th>
+      <% if current_user.admin? || current_user.colaborador? %>
+        <th>Morador (Solicitante)</th> <% end %>
+      <th>Situação</th>
+      <th>Ações</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tickets.each do |ticket| %>
+      <tr>
+        <td><%= ticket.title %></td>
+        <td><%= ticket.unit.number %></td>
+        <% if current_user.admin? || current_user.colaborador? %>
+          <td><%= ticket.user.email %></td>
+        <% end %>
+        <td><%= ticket.status.name %></td>
+        <td>
+          <%= link_to "Ver Detalhes", ticket %>
+          <% if current_user.admin? || current_user.colaborador? %>
+            | <%= link_to "Mudar Status", edit_ticket_path(ticket) %> <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'Abrir Novo Chamado', new_ticket_path %>

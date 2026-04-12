@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Sistema Condominio" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  </head>
+
+  <body style="font-family: sans-serif; padding: 20px;">
+    <% if user_signed_in? %>
+      <nav style="background: #f4f4f4; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
+        <% if current_user.admin? %>
+          <%# O Admin volta para a tela de botões grandes %>
+          <%= link_to "🏠 Início", admin_dashboard_path %> |
+          <%= link_to "Prédios", blocks_path %> |
+          <%= link_to "Unidades", units_path %> |
+          <%= link_to "Vincular", user_units_path %> |
+          <%= link_to "SLA", ticket_types_path %> |
+          <%= link_to "Chamados", tickets_path %>
+        <% elsif current_user.colaborador? %>
+          <%= link_to "Início", tickets_path %> |
+          <%= link_to "Gerenciar Chamados", tickets_path %>
+        <% else %>
+          <%= link_to "Início", tickets_path %> |
+          <%= link_to "Meus Chamados", tickets_path %> |
+          <%= link_to "Novo Chamado", new_ticket_path %>
+        <% end %>
+
+        <span style="float: right;">
+          <strong><%= current_user.email %></strong> (<%= current_user.role %>)
+          <%= button_to "Sair", destroy_user_session_path, method: :delete, style: "display: inline; margin-left: 10px;" %>
+        </span>
+      </nav>
+    <% end %>
+
+    <% if notice %><p style="color: green;"><%= notice %></p><% end %>
+    <% if alert %><p style="color: red;"><%= alert %></p><% end %>
+
+    <%= yield %>
+  </body>
+</html>

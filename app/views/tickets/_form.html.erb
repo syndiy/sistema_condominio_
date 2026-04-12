@@ -1,0 +1,55 @@
+<%= form_with(model: ticket) do |form| %>
+  <% if ticket.errors.any? %>
+    <div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 20px;">
+      <h2><%= pluralize(ticket.errors.count, "erro") %> impediram este chamado de ser salvo:</h2>
+      <ul>
+        <% ticket.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%# O Usuário é preenchido automaticamente nos bastidores %>
+  <%= form.hidden_field :user_id, value: ticket.user_id || current_user.id %>
+
+  <div>
+    <%= form.label :title, "Assunto (O que está acontecendo?)" %>
+    <%# Bloqueado para equipe: Colaboradores não mudam o assunto do morador [cite: 9, 12] %>
+    <%= form.text_field :title, placeholder: "Ex: Vazamento na pia", disabled: !current_user.morador?, style: "display: block; width: 100%;" %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= form.label :description, "Descrição detalhada" %>
+    <%= form.text_area :description, disabled: !current_user.morador?, style: "display: block; width: 100%;", rows: 5 %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= form.label :unit_id, "Em qual apartamento?" %>
+    <%# Moradores só veem as unidades que o Admin vinculou a eles [cite: 8, 9] %>
+    <%= form.collection_select :unit_id, current_user.units, :id, :number, { prompt: "Escolha a unidade" }, { disabled: !current_user.morador? } %>
+  </div>
+
+  <div style="margin-top: 10px;">
+    <%= form.label :ticket_type_id, "Tipo de Problema" %>
+    <%= form.collection_select :ticket_type_id, TicketType.all, :id, :title, { prompt: "Selecione o tipo" }, { disabled: !current_user.morador? } %>
+  </div>
+
+  <hr style="margin: 20px 0;">
+
+  <%# GESTÃO DE STATUS: Exclusivo para Admin e Colaborador [cite: 11, 15] %>
+  <% if current_user.admin? || current_user.colaborador? %>
+    <div style="background: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: 5px;">
+      <h3 style="margin-top: 0;">Painel de Gestão</h3>
+      <%= form.label :status_id, "Atualizar Situação do Chamado" %>
+      <%= form.collection_select :status_id, Status.all, :id, :name, { prompt: "Mudar status..." }, { style: "display: block; width: 100%; padding: 5px;" } %>
+      <p style="font-size: 0.8em; color: #856404;">* A data de finalização será gravada automaticamente ao concluir[cite: 15].</p>
+    </div>
+  <% end %>
+
+  <div style="margin-top: 20px;">
+    <%= form.submit ticket.new_record? ? "Enviar Chamado de Manutenção" : "Salvar Alterações", 
+        style: "background: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; font-weight: bold;" %>
+    <%= link_to "Voltar", tickets_path, style: "margin-left: 15px; color: #666;" %>
+  </div>
+<% end %>
