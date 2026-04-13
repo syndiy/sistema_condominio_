@@ -6,6 +6,13 @@
 
 <br>
 
+<%# Fora do form! No arquivo edit.html.erb ou show.html.erb %>
+<div style="margin-top: 20px;">
+  <%= button_to "Excluir esta unidade", @unit, method: :delete, 
+      form: { data: { confirm: "Tem certeza? Isso pode afetar moradores!" } },
+      style: "color: red; background: none; border: 1px solid red; cursor: pointer;" %>
+</div>
+
 <div>
   <%= link_to "Show this unit", @unit %> |
   <%= link_to "Back to units", units_path %>

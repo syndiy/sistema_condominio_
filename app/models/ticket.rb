@@ -4,6 +4,7 @@ class Ticket < ApplicationRecord
   belongs_to :ticket_type
   belongs_to :status
   has_many :comments, dependent: :destroy
+  has_many_attached :attachments
 
   # Validações básicas
   validates :title, :description, presence: true

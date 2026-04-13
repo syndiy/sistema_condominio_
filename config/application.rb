@@ -16,12 +16,10 @@ module SistemaCondominio
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+  # Define o fuso horário para Brasília (que é o mesmo de Mossoró)
+    config.time_zone = 'Brasilia'
+    
+    # Isso garante que o banco de dados também entenda o horário local
+    config.active_record.default_timezone = :local
   end
 end

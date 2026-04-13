@@ -12,8 +12,33 @@
   Este prédio tem <%= @unit.block.floors_count %> andares e 
   <%= @unit.block.apartments_per_floor %> apartamentos por andar.
 </p>
-  <hr>
-  <%= link_to "Editar esta unidade", edit_unit_path(@unit) %> |
-  <%= link_to "Voltar para a lista", units_path %>
-  <%= button_to "Destroy this unit", @unit, method: :delete %>
+
+<p>
+  <strong>Moradores Vinculados:</strong>
+  <% if @unit.users.any? %>
+    <ul>
+      <% @unit.users.each do |user| %>
+        <li><%= user.name %> (<%= user.email %>)</li>
+      <% end %>
+    </ul>
+  <% else %>
+    <span style="color: #dc3545;">Nenhum morador vinculado ainda.</span>
+  <% end %>
+</p>
+
+ <hr>
+  <div style="display: flex; gap: 10px; align-items: center;">
+    <%= link_to "Editar esta unidade", edit_unit_path(@unit), style: "text-decoration: none; color: #007bff;" %> |
+    <%= link_to "Voltar para a lista", units_path, style: "text-decoration: none; color: #6c757d;" %>
+    
+    <%# O botão de destruir com o aviso dinâmico que você pediu %>
+    <%= button_to "Excluir Unidade", @unit, method: :delete, 
+        form: { data: { turbo_confirm: @unit.users.any? ? 
+          "⚠️ ATENÇÃO: Esta unidade possui moradores vinculados! Se você continuar, os vínculos de moradia serão apagados. Tem certeza que deseja excluir?" : 
+          "Tem certeza que deseja excluir esta unidade?" } },
+        style: "background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;" %>
+  </div>
+</div>
+
+
 </div>

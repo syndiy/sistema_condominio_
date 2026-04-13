@@ -1,10 +1,40 @@
-<p style="color: green"><%= notice %></p>
+<div class="page-shell">
+  <div class="card-base" style="max-width: 500px; margin: 0 auto;">
+    
+  <div class="page-shell">
+  <% if flash[:alert] %>
+    <div style="background: #fff1f2; color: #991b1b; padding: 20px; border-radius: 12px; border: 1px solid #fecdd3; margin-bottom: 25px; max-width: 500px; margin-left: auto; margin-right: auto;">
+      <div style="display: flex; gap: 12px;">
+        <span style="font-size: 20px;">🚫</span>
+        <div>
+          <strong style="display: block; margin-bottom: 5px; font-size: 15px;">Bloqueio de Segurança</strong>
+          <p style="margin: 0; font-size: 14px; line-height: 1.5;"><%= flash[:alert] %></p>
+        </div>
+      </div>
+    </div>
+  <% end %>
 
-<%= render @block %>
+  <div >
+    <%# ... seu código de detalhes do bloco ... %>
 
-<div>
-  <%= link_to "Edit this block", edit_block_path(@block) %> |
-  <%= link_to "Back to blocks", blocks_path %>
+  <div>
+    <%# ... resto do código do card que já fizemos ... %>
+    <h1 style="margin-top: 0;">🏢 Detalhes do Bloco</h1>
+    
+    <div style="margin-bottom: 20px; padding: 15px; background: #f9fafb; border-radius: 8px;">
+      <p style="margin: 5px 0;"><strong>Identificação:</strong> <%= @block.identification %></p>
+      <p style="margin: 5px 0;"><strong>Quantidade de Andares:</strong> <%= @block.floors_count %></p>
+      <p style="margin: 5px 0;"><strong>Apartamentos por Andar:</strong> <%= @block.apartments_per_floor %></p>
+    </div>
 
-  <%= button_to "Destroy this block", @block, method: :delete %>
+    <div style="display: flex; gap: 15px; align-items: center;">
+      <%= link_to "Editar", edit_block_path(@block), class: "btn btn-primary" %>
+      <%= link_to "Voltar", blocks_path, class: "btn", style: "background: #f3f4f6; color: #4b5563;" %>
+      
+    <%= button_to "Excluir Bloco", @block, 
+    method: :delete, 
+    data: { turbo_confirm: "Deseja realmente solicitar a exclusão deste bloco?" }, 
+    class: "btn-danger-text" %>
+    </div>
+  </div>
 </div>

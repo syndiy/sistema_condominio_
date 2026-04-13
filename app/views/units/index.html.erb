@@ -1,23 +1,29 @@
 <h1 style="margin-bottom: 20px;">Unidades (Apartamentos)</h1>
 
+<%= form_with url: units_path, method: :get, local: true, style: "margin-bottom: 20px;" do |f| %>
+  <%= f.text_field :query, placeholder: "Buscar por número ou bloco...", 
+      value: params[:query], style: "padding: 8px; width: 300px;" %>
+  <%= f.submit "Pesquisar", style: "padding: 8px 15px; cursor: pointer;" %>
+  <%= link_to "Limpar", units_path if params[:query].present? %>
+<% end %>
+
 <table style="width: 100%; border-collapse: collapse;">
   <thead>
     <tr style="background-color: #333; color: white; text-align: left;">
       <th style="padding: 12px;">Etiqueta</th>
-      <th style="padding: 12px;">Bloco (Nome Real)</th>
+      <th style="padding: 12px;">Bloco</th>
       <th style="padding: 12px;">Andar</th>
-      <th style="padding: 12px;">Ações</th>
+      <th style="padding: 12px;">Morador</th> <th style="padding: 12px;">Ações</th>
     </tr>
   </thead>
   <tbody>
     <% 
       current_block = nil
-      row_color = "#f2f2f2" # Cor inicial
+      row_color = "#f2f2f2" 
     %>
     
     <% @units.each do |unit| %>
       <% 
-        # Se o bloco mudar, alternamos a cor entre cinza claro e branco
         if unit.block_id != current_block
           current_block = unit.block_id
           row_color = (row_color == "#ffffff" ? "#f2f2f2" : "#ffffff")
@@ -28,8 +34,17 @@
         <td style="padding: 10px;"><strong><%= unit.number %></strong></td>
         <td style="padding: 10px;"><%= unit.block.identification %></td>
         <td style="padding: 10px;"><%= unit.floor %></td>
+        
+  <td style="padding: 10px;">
+  <% if unit.users.any? %>
+    <%# Exibe o e-mail dos moradores vinculados %>
+    <%= unit.users.map(&:email).join(", ") %>
+  <% else %>
+    <span style="color: #999;">--</span>
+  <% end %>
+</td>
         <td style="padding: 10px;">
-          <%= link_to "Ver Detalhes", unit %> |
+          <%= link_to "Ver", unit %> |
           <%= link_to "Editar", edit_unit_path(unit) %>
         </td>
       </tr>

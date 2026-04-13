@@ -1,11 +1,35 @@
-<% content_for :title, "New block" %>
+<div class="page-shell">
+  <%# Card centralizado seguindo o padrão do sistema %>
+  <div class="card-base" style="max-width: 500px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+      <h1 style="margin: 0; font-size: 1.5rem; color: #1e293b;">🆕 Novo Bloco</h1>
+      <%= link_to "Cancelar", blocks_path, class: "link-muted", style: "font-size: 13px; text-decoration: none; color: #64748b; font-weight: 600;" %>
+    </div>
 
-<h1>New block</h1>
+    <%= form_with(model: @block) do |f| %>
+      
+      <div class="form-group" style="margin-bottom: 20px;">
+        <%= f.label :identification, "Identificação do Bloco", class: "form-label", style: "display: block; font-weight: 700; color: #475569; margin-bottom: 8px; font-size: 14px;" %>
+        <%= f.text_field :identification, class: "form-input", placeholder: "Ex: Bloco C", style: "width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;" %>
+      </div>
 
-<%= render "form", block: @block %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+        <div class="form-group">
+          <%= f.label :floors_count, "Andares", class: "form-label", style: "display: block; font-weight: 700; color: #475569; margin-bottom: 8px; font-size: 14px;" %>
+          <%= f.number_field :floors_count, class: "form-input", placeholder: "0", style: "width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;" %>
+        </div>
 
-<br>
+        <div class="form-group">
+          <%= f.label :apartments_per_floor, "Apartamentos por Andar", class: "form-label", style: "display: block; font-weight: 700; color: #475569; margin-bottom: 8px; font-size: 14px;" %>
+          <%= f.number_field :apartments_per_floor, class: "form-input", placeholder: "0", style: "width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1;" %>
+        </div>
+      </div>
 
-<div>
-  <%= link_to "Back to blocks", blocks_path %>
+      <div style="padding-top: 10px;">
+        <%= f.submit "Cadastrar Bloco", class: "btn btn-primary", style: "width: 100%; padding: 14px; font-size: 15px;" %>
+      </div>
+
+    <% end %>
+  </div>
 </div>

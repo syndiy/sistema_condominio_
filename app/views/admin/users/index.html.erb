@@ -1,0 +1,43 @@
+<div class="page-shell">
+  <%# Card único que centraliza tudo no meio da tela %>
+  <div class="card-base" style="max-width: 900px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+      <h1 style="margin: 0; font-size: 1.6rem; color: #1e293b;">👥 Gestão de Usuários</h1>
+      <%= link_to '➕ Novo Usuário', new_admin_user_path, class: "btn btn-primary" %>
+    </div>
+
+    <table class="table-chique">
+      <thead>
+        <tr>
+          <th>NOME</th>
+          <th>E-MAIL</th>
+          <th style="text-align: center;">CARGO</th>
+          <th style="text-align: right;">AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td style="font-weight: 700; color: #1e293b;"><%= user.name.present? ? user.name : "Sem nome" %></td>
+            <td style="color: #64748b;"><%= user.email %></td>
+            <td style="text-align: center;">
+              <span class="badge badge-<%= user.role %>"><%= user.role %></span>
+            </td>
+            <td style="text-align: right;">
+              <div style="display: inline-flex; gap: 10px; align-items: center;">
+                <%= link_to 'Editar', edit_admin_user_path(user), class: "btn-edit" %>
+                
+                <%= button_to 'Excluir', admin_user_path(user), 
+                    method: :delete, 
+                    form: { data: { turbo_confirm: "Deseja remover #{user.email}?" }, style: "display: inline;" }, 
+                    class: "btn-delete-table" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+  </div>
+</div>

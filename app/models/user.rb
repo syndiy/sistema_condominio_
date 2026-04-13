@@ -1,12 +1,11 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  # ESSA LINHA É OBRIGATÓRIA para o login funcionar:
+  devise :database_authenticatable, :recoverable, :rememberable, :validatable
+  
+  # O resto das suas configurações:
+  enum :role, { morador: 0, colaborador: 1, admin: 2 }
 
-  # A forma correta no Rails atual:
-  enum :role, { admin: 0, colaborador: 1, morador: 2 }, default: :morador
-
-  has_many :user_units
+  has_many :user_units, dependent: :destroy
   has_many :units, through: :user_units
-  has_many :tickets
-  has_many :comments
+  has_many :tickets, dependent: :destroy
 end

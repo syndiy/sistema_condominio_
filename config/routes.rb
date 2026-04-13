@@ -5,7 +5,21 @@ Rails.application.routes.draw do
   devise_for :users
 
   # 2. Página Inicial (Cai direto nos Blocos ao logar)
-  root "blocks#index"
+# No config/routes.rb
+
+# Criamos um redirecionamento dinâmico no root
+root to: redirect { |params, request|
+  user = request.env['warden'].user
+  if user&.admin?
+    '/blocks'
+  else
+    '/tickets'
+  end
+}
+
+  namespace :admin do
+  resources :users
+end
 
   # 3. Recursos do Sistema (Telas de cadastro e listagem)
   resources :blocks do

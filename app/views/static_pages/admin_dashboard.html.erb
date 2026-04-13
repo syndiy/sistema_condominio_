@@ -1,43 +1,62 @@
-<h1 style="text-align: center; margin-bottom: 30px;">Painel do Administrador</h1>
+<div style="background-color: #f3f4f6; min-height: 100vh; padding: 50px 20px; font-family: 'Inter', system-ui, sans-serif;">
+  
+  <%# Container Centralizado do Dashboard %>
+  <div style="max-width: 1000px; margin: 0 auto;">
 
-<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
-  <%# Botão Blocos %>
-  <%= link_to blocks_path, style: "text-decoration: none; color: #333;" do %>
-    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
-      <div style="font-size: 30px;">🏢</div>
-      <strong>Prédios/Blocos</strong>
+    <%# Card de Boas-vindas %>
+    <div style="background: white; padding: 40px; border-radius: 16px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1 style="margin: 0; font-size: 2rem; color: #1f2937;">Olá, <%= current_user.email.split('@').first.capitalize %>! 💼</h1>
+        <p style="color: #6b7280; font-size: 1.1rem; margin-top: 8px;">Bem-vinda ao seu Painel de Controle.</p>
+      </div>
+      <div style="font-size: 14px; color: #6b7280; text-align: right;">
+        <div style="font-weight: 700; color: #1f2937;"><%= current_user.email %></div>
+        <div style="text-transform: uppercase;"><%= current_user.role %></div>
+        <%= button_to 'Encerrar Sessão', destroy_user_session_path, method: :delete, style: "background: none; border: none; color: #5b21b6; padding: 0; cursor: pointer; font-weight: 600; margin-top: 10px;" %>
+      </div>
     </div>
-  <% end %>
 
-  <%# Botão Unidades %>
-  <%= link_to units_path, style: "text-decoration: none; color: #333;" do %>
-    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
-      <div style="font-size: 30px;">🔑</div>
-      <strong>Unidades</strong>
-    </div>
-  <% end %>
+    <%# Grid de Ações Rápidas (3 colunas iguais e alinhadas) %>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+      
+      <%# Card 1: Pessoas %>
+      <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 3.5rem; margin-bottom: 15px;">👥</div>
+          <h2 style="font-size: 1.25rem; margin: 0; color: #1f2937;">Moradores</h2>
+          <p style="color: #6b7280; font-size: 0.9rem; margin: 10px 0 20px 0;">Gestão completa da comunidade.</p>
+        </div>
+        <%= link_to 'Gerenciar Pessoas', admin_users_path, style: "background-color: #5b21b6; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; width: 100%; display: block; box-sizing: border-box;" %>
+      </div>
 
-  <%# Botão Vincular Morador %>
-  <%= link_to user_units_path, style: "text-decoration: none; color: #333;" do %>
-    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
-      <div style="font-size: 30px;">👥</div>
-      <strong>Vincular Morador</strong>
-    </div>
-  <% end %>
+      <%# Card 2: Estrutura %>
+      <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 3.5rem; margin-bottom: 15px;">🏢</div>
+          <h2 style="font-size: 1.25rem; margin: 0; color: #1f2937;">Estrutura</h2>
+          <p style="color: #6b7280; font-size: 0.9rem; margin: 10px 0 20px 0;">Blocos e unidades habitacionais.</p>
+        </div>
+        <%= link_to 'Ver Patrimônio', blocks_path, style: "background-color: #5b21b6; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; width: 100%; display: block; box-sizing: border-box;" %>
+      </div>
 
-  <%# Botão SLA %>
-  <%= link_to ticket_types_path, style: "text-decoration: none; color: #333;" do %>
-    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
-      <div style="font-size: 30px;">⏱️</div>
-      <strong>Configurar SLA</strong>
-    </div>
-  <% end %>
+      <%# Card 3: Chamados %>
+      <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+        <div>
+          <div style="font-size: 3.5rem; margin-bottom: 15px;">🎫</div>
+          <h2 style="font-size: 1.25rem; margin: 0; color: #1f2937;">Atendimentos</h2>
+          <p style="color: #6b7280; font-size: 0.9rem; margin: 10px 0 20px 0;">Acompanhe as solicitações.</p>
+        </div>
+        <%= link_to 'Central de Chamados', "#", style: "background-color: #5b21b6; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; width: 100%; display: block; box-sizing: border-box;" %>
+      </div>
 
-  <%# Botão Chamados %>
-  <%= link_to tickets_path, style: "text-decoration: none; color: #333;" do %>
-    <div style="width: 180px; padding: 20px; border: 2px solid #ddd; border-radius: 10px; text-align: center; background: #fff;">
-      <div style="font-size: 30px;">🛠️</div>
-      <strong>Todos os Chamados</strong>
     </div>
-  <% end %>
+
+        
+
+    <%# Rodapé do Dashboard %>
+    <div style="text-align: center; margin-top: 50px; color: #9ca3af; font-size: 12px;">
+      CondomínioPro © <%= Time.now.year %> - Sistema de Gestão Integrada
+    </div>
+
+  </div>
 </div>

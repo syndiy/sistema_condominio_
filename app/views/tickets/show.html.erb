@@ -1,5 +1,4 @@
 <div class="ticket-card" style="border: 1px solid #ccc; padding: 20px; border-radius: 10px; background: #fff;">
-  <%# Note o @ antes de ticket %>
   <h2><%= @ticket.title %></h2>
   <hr>
   
@@ -9,24 +8,45 @@
     </span>
   </p>
 
-  <p><strong>Local: <%= @ticket.unit.number %> (<%= @ticket.unit.block.identification %>)</p>
-  
+  <p><strong>Local:</strong> <%= @ticket.unit.number %> (<%= @ticket.unit.block.identification %>)</p>
   <p><strong>Tipo de Problema:</strong> <%= @ticket.ticket_type.title %></p>
-  
-  <p><strong>Descrição:</strong><br>
-    <%= @ticket.description %>
-  </p>
+  <p><strong>Descrição:</strong><br><%= @ticket.description %></p>
 
-  <p><strong>Aberto em:</strong> <%= @ticket.created_at.strftime("%d/%m/%Y às %H:%M") %></p>
+  <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
+    <h3 style="border-bottom: 2px solid #ddd; padding-bottom: 10px;">🖼️ Arquivos e Fotos do Problema</h3>
+
+    <% if @ticket.attachments.attached? %>
+      <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
+        <% @ticket.attachments.each do |attachment| %>
+          <div style="text-align: center; border: 1px solid #ccc; padding: 10px; border-radius: 8px; background: white; max-width: 220px;">
+            
+            <% if attachment.variable? %>
+              <%# Tentativa de mostrar a imagem. Se der erro de processamento, ele mostra o link %>
+              <%= image_tag attachment.variant(resize_to_limit: [200, 200]), style: "max-width: 100%; border-radius: 5px;" rescue attachment.filename %>
+            <% else %>
+              <div style="font-size: 50px;">📄</div>
+              <p style="font-size: 0.8em; word-break: break-all;"><%= attachment.filename %></p>
+            <% end %>
+
+            <div style="margin-top: 10px;">
+              <%= link_to "🔍 Abrir Original", url_for(attachment), target: "_blank", style: "color: #007bff; text-decoration: none; font-size: 0.9em;" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% else %>
+      <p style="color: #888; font-style: italic;">Nenhuma foto ou anexo foi enviado para este chamado.</p>
+    <% end %>
+  </div>
+  <p style="margin-top: 20px;"><strong>Aberto em:</strong> <%= @ticket.created_at.strftime("%d/%m/%Y às %H:%M") %></p>
 
   <% if @ticket.finished_at.present? %>
     <p style="color: green;"><strong>Resolvido em:</strong> <%= @ticket.finished_at.strftime("%d/%m/%Y às %H:%M") %></p>
   <% else %>
-   <%# Troquei duration_hours por sla_hours %>
-<p style="color: orange;">
-  <strong>Prazo Estimado:</strong> 
-  <%= (@ticket.created_at + @ticket.ticket_type.sla_hours.hours).strftime("%d/%m/%Y %H:%M") %>
-</p>
+    <p style="color: orange;">
+      <strong>Prazo Estimado:</strong> 
+      <%= (@ticket.created_at + @ticket.ticket_type.sla_hours.hours).strftime("%d/%m/%Y %H:%M") %>
+    </p>
   <% end %>
 </div>
 
@@ -34,28 +54,3 @@
   <%= link_to "Editar Chamado", edit_ticket_path(@ticket) %> |
   <%= link_to "Voltar para Meus Chamados", tickets_path %>
 </div>
-
-<hr>
-<h3>Histórico de Interações</h3>
-
-<div id="comments" style="margin-bottom: 20px;">
-  <% if @ticket.comments.any? %>
-    <% @ticket.comments.each do |comment| %>
-      <div style="background: #f1f1f1; padding: 10px; border-radius: 5px; margin-bottom: 10px;">
-        <strong><%= comment.user.email %></strong> (<%= comment.created_at.strftime("%d/%m %H:%M") %>):
-        <p><%= comment.content %></p>
-      </div>
-    <% end %>
-  <% else %>
-    <p>Nenhuma mensagem ainda.</p>
-  <% end %>
-</div>
-
-<h4>Nova Mensagem</h4>
-<%= form_with(model: [ @ticket, @ticket.comments.build ]) do |f| %>
-  <div>
-  
-    <%= f.text_area :content, placeholder: "Escreva uma atualização...", style: "width: 100%; height: 80px;" %>
-  </div>
-  <%= f.submit "Enviar Mensagem", style: "margin-top: 10px;" %>
-<% end %>

@@ -1,42 +1,44 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Sistema Condominio" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Sistema Condomínio</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
   </head>
+  <body>
 
-  <body style="font-family: sans-serif; padding: 20px;">
-    <% if user_signed_in? %>
-      <nav style="background: #f4f4f4; padding: 10px; border-radius: 5px; margin-bottom: 20px;">
-        <% if current_user.admin? %>
-          <%# O Admin volta para a tela de botões grandes %>
-          <%= link_to "🏠 Início", admin_dashboard_path %> |
-          <%= link_to "Prédios", blocks_path %> |
-          <%= link_to "Unidades", units_path %> |
-          <%= link_to "Vincular", user_units_path %> |
-          <%= link_to "SLA", ticket_types_path %> |
-          <%= link_to "Chamados", tickets_path %>
-        <% elsif current_user.colaborador? %>
-          <%= link_to "Início", tickets_path %> |
-          <%= link_to "Gerenciar Chamados", tickets_path %>
-        <% else %>
-          <%= link_to "Início", tickets_path %> |
-          <%= link_to "Meus Chamados", tickets_path %> |
-          <%= link_to "Novo Chamado", new_ticket_path %>
-        <% end %>
+    <%# LÓGICA: SÓ MOSTRA A NAVBAR SE NÃO FOR A HOME PAGE %>
+    <%# LÓGICA: SÓ MOSTRA A NAVBAR SE NÃO FOR A HOME PAGE %>
+<% unless current_page?(root_path) || current_page?(admin_dashboard_path) %>
+  <nav style="background: white; border-bottom: 1px solid #e5e7eb; padding: 15px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
+      
+      <div style="display: flex; gap: 20px; align-items: center;">
+        <span style="font-weight: 800; color: #5b21b6; font-size: 1.2rem;">🏢 CondomínioPro</span>
+        
+        <div style="display: flex; gap: 12px; border-left: 1px solid #e5e7eb; padding-left: 20px; flex-wrap: wrap;">
+          <%= link_to 'Início', admin_dashboard_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
+          <%= link_to 'Usuários', admin_users_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
+          <%= link_to 'Blocos', blocks_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
+          <%= link_to 'Unidades', units_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
+          <%= link_to 'Vincular', user_units_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
+          <%= link_to 'Chamados', tickets_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
+          <%= link_to 'Tipos/SLA', ticket_types_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
+        </div>
+      </div>
 
-        <span style="float: right;">
-          <strong><%= current_user.email %></strong> (<%= current_user.role %>)
-          <%= button_to "Sair", destroy_user_session_path, method: :delete, style: "display: inline; margin-left: 10px;" %>
-        </span>
-      </nav>
-    <% end %>
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <div style="text-align: right;">
+          <div style="font-weight: 700; font-size: 14px;"><%= current_user.email %></div>
+          <div style="font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;"><%= current_user.role %></div>
+        </div>
+        <%= button_to 'Sair', destroy_user_session_path, method: :delete, style: "background: #f3f4f6; border: 1px solid #d1d5db; padding: 6px 12px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #4b5563; font-size: 13px;" %>
+      </div>
 
-    <% if notice %><p style="color: green;"><%= notice %></p><% end %>
-    <% if alert %><p style="color: red;"><%= alert %></p><% end %>
+    </div>
+  </nav>
+<% end %>
 
     <%= yield %>
   </body>

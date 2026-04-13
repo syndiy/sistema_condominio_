@@ -41,24 +41,36 @@ end
     end
   end
 
-  def destroy
-    if @block.units.any?
-      redirect_to blocks_path, alert: "Ação negada: Este bloco possui #{@block.units.count} unidades cadastradas. Remova as unidades primeiro."
-    else
-      @block.destroy
-      redirect_to blocks_path, notice: "Bloco removido com sucesso."
-    end
-  end
+ # app/controllers/blocks_controller.rb
 
+def destroy
+  @block = Block.find(params[:id])
+  
+  # Contamos quantos moradores e chamados existem através das unidades do bloco
+  units_ids = @block.units.pluck(:id)
+  moradores_count = UserUnit.where(unit_id: units_ids).count
+  chamados_count = Ticket.where(unit_id: units_ids).count
+
+  if moradores_count > 0 || chamados_count > 0
+    msg = "Não é possível excluir este bloco pois existem #{moradores_count} moradores e #{chamados_count} chamados vinculados. "
+    msg += "Para deletar um bloco com dados ativos, entre em contato com a assistência técnica para evitar a perda de informações."
+    
+    redirect_to block_path(@block), alert: msg
+  else
+    @block.destroy
+    redirect_to blocks_path, notice: "Bloco excluído com sucesso!"
+  end
+end
   private
 
   # Novo método de autorização exigido pelo PDF para gestão de estrutura
-  def authorize_admin!
-    unless current_user.admin?
-      redirect_to root_path, alert: "Acesso negado: Apenas administradores gerenciam a estrutura física."
-    end
+def authorize_admin!
+  # Se não for admin, em vez de redirecionar para o mesmo lugar (gerando o loop),
+  # redirecione para a área de chamados, que é onde o técnico trabalha!
+  unless current_user&.admin? # ou o método que você usa para checar admin
+    redirect_to tickets_path
   end
-
+end
   def set_block
     @block = Block.find(params.expect(:id))
   end

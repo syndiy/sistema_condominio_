@@ -25,19 +25,22 @@ end
   end
 
   # POST /tickets or /tickets.json
-  def create
-    @ticket = Ticket.new(ticket_params)
+def create
+  @ticket = Ticket.new(ticket_params)
+  
+  # AQUI ESTÁ O PULO DO GATO:
+  # Vinculamos o chamado diretamente ao usuário logado (o morador)
+  @ticket.user = current_user 
 
-    respond_to do |format|
-      if @ticket.save
-        format.html { redirect_to @ticket, notice: "Ticket was successfully created." }
-        format.json { render :show, status: :created, location: @ticket }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @ticket.errors, status: :unprocessable_entity }
-      end
-    end
+  # Se for um morador abrindo, garantimos que comece como 'Aberto' (ou o ID do status inicial)
+  @ticket.status = Status.find_by(name: "Aberto") if @ticket.status.nil?
+
+  if @ticket.save
+    redirect_to @ticket, notice: "Chamado aberto com sucesso! Agora é só aguardar o técnico."
+  else
+    render :new, status: :unprocessable_entity
   end
+end
 
   # PATCH/PUT /tickets/1 or /tickets/1.json
   def update
@@ -69,7 +72,9 @@ end
     end
 
     # Only allow a list of trusted parameters through.
-    def ticket_params
-      params.expect(ticket: [ :title, :description, :user_id, :unit_id, :ticket_type_id, :status_id, :finished_at ])
-    end
+   def ticket_params
+  # Note o 'attachments: []' no final. 
+  # Ele tem que ser o ÚLTIMO da lista e estar com esses colchetes.
+  params.require(:ticket).permit(:title, :description, :unit_id, :ticket_type_id, :status_id, attachments: [])
+end
 end

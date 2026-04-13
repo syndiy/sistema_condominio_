@@ -1,0 +1,31 @@
+<div class="page-shell">
+  <div class="card-base" style="max-width: 500px; margin: 0 auto;">
+    
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px;">
+      <span style="font-size: 1.5rem;">✏️</span>
+      <h1 style="margin: 0; font-size: 1.5rem; color: #1e293b;">Editar Usuário</h1>
+    </div>
+
+    <%= form_with(model: [:admin, @user]) do |f| %>
+      <div class="form-group" style="margin-bottom: 15px;">
+        <%= f.label :name, "Nome Completo", class: "form-label", style: "font-weight: 700; color: #475569;" %>
+        <%= f.text_field :name, class: "form-input", placeholder: "Ex: Eduarda Keila Silva" %>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 15px;">
+        <%= f.label :email, "E-mail", class: "form-label", style: "font-weight: 700; color: #475569;" %>
+        <%= f.email_field :email, class: "form-input" %>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 25px;">
+        <%= f.label :role, "Cargo (Etiqueta)", class: "form-label", style: "font-weight: 700; color: #475569;" %>
+        <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, class: "form-input" %>
+      </div>
+
+      <div style="display: flex; gap: 15px; align-items: center;">
+        <%= f.submit "Salvar Alterações", class: "btn btn-primary", style: "flex: 1;" %>
+        <%= link_to "Cancelar", admin_users_path, style: "text-decoration: none; color: #64748b; font-weight: 600; font-size: 14px;" %>
+      </div>
+    <% end %>
+  </div>
+</div>

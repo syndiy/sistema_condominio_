@@ -1,35 +1,37 @@
-<h1>Blocos do Condomínio</h1>
+<div class="page-shell">
+  <%# Defini um max-width de 800px para a tabela não "esparramar" %>
+  <div class="card-base" style="max-width: 850px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h1 style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">🏘️ Blocos</h1>
+      <%= link_to '➕ Novo Bloco', new_block_path, class: "btn btn-primary", style: "font-size: 13px; padding: 8px 16px;" %>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Identificação</th>
-      <th>Qtd. Andares</th>
-      <th>Apartamentos por Andar</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
+    <table class="table-chique">
+      <thead>
+        <tr>
+          <th style="width: 40%;">IDENTIFICAÇÃO</th>
+          <th style="text-align: center;">ANDARES</th>
+          <th style="text-align: center;">APTS/ANDAR</th>
+          <th style="text-align: right;">AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @blocks.each do |block| %>
+          <tr>
+            <td><strong><%= block.identification %></strong></td>
+            <td style="text-align: center;"><%= block.floors_count %></td>
+            <td style="text-align: center;"><%= block.apartments_per_floor %></td>
+            <td style="text-align: right;">
+              <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <%= link_to 'Ver', block, style: "text-decoration: none; color: #6b7280; font-weight: 600; font-size: 13px;" %>
+                <%= link_to 'Editar', edit_block_path(block), style: "text-decoration: none; color: var(--primary); font-weight: 600; font-size: 13px;" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-  <tbody>
-    <% @blocks.each do |bloco_individual| %>
-      <tr>
-        <td><%= bloco_individual.identification %></td>
-        <%# Aqui estava o erro: troquei floors por floors_count %>
-        <td><%= bloco_individual.floors_count %></td>
-        <%# E aqui troquei units_per_floor por apartments_per_floor %>
-        <td><%= bloco_individual.apartments_per_floor %></td>
-        <td>
-          <%= link_to "Ver", bloco_individual %> |
-          <%= link_to "Editar", edit_block_path(bloco_individual) %> |
-          <%= button_to "Excluir", bloco_individual, 
-              method: :delete, 
-              data: { confirm: "Deseja excluir o #{bloco_individual.identification}?" },
-              style: "color: red; display: inline;" %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-<%= link_to "Novo Bloco", new_block_path %>
+  </div>
+</div>

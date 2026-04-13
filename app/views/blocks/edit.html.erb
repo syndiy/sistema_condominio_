@@ -1,12 +1,27 @@
-<% content_for :title, "Editing block" %>
+<div class="page-shell">
+  <div class="card-base" style="max-width: 500px; margin: 0 auto;">
+    <h1 style="margin-top: 0;">✏️ Editar Bloco</h1>
 
-<h1>Editing block</h1>
+    <%= form_with(model: @block) do |f| %>
+      <div style="margin-bottom: 15px;">
+        <%= f.label :identification, "Identificação do Bloco", class: "form-label", style: "font-weight: 700;" %>
+        <%= f.text_field :identification, class: "form-input", placeholder: "Ex: Bloco C" %>
+      </div>
 
-<%= render "form", block: @block %>
+      <div style="margin-bottom: 15px;">
+        <%= f.label :floors_count, "Quantidade de Andares", class: "form-label", style: "font-weight: 700;" %>
+        <%= f.number_field :floors_count, class: "form-input" %>
+      </div>
 
-<br>
+      <div style="margin-bottom: 25px;">
+        <%= f.label :apartments_per_floor, "Apartamentos por Andar", class: "form-label", style: "font-weight: 700;" %>
+        <%= f.number_field :apartments_per_floor, class: "form-input" %>
+      </div>
 
-<div>
-  <%= link_to "Show this block", @block %> |
-  <%= link_to "Back to blocks", blocks_path %>
+      <div style="display: flex; gap: 10px;">
+        <%= f.submit "Atualizar Bloco", class: "btn btn-primary" %>
+        <%= link_to "Cancelar", blocks_path, class: "btn", style: "background: #f3f4f6; color: #4b5563;" %>
+      </div>
+    <% end %>
+  </div>
 </div>
