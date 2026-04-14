@@ -1,16 +1,29 @@
-<p style="color: green"><%= notice %></p>
+<div class="page-shell">
+  <div class="card-base" style="max-width: 600px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+      <h1 style="margin: 0; font-size: 1.5rem;">🛠️ Status dos Chamados</h1>
+      <%= link_to "➕ Novo Status", new_status_path, class: "btn btn-primary" %>
+    </div>
 
-<% content_for :title, "Statuses" %>
-
-<h1>Statuses</h1>
-
-<div id="statuses">
-  <% @statuses.each do |status| %>
-    <%= render status %>
-    <p>
-      <%= link_to "Show this status", status %>
-    </p>
-  <% end %>
+    <table class="table-chique">
+      <thead>
+        <tr>
+          <th>NOME DO STATUS</th>
+          <th style="text-align: right;">AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @statuses.each do |status| %>
+          <tr>
+            <td style="font-weight: 700; color: #1e293b;">
+              <%= status.name.upcase %>
+            </td>
+            <td style="text-align: right;">
+              <%= button_to "Excluir", status, method: :delete, class: "btn-danger-text", data: { turbo_confirm: "Remover este status?" } %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<%= link_to "New status", new_status_path %>

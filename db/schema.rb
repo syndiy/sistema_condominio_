@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_12_194346) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_13_232330) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -60,6 +60,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_12_194346) do
     t.index ["user_id"], name: "index_comments_on_user_id"
   end
 
+  create_table "responsabilidades", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "ticket_type_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["ticket_type_id"], name: "index_responsabilidades_on_ticket_type_id"
+    t.index ["user_id"], name: "index_responsabilidades_on_user_id"
+  end
+
   create_table "statuses", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
@@ -78,6 +87,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_12_194346) do
     t.text "description"
     t.datetime "finished_at"
     t.bigint "status_id", null: false
+    t.text "tech_notes"
     t.bigint "ticket_type_id", null: false
     t.string "title"
     t.bigint "unit_id", null: false
@@ -125,6 +135,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_12_194346) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "comments", "tickets"
   add_foreign_key "comments", "users"
+  add_foreign_key "responsabilidades", "ticket_types"
+  add_foreign_key "responsabilidades", "users"
   add_foreign_key "tickets", "statuses"
   add_foreign_key "tickets", "ticket_types"
   add_foreign_key "tickets", "units"

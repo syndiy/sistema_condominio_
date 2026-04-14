@@ -8,16 +8,16 @@ class CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
-      # Redireciona de volta para a tela do chamado
-      redirect_to ticket_path(@ticket), notice: "Mensagem enviada!"
+      redirect_to @ticket, notice: "Comentário enviado com sucesso!"
     else
-      redirect_to ticket_path(@ticket), alert: "Não foi possível enviar a mensagem."
+      redirect_to @ticket, alert: "Não foi possível enviar o comentário."
     end
   end
 
   private
 
   def comment_params
-    params.require(:comment).permit(:content)
+    # Permitindo o conteúdo e a lista de mídias (fotos/vídeos)
+    params.require(:comment).permit(:content, medias: [])
   end
 end

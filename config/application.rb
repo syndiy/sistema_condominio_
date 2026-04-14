@@ -21,5 +21,7 @@ module SistemaCondominio
     
     # Isso garante que o banco de dados também entenda o horário local
     config.active_record.default_timezone = :local
+
+   config.active_storage.replace_on_assign_to_many = false
   end
 end

@@ -1,59 +1,94 @@
 <%= form_with(model: ticket, multipart: true) do |form| %>
   <% if ticket.errors.any? %>
     <div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 20px;">
-      <h2><%= pluralize(ticket.errors.count, "erro") %> impediram este chamado de ser salvo:</h2>
-      <ul>
-        <% ticket.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+      <h2><%= pluralize(ticket.errors.count, "erro") %> impediram este chamado:</h2>
+      <ul><% ticket.errors.each do |error| %><li><%= error.full_message %></li><% end %></ul>
     </div>
   <% end %>
 
-  <%# O Usuário é preenchido automaticamente nos bastidores %>
-  
+  <%# 1. SELEÇÃO DO MORADOR (Apenas Admin) %>
+  <% if current_user.admin? %>
+    <div style="background: #f0f9ff; padding: 15px; border: 1px solid #bae6fd; margin-bottom: 15px; border-radius: 8px;">
+      <%= form.label :user_id, "👤 Dono do Chamado (Para registro retroativo)" %>
+      <%= form.collection_select :user_id, User.where(role: :morador), :id, :email, { prompt: "Selecione o morador..." }, { style: "display: block; width: 100%;" } %>
+    </div>
+  <% end %>
 
+  <%# 2. ASSUNTO E DESCRIÇÃO %>
+  <%# Usamos readonly em vez de disabled para os dados serem enviados e não sumirem %>
   <div>
-    <%= form.label :title, "Assunto (O que está acontecendo?)" %>
-    <%= form.text_field :title, placeholder: "Ex: Vazamento na pia", disabled: !current_user.morador?, style: "display: block; width: 100%;" %>
+    <%= form.label :title, "Assunto" %>
+    <%= form.text_field :title, placeholder: "Ex: Vazamento", 
+        readonly: !current_user.morador? && !current_user.admin?, 
+        style: "display: block; width: 100%; background: #{(!current_user.morador? && !current_user.admin?) ? '#f1f5f9' : 'white'};" %>
   </div>
 
   <div style="margin-top: 10px;">
     <%= form.label :description, "Descrição detalhada" %>
-    <%= form.text_area :description, disabled: !current_user.morador?, style: "display: block; width: 100%;", rows: 5 %>
+    <%= form.text_area :description, 
+        readonly: !current_user.morador? && !current_user.admin?, 
+        style: "display: block; width: 100%; background: #{(!current_user.morador? && !current_user.admin?) ? '#f1f5f9' : 'white'};", rows: 4 %>
   </div>
 
-  <%# CORRIGIDO: Agora usa 'form' em vez de 'f' e só aparece/habilita para o morador %>
-  <div style="margin-top: 15px; margin-bottom: 15px;">
-    <%= form.label :attachments, "Anexos (Fotos do problema)" %><br>
-    <%= form.file_field :attachments, multiple: true, disabled: !current_user.morador?, style: "padding: 10px; border: 1px solid #ccc; width: 100%;" %>
-  </div>
-
-  <div style="margin-top: 10px;">
-    <%= form.label :unit_id, "Em qual apartamento?" %>
-    <%= form.collection_select :unit_id, current_user.units, :id, :number, { prompt: "Escolha a unidade" }, { disabled: !current_user.morador? } %>
-  </div>
-
-  <div style="margin-top: 10px;">
-    <%= form.label :ticket_type_id, "Tipo de Problema" %>
-    <%= form.collection_select :ticket_type_id, TicketType.all, :id, :title, { prompt: "Selecione o tipo" }, { disabled: !current_user.morador? } %>
-  </div>
-
-  <hr style="margin: 20px 0;">
-
-  <%# GESTÃO DE STATUS: Exclusivo para Admin e Colaborador %>
-  <% if current_user.admin? || current_user.colaborador? %>
-    <div style="background: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: 5px;">
-      <h3 style="margin-top: 0;">Painel de Gestão</h3>
-      <%= form.label :status_id, "Atualizar Situação do Chamado" %>
-      <%= form.collection_select :status_id, Status.all, :id, :name, { prompt: "Mudar status..." }, { style: "display: block; width: 100%; padding: 5px;" } %>
-      <p style="font-size: 0.8em; color: #856404;">* A data de finalização será gravada automaticamente ao concluir.</p>
+  <%# 3. ANEXOS INICIAIS %>
+  <%# Aqui, se não for morador/admin, a gente apenas esconde o campo para não dar erro de envio %>
+  <% if current_user.morador? || current_user.admin? %>
+    <div style="margin-top: 15px;">
+      <%= form.label :attachments, "Fotos do Problema" %><br>
+      <%= form.file_field :attachments, multiple: true %>
     </div>
   <% end %>
 
-  <div style="margin-top: 20px;">
-    <%= form.submit ticket.new_record? ? "Enviar Chamado de Manutenção" : "Salvar Alterações", 
-        style: "background: #28a745; color: white; padding: 10px 20px; border: none; cursor: pointer; font-weight: bold;" %>
-    <%= link_to "Voltar", tickets_path, style: "margin-left: 15px; color: #666;" %>
+  <%# 4. UNIDADE %>
+  <div style="margin-top: 10px;">
+    <%= form.label :unit_id, "Unidade/Apartamento" %>
+    <% units_list = current_user.admin? ? Unit.all : (current_user.units || []) %>
+    <% if current_user.morador? || current_user.admin? %>
+      <%= form.collection_select :unit_id, units_list, :id, :number, { prompt: "Selecione a unidade" }, { style: "display: block; width: 100%;" } %>
+    <% else %>
+      <%# Para o Colaborador, mostramos apenas o texto e mantemos o ID escondido para não perder a info %>
+      <div style="padding: 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px;">
+        <%= ticket.unit&.number %>
+      </div>
+      <%= form.hidden_field :unit_id %>
+    <% end %>
+  </div>
+
+  <%# 5. TIPO DE CHAMADO %>
+  <div style="margin-top: 10px;">
+    <%= form.label :ticket_type_id, "Tipo de Problema" %>
+    <% if current_user.morador? || current_user.admin? %>
+      <%= form.collection_select :ticket_type_id, TicketType.all, :id, :title, { prompt: "Selecione o tipo" }, { style: "display: block; width: 100%;" } %>
+    <% else %>
+      <div style="padding: 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px;">
+        <%= ticket.ticket_type&.title %>
+      </div>
+      <%= form.hidden_field :ticket_type_id %>
+    <% end %>
+  </div>
+
+  <%# 6. PAINEL DE GESTÃO (ADMIN E COLABORADOR) %>
+  <% if current_user.admin? || current_user.colaborador? %>
+    <div style="background: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: 8px; margin-top: 20px;">
+      <h3 style="margin-top: 0;">🛠️ Painel de Gestão</h3>
+      
+      <%= form.label :tech_notes, "Comentários Técnicos (Parecer)" %>
+      <%= form.text_area :tech_notes, placeholder: "Descreva o que foi feito para resolver...", style: "display: block; width: 100%;", rows: 3 %>
+      
+      <div style="margin-top: 10px;">
+        <%= form.label :resolution_media, "📸 Anexar Prova da Resolução" %><br>
+        <%= form.file_field :resolution_media, multiple: true %>
+      </div>
+
+      <div style="margin-top: 10px;">
+        <%= form.label :status_id, "Alterar Status" %>
+        <%= form.collection_select :status_id, Status.all, :id, :name, { prompt: "Mudar situação..." }, { style: "display: block; width: 100%;" } %>
+      </div>
+    </div>
+  <% end %>
+
+  <div style="margin-top: 25px;">
+    <%= form.submit "Salvar Alterações", style: "background: #5b21b6; color: white; padding: 12px 25px; border: none; cursor: pointer; border-radius: 8px; font-weight: bold;" %>
+    <%= link_to "Cancelar", tickets_path, style: "margin-left: 15px; color: #64748b; text-decoration: none;" %>
   </div>
 <% end %>

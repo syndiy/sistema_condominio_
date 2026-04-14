@@ -1,5 +1,5 @@
 <div class="page-shell">
-  <div class="card-base" style="max-width: 500px; margin: 0 auto;">
+  <div class="card-base" style="max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 12px; background: #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
     
     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px;">
       <span style="font-size: 1.5rem;">✏️</span>
@@ -8,24 +8,58 @@
 
     <%= form_with(model: [:admin, @user]) do |f| %>
       <div class="form-group" style="margin-bottom: 15px;">
-        <%= f.label :name, "Nome Completo", class: "form-label", style: "font-weight: 700; color: #475569;" %>
-        <%= f.text_field :name, class: "form-input", placeholder: "Ex: Eduarda Keila Silva" %>
+        <%= f.label :name, "Nome Completo", class: "form-label", style: "font-weight: 700; color: #475569; display: block;" %>
+        <%= f.text_field :name, class: "form-input", placeholder: "Ex: Eduarda Keila Silva", style: "width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px;" %>
       </div>
 
       <div class="form-group" style="margin-bottom: 15px;">
-        <%= f.label :email, "E-mail", class: "form-label", style: "font-weight: 700; color: #475569;" %>
-        <%= f.email_field :email, class: "form-input" %>
+        <%= f.label :email, "E-mail", class: "form-label", style: "font-weight: 700; color: #475569; display: block;" %>
+        <%= f.email_field :email, class: "form-input", style: "width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px;" %>
       </div>
 
-      <div class="form-group" style="margin-bottom: 25px;">
-        <%= f.label :role, "Cargo (Etiqueta)", class: "form-label", style: "font-weight: 700; color: #475569;" %>
-        <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, class: "form-input" %>
+      <div class="form-group" style="margin-bottom: 20px;">
+        <%= f.label :role, "Cargo (Etiqueta)", class: "form-label", style: "font-weight: 700; color: #475569; display: block;" %>
+        <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, id: "role-select", class: "form-input", style: "width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px;" %>
+      </div>
+
+      <%# SEÇÃO DE RESPONSABILIDADES - Escondida por padrão %>
+      <div id="responsabilidades-section" style="margin-top: 20px; margin-bottom: 30px; padding: 15px; border: 1px solid #ddd; border-radius: 8px; background: #f9fafb; display: none;">
+        <h3 style="font-size: 14px; color: #5b21b6; margin-top: 0;">🛠️ Responsabilidades (Categorias)</h3>
+        <p style="font-size: 12px; color: #666;">Quais tipos de chamado este usuário pode atender?</p>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+          <%= f.collection_check_boxes :ticket_type_ids, TicketType.all, :id, :title do |b| %>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <%= b.check_box %>
+              <%= b.label style: "font-size: 13px; cursor: pointer; color: #475569;" %>
+            </div>
+          <% end %>
+        </div>
       </div>
 
       <div style="display: flex; gap: 15px; align-items: center;">
-        <%= f.submit "Salvar Alterações", class: "btn btn-primary", style: "flex: 1;" %>
+        <%= f.submit "Salvar Alterações", class: "btn btn-primary", style: "flex: 1; background: #5b21b6; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold;" %>
         <%= link_to "Cancelar", admin_users_path, style: "text-decoration: none; color: #64748b; font-weight: 600; font-size: 14px;" %>
       </div>
     <% end %>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const roleSelect = document.getElementById('role-select');
+    const responsabilidadesSection = document.getElementById('responsabilidades-section');
+
+    function toggleSection() {
+      // Verifica se o cargo selecionado é 'colaborador'
+      if (roleSelect.value === "colaborador") {
+        responsabilidadesSection.style.display = "block";
+      } else {
+        responsabilidadesSection.style.display = "none";
+      }
+    }
+
+    roleSelect.addEventListener("change", toggleSection);
+    toggleSection(); // Roda ao carregar a página
+  });
+</script>

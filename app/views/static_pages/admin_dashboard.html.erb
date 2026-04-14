@@ -16,42 +16,59 @@
       </div>
     </div>
 
-    <%# Grid de Ações Rápidas (3 colunas iguais e alinhadas) %>
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-      
-      <%# Card 1: Pessoas %>
-      <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <div style="font-size: 3.5rem; margin-bottom: 15px;">👥</div>
-          <h2 style="font-size: 1.25rem; margin: 0; color: #1f2937;">Moradores</h2>
-          <p style="color: #6b7280; font-size: 0.9rem; margin: 10px 0 20px 0;">Gestão completa da comunidade.</p>
-        </div>
-        <%= link_to 'Gerenciar Pessoas', admin_users_path, style: "background-color: #5b21b6; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; width: 100%; display: block; box-sizing: border-box;" %>
-      </div>
-
-      <%# Card 2: Estrutura %>
-      <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <div style="font-size: 3.5rem; margin-bottom: 15px;">🏢</div>
-          <h2 style="font-size: 1.25rem; margin: 0; color: #1f2937;">Estrutura</h2>
-          <p style="color: #6b7280; font-size: 0.9rem; margin: 10px 0 20px 0;">Blocos e unidades habitacionais.</p>
-        </div>
-        <%= link_to 'Ver Patrimônio', blocks_path, style: "background-color: #5b21b6; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; width: 100%; display: block; box-sizing: border-box;" %>
-      </div>
-
-      <%# Card 3: Chamados %>
-      <div style="background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-        <div>
-          <div style="font-size: 3.5rem; margin-bottom: 15px;">🎫</div>
-          <h2 style="font-size: 1.25rem; margin: 0; color: #1f2937;">Atendimentos</h2>
-          <p style="color: #6b7280; font-size: 0.9rem; margin: 10px 0 20px 0;">Acompanhe as solicitações.</p>
-        </div>
-        <%= link_to 'Central de Chamados', "#", style: "background-color: #5b21b6; color: white; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: 600; width: 100%; display: block; box-sizing: border-box;" %>
-      </div>
-
+  <%# Grid de 6 cards (3 por linha em telas grandes) %>
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px;">
+    
+    <%# 1. BLOCOS (O que faltava!) %>
+    <div class="card-base" style="text-align: center; padding: 25px; transition: transform 0.2s;">
+      <div style="font-size: 2.5rem; margin-bottom: 15px;">🏢</div>
+      <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #1e293b;">Blocos</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Gerencie os prédios e estruturas do condomínio.</p>
+      <%= link_to "Gerenciar Blocos", blocks_path, class: "btn btn-primary", style: "width: 100%; justify-content: center;" %>
     </div>
 
-        
+    <%# 2. UNIDADES %>
+    <div class="card-base" style="text-align: center; padding: 25px;">
+      <div style="font-size: 2.5rem; margin-bottom: 15px;">🚪</div>
+      <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #1e293b;">Unidades</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Lista geral de todos os apartamentos e salas.</p>
+      <%= link_to "Ver Unidades", units_path, class: "btn btn-primary", style: "width: 100%; justify-content: center;" %>
+    </div>
+
+    <%# 3. VINCULAR %>
+    <div class="card-base" style="text-align: center; padding: 25px;">
+      <div style="font-size: 2.5rem; margin-bottom: 15px;">🔗</div>
+      <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #1e293b;">Vincular</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Associe moradores às suas respectivas unidades.</p>
+      <%= link_to "Realizar Vínculo", user_units_path, class: "btn btn-primary", style: "width: 100%; justify-content: center;" %>
+    </div>
+
+    <%# 4. CHAMADOS %>
+    <div class="card-base" style="text-align: center; padding: 25px;">
+      <div style="font-size: 2.5rem; margin-bottom: 15px;">🎫</div>
+      <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #1e293b;">Chamados</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Acompanhe e resolva as solicitações pendentes.</p>
+      <%= link_to "Abrir Chamados", tickets_path, class: "btn btn-primary", style: "width: 100%; justify-content: center;" %>
+    </div>
+
+    <%# 5. TIPOS / SLA %>
+    <div class="card-base" style="text-align: center; padding: 25px;">
+      <div style="font-size: 2.5rem; margin-bottom: 15px;">⏱️</div>
+      <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #1e293b;">Tipos/SLA</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Defina prazos e categorias de atendimento.</p>
+      <%= link_to "Configurar SLA", ticket_types_path, class: "btn btn-primary", style: "width: 100%; justify-content: center;" %>
+    </div>
+
+    <%# 6. STATUS %>
+    <div class="card-base" style="text-align: center; padding: 25px;">
+      <div style="font-size: 2.5rem; margin-bottom: 15px;">🛠️</div>
+      <h3 style="margin: 0 0 10px 0; font-size: 1.2rem; color: #1e293b;">Status</h3>
+      <p style="font-size: 13px; color: #64748b; margin-bottom: 20px;">Personalize as etapas do fluxo de trabalho.</p>
+      <%= link_to "Editar Status", statuses_path, class: "btn btn-primary", style: "width: 100%; justify-content: center;" %>
+    </div>
+
+  </div>
+</div>  
 
     <%# Rodapé do Dashboard %>
     <div style="text-align: center; margin-top: 50px; color: #9ca3af; font-size: 12px;">

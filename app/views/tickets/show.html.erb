@@ -3,8 +3,8 @@
   <hr>
   
   <p><strong>Status:</strong> 
-    <span style="padding: 5px 10px; border-radius: 5px; background: #e0f0ff; color: #007bff;">
-      <%= @ticket.status.name %>
+    <span style="padding: 5px 10px; border-radius: 5px; background: #e0f0ff; color: #007bff; font-weight: bold;">
+      <%= @ticket.status.name.upcase %>
     </span>
   </p>
 
@@ -19,9 +19,7 @@
       <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
         <% @ticket.attachments.each do |attachment| %>
           <div style="text-align: center; border: 1px solid #ccc; padding: 10px; border-radius: 8px; background: white; max-width: 220px;">
-            
             <% if attachment.variable? %>
-              <%# Tentativa de mostrar a imagem. Se der erro de processamento, ele mostra o link %>
               <%= image_tag attachment.variant(resize_to_limit: [200, 200]), style: "max-width: 100%; border-radius: 5px;" rescue attachment.filename %>
             <% else %>
               <div style="font-size: 50px;">📄</div>
@@ -35,13 +33,14 @@
         <% end %>
       </div>
     <% else %>
-      <p style="color: #888; font-style: italic;">Nenhuma foto ou anexo foi enviado para este chamado.</p>
+      <p style="color: #888; font-style: italic;">Nenhuma foto ou anexo foi enviado.</p>
     <% end %>
   </div>
+
   <p style="margin-top: 20px;"><strong>Aberto em:</strong> <%= @ticket.created_at.strftime("%d/%m/%Y às %H:%M") %></p>
 
   <% if @ticket.finished_at.present? %>
-    <p style="color: green;"><strong>Resolvido em:</strong> <%= @ticket.finished_at.strftime("%d/%m/%Y às %H:%M") %></p>
+    <p style="color: green; font-weight: bold;">✅ Resolvido em: <%= @ticket.finished_at.strftime("%d/%m/%Y às %H:%M") %></p>
   <% else %>
     <p style="color: orange;">
       <strong>Prazo Estimado:</strong> 
@@ -51,6 +50,79 @@
 </div>
 
 <div style="margin-top: 20px;">
-  <%= link_to "Editar Chamado", edit_ticket_path(@ticket) %> |
+  <%= link_to "Editar Chamado", edit_ticket_path(@ticket), class: "btn" %> |
   <%= link_to "Voltar para Meus Chamados", tickets_path %>
 </div>
+
+<hr style="margin: 40px 0;">
+
+<div class="comments-section">
+  <h3 style="color: #1e293b; margin-bottom: 20px;">💬 Histórico e Evolução</h3>
+
+  <%# --- BLOCO DE PARECER TÉCNICO (Aparece quando o Admin/Colaborador preenche o Painel de Gestão) --- %>
+  <% if @ticket.tech_notes.present? %>
+    <div style="padding: 20px; border: 1px solid #ffeeba; background: #fffdf5; border-radius: 10px; margin-bottom: 25px;">
+      <p style="margin: 0; color: #856404; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">
+        ⚠️ Parecer Final / Notas de Manutenção
+      </p>
+      <p style="margin: 15px 0; font-size: 1.1rem; color: #1e293b; line-height: 1.5;"><%= @ticket.tech_notes %></p>
+      
+      <% if @ticket.resolution_media.attached? %>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <% @ticket.resolution_media.each do |media| %>
+            <%= link_to url_for(media), target: "_blank", style: "text-decoration: none;" do %>
+              <div style="padding: 5px 12px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 5px; color: #92400e; font-size: 0.8rem;">
+                🖼️ Ver Prova de Resolução
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# --- LISTA DE COMENTÁRIOS COM ETIQUETAS DE CARGO --- %>
+  <div id="comments-list" style="margin-bottom: 30px;">
+    <% @ticket.comments.each do |comment| %>
+      <div class="card-base" style="padding: 15px; margin-bottom: 12px; background: #f8fafc; border-left: 4px solid #cbd5e1;">
+        <p style="margin: 0; font-size: 0.95rem; color: #334155;">
+          <strong style="color: #1e293b;"><%= comment.user.name %></strong>
+          <%# ETIQUETA DE CARGO %>
+          <span style="font-size: 10px; padding: 2px 8px; border-radius: 10px; background: #e2e8f0; color: #475569; margin-left: 8px; font-weight: 800; text-transform: uppercase;">
+            <%= comment.user.role %>
+          </span>
+        </p>
+        
+        <p style="margin: 8px 0; color: #4b5563;"><%= comment.content %></p>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <small style="color: #94a3b8;"><%= comment.created_at.strftime("%d/%m/%Y %H:%M") %></small>
+          
+          <% if comment.medias.attached? %>
+            <div style="display: flex; gap: 8px;">
+              <% comment.medias.each do |media| %>
+                <%= link_to "📎 Ver Mídia", url_for(media), target: "_blank", style: "font-size: 0.75rem; color: #6366f1; font-weight: 600;" %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+ <%# --- FORMULÁRIO DE COMENTÁRIOS (Liberado para todos) --- %>
+  <div style="background: #f1f5f9; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0;">
+    <h4 style="margin-top: 0; color: #1e293b;">💬 Enviar um Comentário</h4>
+    <%= form_with(model: [ @ticket, Comment.new ], local: true, multipart: true) do |f| %>
+      <%= f.text_area :content, placeholder: "Escreva aqui sua dúvida ou mensagem...", style: "width: 100%; border-radius: 8px; border: 1px solid #cbd5e1; padding: 12px; font-family: inherit;", rows: 3 %>
+      
+      <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <%= f.label :medias, "📸 Enviar Foto/Vídeo", style: "font-size: 0.85rem; font-weight: 600; color: #475569;" %><br>
+          <%= f.file_field :medias, multiple: true, style: "font-size: 0.8rem; margin-top: 5px;" %>
+        </div>
+
+        <%= f.submit "Enviar Mensagem", class: "btn btn-primary", style: "padding: 10px 20px;" %>
+      </div>
+    <% end %>
+  </div>

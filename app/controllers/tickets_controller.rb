@@ -1,17 +1,19 @@
 class TicketsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_ticket, only: %i[ show edit update destroy ]
 
-  # GET /tickets or /tickets.json
-def index
-  if current_user.admin? || current_user.colaborador?
-    @tickets = Ticket.all
-    # Implementando filtro básico exigido pelo PDF 
-    @tickets = @tickets.where(status_id: params[:status_id]) if params[:status_id].present?
-  else
-    @tickets = current_user.tickets # Morador vê apenas os seus [cite: 14]
+  # GET /tickets
+  def index
+    if current_user.admin? || current_user.colaborador?
+      @tickets = Ticket.all
+      # Filtro de status para o Admin/Colaborador
+      @tickets = @tickets.where(status_id: params[:status_id]) if params[:status_id].present?
+    else
+      @tickets = current_user.tickets # Morador vê apenas os seus
+    end
   end
-end
-  # GET /tickets/1 or /tickets/1.json
+
+  # GET /tickets/1
   def show
   end
 
@@ -24,57 +26,69 @@ end
   def edit
   end
 
-  # POST /tickets or /tickets.json
-def create
-  @ticket = Ticket.new(ticket_params)
-  
-  # AQUI ESTÁ O PULO DO GATO:
-  # Vinculamos o chamado diretamente ao usuário logado (o morador)
-  @ticket.user = current_user 
+  # POST /tickets
+  def create
+    @ticket = Ticket.new(ticket_params)
+    
+    # Se o Admin não selecionou um morador (retroativo), o dono é o próprio Admin
+    # Se for morador criando, o dono é o próprio morador
+    @ticket.user = current_user if @ticket.user.nil?
 
-  # Se for um morador abrindo, garantimos que comece como 'Aberto' (ou o ID do status inicial)
-  @ticket.status = Status.find_by(name: "Aberto") if @ticket.status.nil?
+    # Status inicial padrão caso não venha no formulário
+    @ticket.status = Status.find_by(name: "Aberto") if @ticket.status.nil?
 
-  if @ticket.save
-    redirect_to @ticket, notice: "Chamado aberto com sucesso! Agora é só aguardar o técnico."
+    if @ticket.save
+      redirect_to @ticket, notice: "Chamado registrado com sucesso!"
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  # PATCH/PUT /tickets/1
+  def update
+  # Carrega os parâmetros
+  params_to_update = ticket_params.to_h
+
+  # Se o campo veio vazio porque estava 'disabled' no HTML, removemos da atualização
+  # para o Rails não apagar o que já existe no banco.
+  params_to_update.delete_if { |key, value| value.blank? && ["title", "description", "unit_id", "ticket_type_id"].include?(key) }
+
+  if ticket_params[:status_id] == "3"
+    @ticket.finished_at = Time.current
+  end
+
+  if @ticket.update(params_to_update)
+    redirect_to @ticket, notice: "Chamado atualizado com sucesso!"
   else
-    render :new, status: :unprocessable_entity
+    render :edit, status: :unprocessable_entity
   end
 end
 
-  # PATCH/PUT /tickets/1 or /tickets/1.json
-  def update
-    respond_to do |format|
-      if @ticket.update(ticket_params)
-        format.html { redirect_to @ticket, notice: "Ticket was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @ticket }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @ticket.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /tickets/1 or /tickets/1.json
+  # DELETE /tickets/1
   def destroy
     @ticket.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to tickets_path, notice: "Ticket was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
-    end
+    redirect_to tickets_path, notice: "Chamado excluído.", status: :see_other
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_ticket
-      @ticket = Ticket.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-   def ticket_params
-  # Note o 'attachments: []' no final. 
-  # Ele tem que ser o ÚLTIMO da lista e estar com esses colchetes.
-  params.require(:ticket).permit(:title, :description, :unit_id, :ticket_type_id, :status_id, attachments: [])
-end
+  def set_ticket
+    # Use params[:id] para garantir compatibilidade
+    @ticket = Ticket.find(params[:id])
+  end
+
+  def ticket_params
+    # AQUI ESTÁ A CHAVE: Liberamos tech_notes, user_id (retroativo) e resolution_media
+    params.require(:ticket).permit(
+      :title, 
+      :description, 
+      :unit_id, 
+      :ticket_type_id, 
+      :status_id, 
+      :user_id, 
+      :tech_notes, 
+      attachments: [], 
+      resolution_media: []
+    )
+  end
 end
