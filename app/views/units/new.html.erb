@@ -1,11 +1,38 @@
-<% content_for :title, "New unit" %>
+<div class="container-crud">
+  <div class="card-standard">
+    
+    <div class="login-header" style="text-align: center; margin-bottom: 40px;">
+   
+      <h1 class="brand-name">Nova <span class="brand-bold">Unidade</span></h1>
+      <p class="login-subtitle">Vincule um novo apartamento ou sala a um bloco.</p>
+    </div>
 
-<h1>New unit</h1>
+    <%= form_with(model: @unit, local: true) do |f| %>
+      
+      <div class="form-group-login">
+        <%= f.label :number, "IDENTIFICAÇÃO / NÚMERO", class: "form-label-login" %>
+        <%= f.text_field :number, class: "form-input-login", placeholder: "Ex: A101, Sala 02..." %>
+      </div>
 
-<%= render "form", unit: @unit %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group-login">
+          <%= f.label :floor, "ANDAR", class: "form-label-login" %>
+          <%= f.number_field :floor, class: "form-input-login", placeholder: "Ex: 1" %>
+        </div>
 
-<br>
+        <div class="form-group-login">
+          <%= f.label :block_id, "BLOCO CORRESPONDENTE", class: "form-label-login" %>
+          <%= f.collection_select :block_id, Block.all, :id, :identification, { prompt: "Selecione..." }, class: "form-input-login" %>
+        </div>
+      </div>
 
-<div>
-  <%= link_to "Back to units", units_path %>
+      <%# Se você tiver campos extras como metragem ou proprietário, adicione aqui com a classe form-input-login %>
+
+      <div class="actions-container">
+        <%= f.submit "Salvar Unidade", class: "btn-pro-size btn-edit-pro" %>
+        <%= link_to "Cancelar", units_path, class: "btn-pro-size btn-delete-pro" %>
+      </div>
+
+    <% end %>
+  </div>
 </div>

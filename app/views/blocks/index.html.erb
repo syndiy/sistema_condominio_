@@ -1,37 +1,41 @@
-<div class="page-shell">
-  <%# Defini um max-width de 800px para a tabela não "esparramar" %>
-  <div class="card-base" style="max-width: 850px; margin: 0 auto;">
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-      <h1 style="margin: 0; font-size: 1.5rem; display: flex; align-items: center; gap: 10px;">🏘️ Blocos</h1>
-      <%= link_to '➕ Novo Bloco', new_block_path, class: "btn btn-primary", style: "font-size: 13px; padding: 8px 16px;" %>
+<div class="container-crud">
+  <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+      <h1 class="brand-name" style="font-size: 2rem;">Gestão de <span class="brand-bold">Blocos</span></h1>
+      <p class="login-subtitle" style="margin-top: 5px;">Visualize e gerencie as torres do condomínio.</p>
     </div>
-
-    <table class="table-chique">
-      <thead>
-        <tr>
-          <th style="width: 40%;">IDENTIFICAÇÃO</th>
-          <th style="text-align: center;">ANDARES</th>
-          <th style="text-align: center;">APTS/ANDAR</th>
-          <th style="text-align: right;">AÇÕES</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @blocks.each do |block| %>
-          <tr>
-            <td><strong><%= block.identification %></strong></td>
-            <td style="text-align: center;"><%= block.floors_count %></td>
-            <td style="text-align: center;"><%= block.apartments_per_floor %></td>
-            <td style="text-align: right;">
-              <div style="display: flex; gap: 12px; justify-content: flex-end;">
-                <%= link_to 'Ver', block, style: "text-decoration: none; color: #6b7280; font-weight: 600; font-size: 13px;" %>
-                <%= link_to 'Editar', edit_block_path(block), style: "text-decoration: none; color: var(--primary); font-weight: 600; font-size: 13px;" %>
-              </div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-
+    <%= link_to "+ Novo Bloco", new_block_path, class: "btn-pro-size btn-edit-pro", style: "width: 180px !important;" %>
   </div>
+
+  <div class="card-table">
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th style="width: 40%;">IDENTIFICAÇÃO</th>
+        <th style="width: 20%;">ANDARES</th>
+        <th style="width: 20%;">APTOS/ANDAR</th>
+        <th style="width: 20%; text-align: right; padding-right: 25px;">AÇÕES</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @blocks.each do |block| %>
+        <tr>
+          <td>
+            <div style="display: flex; align-items: center; gap: 10px;">
+           
+              <strong style="color: #13505B;"><%= block.identification %></strong>
+            </div>
+          </td>
+          <td><%= block.floors_count %></td>
+          <td><%= block.apartments_per_floor %></td>
+          <td>
+            <div class="action-buttons-row">
+              <%= link_to "Detalhes", block, class: "btn-action-pill btn-details-pill" %>
+              <%= link_to "Editar", edit_block_path(block), class: "btn-action-pill btn-edit-pill" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

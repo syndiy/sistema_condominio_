@@ -1,94 +1,98 @@
-<%= form_with(model: ticket, multipart: true) do |form| %>
-  <% if ticket.errors.any? %>
-    <div style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 20px;">
-      <h2><%= pluralize(ticket.errors.count, "erro") %> impediram este chamado:</h2>
-      <ul><% ticket.errors.each do |error| %><li><%= error.full_message %></li><% end %></ul>
+<div class="container-crud">
+  <div class="card-standard">
+    <div class="login-header" style="text-align: center; margin-bottom: 40px;">
+      <span class="brand-icon">🛠️</span>
+      <h1 class="brand-name">Editar <span class="brand-bold">Chamado</span></h1>
+      <p class="login-subtitle">Gerencie as informações e o status da manutenção.</p>
     </div>
-  <% end %>
 
-  <%# 1. SELEÇÃO DO MORADOR (Apenas Admin) %>
-  <% if current_user.admin? %>
-    <div style="background: #f0f9ff; padding: 15px; border: 1px solid #bae6fd; margin-bottom: 15px; border-radius: 8px;">
-      <%= form.label :user_id, "👤 Dono do Chamado (Para registro retroativo)" %>
-      <%= form.collection_select :user_id, User.where(role: :morador), :id, :email, { prompt: "Selecione o morador..." }, { style: "display: block; width: 100%;" } %>
-    </div>
-  <% end %>
+    <%= form_with(model: @ticket, local: true, multipart: true) do |form| %>
+      
+      <%# MENSAGENS DE ERRO %>
+      <% if @ticket.errors.any? %>
+        <div style="background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; border: 1px solid #fecaca;">
+          <strong style="display: block; margin-bottom: 5px;"><%= pluralize(@ticket.errors.count, "erro") %> impediram a gravação:</strong>
+          <ul style="margin: 0; padding-left: 20px;">
+            <% @ticket.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
 
-  <%# 2. ASSUNTO E DESCRIÇÃO %>
-  <%# Usamos readonly em vez de disabled para os dados serem enviados e não sumirem %>
-  <div>
-    <%= form.label :title, "Assunto" %>
-    <%= form.text_field :title, placeholder: "Ex: Vazamento", 
-        readonly: !current_user.morador? && !current_user.admin?, 
-        style: "display: block; width: 100%; background: #{(!current_user.morador? && !current_user.admin?) ? '#f1f5f9' : 'white'};" %>
-  </div>
+      <%# 1. SELEÇÃO DO MORADOR (SÓ ADMIN) %>
+      <% if current_user.admin? %>
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 30px;">
+          <label class="form-label-login" style="font-size: 0.7rem; color: #0369a1;">👤 DONO DO CHAMADO (REGISTRO RETROATIVO)</label>
+          <%= form.collection_select :user_id, User.where(role: :morador), :id, :name, { prompt: "Selecione o morador..." }, class: "form-input-login" %>
+        </div>
+      <% end %>
 
-  <div style="margin-top: 10px;">
-    <%= form.label :description, "Descrição detalhada" %>
-    <%= form.text_area :description, 
-        readonly: !current_user.morador? && !current_user.admin?, 
-        style: "display: block; width: 100%; background: #{(!current_user.morador? && !current_user.admin?) ? '#f1f5f9' : 'white'};", rows: 4 %>
-  </div>
-
-  <%# 3. ANEXOS INICIAIS %>
-  <%# Aqui, se não for morador/admin, a gente apenas esconde o campo para não dar erro de envio %>
-  <% if current_user.morador? || current_user.admin? %>
-    <div style="margin-top: 15px;">
-      <%= form.label :attachments, "Fotos do Problema" %><br>
-      <%= form.file_field :attachments, multiple: true %>
-    </div>
-  <% end %>
-
-  <%# 4. UNIDADE %>
-  <div style="margin-top: 10px;">
-    <%= form.label :unit_id, "Unidade/Apartamento" %>
-    <% units_list = current_user.admin? ? Unit.all : (current_user.units || []) %>
-    <% if current_user.morador? || current_user.admin? %>
-      <%= form.collection_select :unit_id, units_list, :id, :number, { prompt: "Selecione a unidade" }, { style: "display: block; width: 100%;" } %>
-    <% else %>
-      <%# Para o Colaborador, mostramos apenas o texto e mantemos o ID escondido para não perder a info %>
-      <div style="padding: 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px;">
-        <%= ticket.unit&.number %>
+      <%# 2. DADOS BÁSICOS %>
+      <div class="form-group-login">
+        <%= form.label :title, "ASSUNTO", class: "form-label-login" %>
+        <%= form.text_field :title, class: "form-input-login", 
+            readonly: !current_user.morador? && !current_user.admin?, 
+            style: (!current_user.morador? && !current_user.admin?) ? "background: #f1f5f9;" : "" %>
       </div>
-      <%= form.hidden_field :unit_id %>
+
+      <div class="form-group-login">
+        <%= form.label :description, "DESCRIÇÃO DETALHADA", class: "form-label-login" %>
+        <%= form.text_area :description, class: "form-input-login", rows: 4, 
+            readonly: !current_user.morador? && !current_user.admin?, 
+            style: "height: auto; resize: none; #{(!current_user.morador? && !current_user.admin?) ? 'background: #f1f5f9;' : ''}" %>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+        <div>
+          <%= form.label :unit_id, "UNIDADE/APARTAMENTO", class: "form-label-login" %>
+          <% if current_user.morador? || current_user.admin? %>
+            <%= form.collection_select :unit_id, (current_user.admin? ? Unit.all : current_user.units), :id, :number, { prompt: "Selecione a unidade" }, class: "form-input-login" %>
+          <% else %>
+            <div class="form-input-login" style="background: #f1f5f9; display: flex; align-items: center;"><%= @ticket.unit&.number %></div>
+            <%= form.hidden_field :unit_id %>
+          <% end %>
+        </div>
+
+        <div>
+          <%= form.label :ticket_type_id, "TIPO DE PROBLEMA", class: "form-label-login" %>
+          <% if current_user.morador? || current_user.admin? %>
+            <%= form.collection_select :ticket_type_id, TicketType.all, :id, :title, { prompt: "Selecione o tipo" }, class: "form-input-login" %>
+          <% else %>
+            <div class="form-input-login" style="background: #f1f5f9; display: flex; align-items: center;"><%= @ticket.ticket_type&.title %></div>
+            <%= form.hidden_field :ticket_type_id %>
+          <% end %>
+        </div>
+      </div>
+
+      <%# 3. PAINEL DE GESTÃO (SÓ ADMIN E COLABORADOR) %>
+      <% if current_user.admin? || current_user.colaborador? %>
+        <div style="background: #fffdf5; border: 2px solid #fcd34d; padding: 25px; border-radius: 15px; margin-top: 20px; margin-bottom: 30px;">
+          <h3 style="font-size: 0.85rem; font-weight: 800; color: #92400e; margin-bottom: 20px; text-transform: uppercase;">🛠️ Painel de Gestão Técnica</h3>
+          
+          <div class="form-group-login">
+            <%= form.label :tech_notes, "COMENTÁRIOS TÉCNICOS (PARECER)", class: "form-label-login" %>
+            <%= form.text_area :tech_notes, class: "form-input-login", rows: 3, placeholder: "O que foi feito para resolver?", style: "height: auto; border-color: #fcd34d; resize: none;" %>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+              <%= form.label :status_id, "ALTERAR STATUS", class: "form-label-login" %>
+              <%= form.collection_select :status_id, Status.all, :id, :name, {}, class: "form-input-login", style: "border-color: #fcd34d;" %>
+            </div>
+            <div>
+              <%= form.label :resolution_media, "PROVA DE RESOLUÇÃO", class: "form-label-login" %>
+              <%= form.file_field :resolution_media, multiple: true, class: "form-input-login", style: "border-color: #fcd34d; padding-top: 10px;" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <%# BOTÕES FINAIS %>
+      <div class="actions-container" style="margin-top: 20px;">
+        <%= form.submit "Salvar Alterações", class: "btn-pro-size btn-edit-pro" %>
+        <%= link_to "Cancelar", tickets_path, class: "btn-pro-size btn-delete-pro" %>
+      </div>
     <% end %>
   </div>
-
-  <%# 5. TIPO DE CHAMADO %>
-  <div style="margin-top: 10px;">
-    <%= form.label :ticket_type_id, "Tipo de Problema" %>
-    <% if current_user.morador? || current_user.admin? %>
-      <%= form.collection_select :ticket_type_id, TicketType.all, :id, :title, { prompt: "Selecione o tipo" }, { style: "display: block; width: 100%;" } %>
-    <% else %>
-      <div style="padding: 8px; background: #f1f5f9; border: 1px solid #cbd5e1; border-radius: 4px;">
-        <%= ticket.ticket_type&.title %>
-      </div>
-      <%= form.hidden_field :ticket_type_id %>
-    <% end %>
-  </div>
-
-  <%# 6. PAINEL DE GESTÃO (ADMIN E COLABORADOR) %>
-  <% if current_user.admin? || current_user.colaborador? %>
-    <div style="background: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: 8px; margin-top: 20px;">
-      <h3 style="margin-top: 0;">🛠️ Painel de Gestão</h3>
-      
-      <%= form.label :tech_notes, "Comentários Técnicos (Parecer)" %>
-      <%= form.text_area :tech_notes, placeholder: "Descreva o que foi feito para resolver...", style: "display: block; width: 100%;", rows: 3 %>
-      
-      <div style="margin-top: 10px;">
-        <%= form.label :resolution_media, "📸 Anexar Prova da Resolução" %><br>
-        <%= form.file_field :resolution_media, multiple: true %>
-      </div>
-
-      <div style="margin-top: 10px;">
-        <%= form.label :status_id, "Alterar Status" %>
-        <%= form.collection_select :status_id, Status.all, :id, :name, { prompt: "Mudar situação..." }, { style: "display: block; width: 100%;" } %>
-      </div>
-    </div>
-  <% end %>
-
-  <div style="margin-top: 25px;">
-    <%= form.submit "Salvar Alterações", style: "background: #5b21b6; color: white; padding: 12px 25px; border: none; cursor: pointer; border-radius: 8px; font-weight: bold;" %>
-    <%= link_to "Cancelar", tickets_path, style: "margin-left: 15px; color: #64748b; text-decoration: none;" %>
-  </div>
-<% end %>
+</div>

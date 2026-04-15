@@ -1,0 +1,56 @@
+<div class="login-split-container">
+  
+  <div class="login-form-col">
+    <div class="login-box">
+      <div class="login-header">
+        <span class="brand-icon">🏢</span>
+        <h1 class="brand-name">Condomínio<span class="brand-bold">Pro</span></h1>
+        <p class="login-subtitle">Bem-vindo de volta! Por favor, insira suas credenciais.</p>
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "standard-form" }) do |f| %>
+        
+        <div class="form-group-login">
+          <%= f.label :email, "E-MAIL CORPORATIVO", class: "form-label-login" %>
+          <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "seu@email.com.br", class: "form-input-login" %>
+        </div>
+
+        <div class="form-group-login">
+          <div class="label-wrapper">
+            <%= f.label :password, "SENHA", class: "form-label-login" %>
+            <%- if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations' %>
+              <%= link_to "Esqueceu a senha?", new_password_path(resource_name), class: "login-link-sm" %>
+            <% end %>
+          </div>
+          <%= f.password_field :password, autocomplete: "current-password", placeholder: "••••••••", class: "form-input-login" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="form-group-checkbox">
+            <%= f.check_box :remember_me, class: "form-checkbox" %>
+            <%= f.label :remember_me, "Lembrar de mim neste dispositivo", class: "form-label-checkbox" %>
+          </div>
+        <% end %>
+
+        <div class="form-actions-login">
+          <%= f.submit "Entrar no Sistema", class: "btn-login-primary" %>
+        </div>
+      <% end %>
+
+      <div class="login-footer">
+        <p class="text-muted-sm">Ainda não tem acesso? <a href="#" class="login-link">Solicitar cadastro</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-visual-col">
+    <div class="visual-content">
+      <div class="visual-quote">
+        “A gestão eficiente do seu condomínio começa aqui.”
+      </div>
+      <p class="visual-description">Centralize chamados, usuários, blocos e unidades em uma plataforma robusta e intuitiva.</p>
+      <div class="visual-decorative-circles"></div>
+    </div>
+  </div>
+
+</div>

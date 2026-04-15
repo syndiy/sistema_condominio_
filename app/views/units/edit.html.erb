@@ -1,19 +1,36 @@
-<% content_for :title, "Editing unit" %>
+<div class="container-crud">
+  <div class="card-standard">
+    
+    <div class="login-header" style="text-align: center; margin-bottom: 40px;">
+    
+      <h1 class="brand-name">Editar <span class="brand-bold">Unidade</span></h1>
+      <p class="login-subtitle">Ajuste o número do apartamento ou o bloco correspondente.</p>
+    </div>
 
-<h1>Editing unit</h1>
+    <%= form_with(model: @unit, local: true) do |f| %>
+      
+      <div class="form-group-login">
+        <%= f.label :number, "NÚMERO DA UNIDADE", class: "form-label-login" %>
+        <%= f.text_field :number, class: "form-input-login" %>
+      </div>
 
-<%= render "form", unit: @unit %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group-login">
+          <%= f.label :floor, "ANDAR", class: "form-label-login" %>
+          <%= f.number_field :floor, class: "form-input-login" %>
+        </div>
 
-<br>
+        <div class="form-group-login">
+          <%= f.label :block_id, "BLOCO", class: "form-label-login" %>
+          <%= f.collection_select :block_id, Block.all, :id, :identification, {}, class: "form-input-login" %>
+        </div>
+      </div>
 
-<%# Fora do form! No arquivo edit.html.erb ou show.html.erb %>
-<div style="margin-top: 20px;">
-  <%= button_to "Excluir esta unidade", @unit, method: :delete, 
-      form: { data: { confirm: "Tem certeza? Isso pode afetar moradores!" } },
-      style: "color: red; background: none; border: 1px solid red; cursor: pointer;" %>
-</div>
+      <div class="actions-container">
+        <%= f.submit "Salvar Unidade", class: "btn-pro-size btn-edit-pro" %>
+        <%= link_to "Cancelar", unit_path(@unit), class: "btn-pro-size btn-delete-pro" %>
+      </div>
 
-<div>
-  <%= link_to "Show this unit", @unit %> |
-  <%= link_to "Back to units", units_path %>
+    <% end %>
+  </div>
 </div>

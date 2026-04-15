@@ -1,40 +1,45 @@
-<div class="page-shell">
-  <div class="card-base" style="max-width: 500px; margin: 0 auto;">
+<div class="container-crud">
+  <div class="card-standard">
     
-  <div class="page-shell">
-  <% if flash[:alert] %>
-    <div style="background: #fff1f2; color: #991b1b; padding: 20px; border-radius: 12px; border: 1px solid #fecdd3; margin-bottom: 25px; max-width: 500px; margin-left: auto; margin-right: auto;">
-      <div style="display: flex; gap: 12px;">
-        <span style="font-size: 20px;">🚫</span>
-        <div>
-          <strong style="display: block; margin-bottom: 5px; font-size: 15px;">Bloqueio de Segurança</strong>
-          <p style="margin: 0; font-size: 14px; line-height: 1.5;"><%= flash[:alert] %></p>
+    <%# Header centralizado com o estilo que a gente definiu %>
+    <div class="login-header" style="text-align: center; margin-bottom: 40px;">
+      <span class="brand-icon">🏢</span>
+      <h1 class="brand-name">Detalhes do <span class="brand-bold">Bloco</span></h1>
+      <p class="login-subtitle">Informações técnicas e estrutura da torre.</p>
+    </div>
+
+    <%# Grid de Informações limpo e sem bordas sobrando %>
+    <div class="info-section-pro" style="margin-bottom: 40px;">
+      <h3 style="font-size: 0.85rem; font-weight: 800; color: #13505B; margin-bottom: 25px; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+        Informações Técnicas
+      </h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        <div class="info-item">
+          <span class="form-label-login" style="font-size: 0.7rem;">IDENTIFICAÇÃO</span>
+          <p style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 5px 0;"><%= @block.identification %></p>
+        </div>
+        <div class="info-item">
+          <span class="form-label-login" style="font-size: 0.7rem;">ANDARES</span>
+          <p style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 5px 0;"><%= @block.floors_count %></p>
+        </div>
+        <div class="info-item">
+          <span class="form-label-login" style="font-size: 0.7rem;">APTOS POR ANDAR</span>
+          <p style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 5px 0;"><%= @block.apartments_per_floor %></p>
         </div>
       </div>
     </div>
-  <% end %>
 
-  <div >
-    <%# ... seu código de detalhes do bloco ... %>
-
-  <div>
-    <%# ... resto do código do card que já fizemos ... %>
-    <h1 style="margin-top: 0;">🏢 Detalhes do Bloco</h1>
-    
-    <div style="margin-bottom: 20px; padding: 15px; background: #f9fafb; border-radius: 8px;">
-      <p style="margin: 5px 0;"><strong>Identificação:</strong> <%= @block.identification %></p>
-      <p style="margin: 5px 0;"><strong>Quantidade de Andares:</strong> <%= @block.floors_count %></p>
-      <p style="margin: 5px 0;"><strong>Apartamentos por Andar:</strong> <%= @block.apartments_per_floor %></p>
-    </div>
-
-    <div style="display: flex; gap: 15px; align-items: center;">
-      <%= link_to "Editar", edit_block_path(@block), class: "btn btn-primary" %>
-      <%= link_to "Voltar", blocks_path, class: "btn", style: "background: #f3f4f6; color: #4b5563;" %>
+    <%# Botões Gêmeos e Alinhados (Usando as classes que a gente consertou) %>
+    <div class="actions-container">
+      <%= link_to "Editar", edit_block_path(@block), class: "btn-pro-size btn-edit-pro" %>
       
-    <%= button_to "Excluir Bloco", @block, 
-    method: :delete, 
-    data: { turbo_confirm: "Deseja realmente solicitar a exclusão deste bloco?" }, 
-    class: "btn-danger-text" %>
+      <%= button_to "Excluir", @block, method: :delete, 
+          form: { data: { turbo_confirm: "Tem certeza que deseja apagar este bloco?" } }, 
+          class: "btn-pro-size btn-delete-pro" %>
+
+      <%= link_to "Voltar", blocks_path, class: "btn-pro-size btn-secondary", style: "background-color: transparent !important; border: none !important; width: auto !important; color: #64748b !important; text-decoration: underline !important;" %>
     </div>
+
   </div>
 </div>

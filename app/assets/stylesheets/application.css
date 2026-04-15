@@ -1,234 +1,1328 @@
-/* DESIGN CHIQUE MINIMALISTA CINDY */
-
+/* application.css */
 :root {
-  --primary: #5b21b6; /* Roxo elegante */
-  --primary-hover: #4c1d95;
-  --bg-main: #f3f4f6; /* Cinza bem clarinho */
-  --bg-card: #ffffff;
-  --text-main: #1f2937;
-  --text-muted: #6b7280;
-  --border-color: #e5e7eb;
-  --radius-md: 12px;
-  --radius-sm: 8px;
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  /* Cores principais da paleta */
+  --primary: #119DA4;       /* Dark Cyan (Destaques e Botão Principal) */
+  --primary-hover: #0C7489; /* Cerulean (Efeito de hover nos botões) */
+  --dark-accent: #13505B;   /* Dark Teal (Sidebar ou Headers) */
+  
+  /* Cores de apoio */
+  --bg-body: #D7D9CE;       /* Dust Grey (Fundo da página, mais suave que o branco puro) */
+  --text-main: #040404;     /* Black (Títulos e textos importantes) */
+  --border: #cbd5e1;        /* Mantemos um cinza claro para bordas */
+  
+  /* Variação para botões secundários */
+  --secondary-bg: #e2e8f0;
+  --secondary-text: #475569;
 }
-
 body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  font-family: sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
 }
 
-/* CONTAINER DAS PÁGINAS (MENOS DASHBOARD) */
-.page-shell {
-  max-width: 1200px;
+/* Navbar */
+.navbar {
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
+  padding: 15px 0;
+  margin-bottom: 30px;
+}
+
+.nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: var(--text);
+  font-weight: 600;
+  margin-right: 15px;
+  font-size: 0.9rem;
+}
+
+.nav-links a:hover { color: var(--primary); }
+
+/* Layout e Containers */
+.container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+.container-small {
+  max-width: 1000px;
   margin: 40px auto;
   padding: 0 20px;
-  width: 100%;
-  box-sizing: border-box;
 }
 
-.card-base {
-  background: var(--bg-card);
-  padding: 30px;
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  border: 1px solid var(--border-color);
+/* O "Trilho" de alinhamento perfeito para as páginas de Detalhes */
+.main-content-layout {
+  display: grid;
+  grid-template-columns: 85px 1fr; /* Coluna fixa pro Voltar | Resto pro conteúdo */
+  gap: 20px;
+  align-items: start;
 }
 
-/* BOTÕES PADRÃO */
-.btn {
+.card-back {
+  display: flex;
+  justify-content: flex-start;
+  padding-top: 8px; /* Alinha a bolha com o centro da primeira linha do título */
+}
+
+.content-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Títulos */
+.main-title-inline {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text);
+  margin: 0 !important;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.page-title {
+  color: var(--text);
+  letter-spacing: -0.02em;
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 25px;
+}
+
+/* Cards */
+.card {
+  background: var(--white);
+  border-radius: 10px;
+  padding: 25px;
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  margin: 0 !important;
+}
+
+.card-form {
+  max-width: 600px;
+  margin: 0 auto !important;
+  padding: 40px;
+}
+
+/* Tabelas e Gestão */
+.card-table {
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  overflow: hidden;
+}
+.data-table { 
+  width: 100%; 
+  border-collapse: collapse; 
+}
+
+.data-table th { 
+  padding: 15px; 
+  background: #f8fafc;
+  border-bottom: 2px solid var(--border); 
+  color: #64748b; 
+  font-size: 0.75rem; 
+  text-transform: uppercase; 
+  font-weight: 700;
+  text-align: left; /* Garante que o título comece na esquerda */
+}
+
+.data-table td { 
+  padding: 15px; 
+  border-bottom: 1px solid var(--border); 
+  font-size: 0.95rem; 
+  text-align: left; /* Garante que o conteúdo comece na esquerda */
+  vertical-align: middle;
+}
+
+/* --- NOVAS REGRAS DE ALINHAMENTO --- */
+
+/* Força a coluna de Cargo a ficar bem alinhada com o título */
+.col-cargo {
+  text-align: left !important;
+  width: 150px;
+}
+
+/* Força a coluna de Ações a ficar toda para a direita */
+.col-actions {
+  text-align: right !important;
+}
+
+/* Alinha os botões Editar/Excluir com o título AÇÕES lá no topo */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end; 
+}
+
+/* Botões */
+.btn-primary {
+  background: var(--primary);
+  color: white;
   padding: 10px 20px;
-  border-radius: var(--radius-sm);
-  font-weight: 600;
+  border-radius: 6px;
   text-decoration: none;
+  font-weight: bold;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.2s;
   border: none;
   cursor: pointer;
-  font-size: 14px;
 }
 
-.btn-primary {
-  background-color: var(--primary);
-  color: white;
-}
-
-.btn-primary:hover {
-  background-color: var(--primary-hover);
-}
-
-.btn-danger-text {
-  background: none;
-  color: #dc2626;
-  padding: 0;
-  font-weight: 600;
-}
-
-.btn-danger-text:hover {
-  text-decoration: underline;
-}
-
-/* TABELAS MODERNAS ZEBRADAS */
-.table-chique {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  margin-top: 20px;
-}
-
-.table-chique th {
-  text-align: left;
-  padding: 15px;
-  background-color: #f9fafb;
-  color: var(--text-muted);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+.btn-back-pill {
+  display: inline-flex;
+  align-items: center;
+  background: var(--white);
+  color: var(--text-light);
+  padding: 8px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-size: 0.8rem;
   font-weight: 700;
-  border-bottom: 2px solid var(--border-color);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  transition: 0.2s;
 }
 
-.table-chique td {
-  padding: 15px;
-  border-bottom: 1px solid var(--border-color);
-  font-size: 14px;
+.btn-back-pill:hover {
+  border-color: var(--primary);
+  color: var(--primary);
 }
 
-/* Efeito Zebrado */
-.table-chique tbody tr:nth-child(even) {
-  background-color: #f9fafb; /* Cinza clarinho nas linhas pares */
-}
-
-.table-chique tbody tr:hover {
-  background-color: #f3f4f6; /* Destaque no hover */
-}
-
-/* ETIQUETAS (BADGES) */
-.badge {
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 11px;
+.btn-danger, .btn-destructive {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  padding: 10px 20px;
+  border-radius: 8px;
   font-weight: 700;
+  cursor: pointer;
+}
+
+/* Formulários */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-light);
   text-transform: uppercase;
 }
-.badge-admin { background-color: #d1fae5; color: #065f46; }
-.badge-colaborador { background-color: #fef3c7; color: #92400e; }
-.badge-morador { background-color: #e0f2fe; color: #075985; }
 
-/* INPUTS DE FORMULÁRIO */
 .form-input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: var(--radius-sm);
-  margin-top: 6px;
-  font-size: 14px;
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 1rem;
   box-sizing: border-box;
 }
 
 .form-input:focus {
   outline: none;
   border-color: var(--primary);
-  ring: 2px solid #ddd6fe;
+  box-shadow: 0 0 0 4px rgba(91, 33, 182, 0.1);
 }
 
-/* Botão de Excluir Chique */
-.btn-danger-text {
-  background: none;
-  border: none;
-  color: #dc2626; /* Vermelho padrão de erro/perigo */
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  padding: 8px 12px;
+/* Info Sections (Show) */
+.info-section {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+}
+
+.info-label {
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-light);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.info-value { font-size: 1.1rem; font-weight: 600; }
+
+/* Status Badges */
+.status-badge { padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+.status-badge.morador { background: #dcfce7; color: #166534; }
+.status-badge.admin { background: #fee2e2; color: #991b1b; }
+.status-badge.colaborador { background: #fef3c7; color: #92400e; }
+
+/* Auxiliares */
+.header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.text-center { text-align: center; }
+.btn-full { width: 100%; }
+.inline-form { display: inline; }
+
+/* Container das ações para alinhar direitinho */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Base dos botões de ação */
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+/* Botão Editar: Azul Suave / Indigo */
+.btn-edit {
+  background-color: #eef2ff;
+  color: #4338ca;
+}
+
+.btn-edit:hover {
+  background-color: #e0e7ff;
+  transform: translateY(-1px);
+}
+
+/* Botão Excluir: Vermelho Suave */
+.btn-delete {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.btn-delete:hover {
+  background-color: #fee2e2;
+  transform: translateY(-1px);
+}
+
+/* Pequeno ajuste na badge de cargo para ficar mais elegante */
+.status-badge {
+  letter-spacing: 0.02em;
+  padding: 4px 12px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
+}
+
+
+
+
+/* Container para alinhar os botões lado a lado */
+.form-actions-row {
+  display: flex;
+  justify-content: center; /* Centraliza a dupla no meio do card */
+  align-items: center;
+  gap: 15px; /* Espaço entre eles */
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* Ajuste no botão principal */
+.btn-md {
+  min-width: 160px;
+  flex: 0 1 auto; /* Não deixa ele ocupar a tela toda */
+}
+
+/* O novo botão Cancelar cinza e chique */
+.btn-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f1f5f9; /* Cinza suave */
+  color: #475569; /* Texto grafite */
+  padding: 10px 24px;
   border-radius: 8px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+.btn-cancel:hover {
+  background-color: #e2e8f0;
+  color: #1e293b;
+  border-color: #cbd5e1;
+  transform: translateY(-1px);
+}
+
+/* Container do Checkbox Customizado */
+.custom-checkbox {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  user-select: none;
+  color: var(--text);
   transition: all 0.2s;
 }
 
-.btn-danger-text:hover {
-  background-color: #fef2f2; /* Um vermelhinho bem clarinho ao passar o mouse */
-  text-decoration: underline;
+/* Esconde o checkbox padrão do navegador */
+.custom-checkbox input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+/* Grid em duas colunas para economizar espaço */
+.checkbox-compact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 15px;
 }
 
-/* No seu application.css */
+/* Esconde o input original */
+.chip-checkbox input {
+  display: none;
+}
 
-.card-base.compact {
-  max-width: 500px;
+/* O "Botão" do checkbox */
+.chip-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 12px;
+  background-color: #f1f5f9;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #475569;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.chip-icon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+  color: #94a3b8;
+  transition: transform 0.2s;
+}
+
+/* Efeito ao passar o mouse */
+.chip-checkbox:hover .chip-label {
+  background-color: #e2e8f0;
+  border-color: #cbd5e1;
+}
+
+/* Quando selecionado (Checked) */
+.chip-checkbox input:checked + .chip-label {
+  background-color: #eef2ff; /* Um roxo/azul bem clarinho */
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.chip-checkbox input:checked + .chip-label .chip-icon {
+  color: var(--primary);
+  transform: rotate(45deg); /* O + vira um x ou apenas gira para indicar seleção */
+  content: "✓"; /* Opcional: mudar o ícone via JS ou manter o giro */
+}
+
+/* Ajuste para ocupar a linha toda se for ímpar (opcional) */
+.chip-checkbox:last-child:nth-child(odd) {
+  grid-column: span 1;
+}
+
+/* Limpa qualquer largura estranha e fixa o alinhamento */
+.data-table {
+  table-layout: fixed; /* Força o navegador a respeitar os % que definimos no HTML */
+  width: 100%;
+}
+
+.data-table th, .data-table td {
+  text-align: left !important; /* Tudo para a esquerda */
+  padding: 12px 15px;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Se o nome for muito grande, ele coloca ... em vez de quebrar a tabela */
+  white-space: nowrap;
+}
+
+/* Deixa os botões de ação com um visual mais moderno (Pills) */
+.btn-action {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-edit {
+  background-color: #eef2ff;
+  color: #4338ca;
+}
+
+.btn-delete {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.btn-action:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.95);
+}
+
+.main-navbar {
+  background-color: #13505B; /* O Dark Teal da sua paleta */
+  height: 70px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 0 2rem;
+  color: #D7D9CE; /* O cinza areia para o texto */
+}
+
+.nav-container {
+  width: 100%;
+  max-width: 1400px;
   margin: 0 auto;
-}
-
-.card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 25px;
 }
 
-.info-row {
+/* Logo */
+.brand-name {
+  font-size: 1.25rem;
+  letter-spacing: -0.5px;
+  color: #D7D9CE;
+}
+.brand-bold { font-weight: 800; color: #119DA4; }
+
+/* Menu de Navegação */
+.nav-menu {
+  display: flex;
+  list-style: none;
+  gap: 5px;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-link {
+  color: #D7D9CE;
+  text-decoration: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #119DA4;
+}
+
+.nav-link.active {
+  background-color: #119DA4; /* Dark Cyan de destaque */
+  color: #13505B;
+}
+
+/* Seção do Usuário */
+.nav-user-section {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border-left: 1px solid rgba(215, 217, 206, 0.2);
+  padding-left: 20px;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.user-email {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.user-role {
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  color: #119DA4;
+  font-weight: 800;
+}
+
+.btn-logout {
+  background-color: transparent;
+  border: 1px solid #119DA4;
+  color: #119DA4;
+  padding: 6px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #119DA4;
+  color: #13505B;
+}
+
+/* 1. LIBERA A ROLAGEM GLOBAL (O que faltava!) */
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow-y: auto !important; /* Permite rolar para baixo quando o conteúdo cresce */
+  background-color: #f1f5f9;
+}
+
+/* 2. TRAVA A ROLAGEM APENAS NA TELA DE LOGIN */
+/* Adicione esta regra para a tela de login não bugar */
+.login-split-container {
+  position: fixed; 
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  z-index: 9999;
+  overflow: hidden; /* O login continua sem scroll, do jeito chique */
+}
+
+/* 2. COLUNA DO FORMULÁRIO (ESQUERDA - Agora centralizada e ampla) */
+.login-form-col {
+  flex: 0 0 50%; /* Ocupa metade da tela para não ficar espremido */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* CENTRALIZA o formulário na coluna */
+  background-color: white;
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 400px; /* Largura ideal para leitura */
+}
+
+.login-header {
+  margin-bottom: 45px;
+}
+
+.brand-icon {
+  font-size: 2.8rem;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.brand-name { 
+  font-size: 2rem; 
+  font-weight: 700; 
+  color: #13505B; 
+  margin: 0;
+}
+
+.brand-bold { color: #119DA4; font-weight: 800; }
+
+.login-subtitle { 
+  font-size: 1rem; 
+  color: #64748b; 
+  margin-top: 12px; 
+  line-height: 1.5;
+}
+
+/* 3. INPUTS E LABELS (Alinhamento Moderno) */
+.form-group-login { 
+  margin-bottom: 25px; 
+  position: relative;
+}
+
+.label-wrapper {
   display: flex;
   justify-content: space-between;
-  padding: 12px 0;
-  border-bottom: 1px solid #f1f5f9;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.info-row strong {
-  color: #64748b;
-  font-size: 12px;
+.form-label-login {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #13505B;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
 }
 
-.card-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 30px;
-}
-
-.alert-danger {
-  background: #fff1f2;
-  color: #991b1b;
-  padding: 15px;
-  border-radius: 12px;
-  border: 1px solid #fecdd3;
-  margin: 0 auto 20px auto;
-  max-width: 500px;
-  font-size: 13px;
-  font-weight: 500;
-}
-
-/* Botões de Ação na Tabela */
-.btn-edit {
-  color: #5b21b6; /* Roxo do seu tema */
-  text-decoration: none;
-  font-weight: 700;
-  font-size: 13px;
-  margin-right: 10px;
-}
-
-.btn-edit:hover { text-decoration: underline; }
-
-.btn-delete-table {
-  background: #f3f4f6; /* Fundo cinza clarinho */
-  color: #4b5563;
-  border: 1px solid #d1d5db;
-  padding: 4px 10px;
-  border-radius: 6px;
+/* Link de Senha (Adeus 2010!) */
+.login-link-sm {
+  font-size: 0.8rem;
   font-weight: 600;
-  font-size: 12px;
-  cursor: pointer;
+  color: #119DA4;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.login-link-sm:hover {
+  color: #13505B;
+  text-decoration: underline;
+}
+
+.form-input-login {
+  width: 100%;
+  padding: 14px 18px;
+  font-size: 1rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+  box-sizing: border-box;
   transition: all 0.2s;
 }
 
-.btn-delete-table:hover {
-  background: #fee2e2; /* Vermelhinho ao passar o mouse */
-  color: #dc2626;
-  border-color: #fecdd3;
+.form-input-login:focus {
+  outline: none;
+  border-color: #119DA4;
+  background-color: white;
+  box-shadow: 0 0 0 4px rgba(17, 157, 164, 0.1);
+}
+
+/* Checkbox (Modernizado) */
+.form-group-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 35px;
+  cursor: pointer;
+}
+
+.form-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: #119DA4;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.form-label-checkbox {
+  font-size: 0.9rem;
+  color: #64748b;
+  font-weight: 500;
+  user-select: none;
+}
+
+.btn-login-primary {
+  width: 100%;
+  background-color: #119DA4;
+  color: white;
+  padding: 16px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(17, 157, 164, 0.2);
+  transition: all 0.3s ease;
+}
+
+.btn-login-primary:hover {
+  background-color: #13505B;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(13, 80, 91, 0.25);
+}
+
+/* 4. COLUNA VISUAL (DIREITA) */
+.login-visual-col {
+  flex: 1;
+  background-color: #13505B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px;
+  color: white;
+  position: relative;
+}
+
+.visual-quote {
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 25px;
+}
+
+.visual-description {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.login-footer {
+  margin-top: 40px;
+  padding-top: 25px;
+  border-top: 1px solid #f1f5f9;
+  text-align: center;
+}
+
+.login-link {
+  color: #119DA4;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* FUNDO GLOBAL DO SISTEMA */
+body {
+  background-color: #f1f5f9 !important; /* Cinza gelo para os cards brancos saltarem */
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* NAVBAR CORPORATIVA */
+.navbar-pro {
+  background-color: #13505B; /* Seu Dark Teal poderoso */
+  height: 70px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  padding: 0 2rem;
+  color: white;
+}
+
+.navbar-main-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-left-group, .navbar-right-group {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+/* Logo */
+.logo-text { font-size: 1.3rem; font-weight: 500; color: #D7D9CE; }
+.logo-bold { font-weight: 800; color: #119DA4; } /* Dark Cyan no Pro */
+
+/* Links de Navegação - Versão Elegante */
+.navbar-links {
+  display: flex;
+  list-style: none;
+  gap: 5px; /* Diminuí o gap para os links ficarem mais próximos */
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  color: rgba(215, 217, 206, 0.7);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 15px 20px; /* Mais espaço lateral, menos "caixa" */
+  border-radius: 0;    /* Remove o arredondado de botão */
+  transition: all 0.3s;
+  position: relative;  /* Necessário para a barrinha embaixo */
+}
+
+/* Logo em Branco Puro para destacar */
+.logo-text { 
+  font-size: 1.3rem; 
+  font-weight: 500; 
+  color: #FFFFFF !important; /* Branco no "Condomínio" */
+  letter-spacing: -0.5px;
+}
+
+.logo-bold { 
+  font-weight: 800; 
+  color: #119DA4; /* Mantemos o Teal vibrante no "Pro" para dar o charme */
+}
+/* Destaque na Navbar - Limpo e Branco */
+.nav-item.active {
+  color: #FFFFFF !important; 
+  background: none !important; /* ISSO AQUI VAI MATAR O BLOCO ESQUISITO */
+  background-color: transparent !important;
+  font-weight: 700;
+  position: relative;
+}
+
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  bottom: -5px; /* Ajustei para a linha descer um pouco mais */
+  left: 20%;
+  right: 20%;
+  height: 3px;
+  background-color: #FFFFFF; /* A barrinha branca que você pediu */
+  border-radius: 10px;
+}
+
+/* Garante que no hover também não apareça fundo nenhum */
+.nav-item:hover {
+  background: none !important;
+  color: #FFFFFF !important;
+  opacity: 0.8;
+}
+
+/* Perfil e Sair */
+.user-profile-nav { display: flex; align-items: center; gap: 12px; }
+
+.user-avatar-circle {
+  width: 36px; height: 36px; background: #119DA4; color: #13505B;
+  border-radius: 50%; display: flex; align-items: center; 
+  justify-content: center; font-weight: 800; font-size: 0.8rem;
+}
+
+.user-meta { display: flex; flex-direction: column; text-align: left; }
+.u-name { font-size: 0.85rem; font-weight: 700; color: white; }
+.u-role { font-size: 0.65rem; color: #119DA4; font-weight: 800; letter-spacing: 0.5px; }
+
+.btn-logout-nav {
+  background: transparent;
+  border: 1px solid rgba(215, 217, 206, 0.3);
+  color: rgba(215, 217, 206, 0.8);
+  padding: 6px 15px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-logout-nav:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+/* PADRONIZAÇÃO DAS TELAS (TABELAS E BOTÕES) */
+.page-title { color: #13505B; font-weight: 800; }
+
+.btn-primary {
+  background-color: #119DA4 !important;
+  border: none !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+}
+
+.card-table {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+/* Espaçamento mestre para todas as telas */
+.container-main, .container-crud, .page-container {
+  margin-top: 40px !important; /* Afasta da navbar */
+  margin-bottom: 40px;
+  padding: 0 20px;
+}
+
+/* Botões da Paleta Nova (Teal) */
+.btn-primary, .btn-teal {
+  background-color: #119DA4 !important;
+  color: white !important;
+  border: none !important;
+  padding: 12px 24px !important;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #13505B !important;
+  transform: translateY(-1px);
+}
+
+/* Botão Cancelar/Voltar padrão */
+.btn-secondary, .btn-cancel {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+/* Card Branco Global (O contraste que faltava) */
+.card-standard {
+  background: white !important;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+  padding: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* FORÇANDO A PALETA NOVA EM TODOS OS BOTÕES */
+
+/* Botão de Editar / Salvar / Detalhes (O que era Roxo) */
+.btn-primary, 
+button[type="submit"], 
+input[type="submit"],
+.button.is-primary {
+  background-color: #119DA4 !important; /* Seu Dark Cyan / Teal */
+  color: white !important;
+  border: none !important;
+  padding: 10px 20px !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-primary:hover, 
+button[type="submit"]:hover {
+  background-color: #13505B !important; /* Dark Teal no hover */
+}
+
+/* Botão de Excluir / Erro */
+.btn-danger, 
+.button.is-danger {
+  background-color: #ef4444 !important; /* Vermelho moderno */
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+}
+
+/* Botão de Detalhes / Editar sutil (aquele lilás clarinho) */
+.btn-action-edit {
+  background-color: rgba(17, 157, 164, 0.1) !important;
+  color: #119DA4 !important;
+  border: 1px solid #119DA4 !important;
+}
+
+/* Garante que o fundo da página seja o cinza gelo e o card seja branco puro */
+body {
+  background-color: #f1f5f9 !important;
+}
+
+/* Aplique esta classe na div principal das suas telas de Edit e New */
+.card-standard {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05) !important;
+  padding: 40px !important;
+  margin: 40px auto !important; /* Aqui já resolve o problema de estar colado na nav */
+  max-width: 600px;
+}
+/* BOTÃO EDITAR (Teal / Confiança) */
+.btn-edit-pro {
+  background-color: #119DA4 !important;
+  color: white !important;
+  border: none !important;
+  padding: 10px 25px !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: all 0.2s;
+}
+
+.btn-edit-pro:hover {
+  background-color: #13505B !important; /* Fica mais escurinho */
+  transform: translateY(-1px);
+}
+
+/* BOTÃO EXCLUIR (Vermelho Suave / Perigo) */
+.btn-delete-pro {
+  background-color: #fee2e2 !important; /* Um fundo vermelho bem clarinho */
+  color: #ef4444 !important;          /* Texto vermelho vivo */
+  border: 1px solid #fecaca !important;
+  padding: 10px 25px !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  transition: all 0.2s;
+}
+
+.btn-delete-pro:hover {
+  background-color: #ef4444 !important; /* Inverte no hover: fundo vermelho */
+  color: white !important;              /* e texto branco */
+  border-color: #ef4444 !important;
+}
+
+/* RESET DE BOTÕES PARA MATAR O ESTILO DO SCAFFOLD */
+/* Procure essa regra e mude APENAS o padding para 0 */
+.actions-container .btn-edit-pro, 
+.actions-container a.btn-edit-pro {
+    background-color: #119DA4 !important;
+    color: white !important;
+    padding: 0 !important; /* MUDOU AQUI: Agora ele não estufa mais */
+    border-radius: 12px !important; /* Deixando arredondado igual ao outro */
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    border: none !important;
+    display: inline-flex !important; /* Mudamos para flex para centralizar o texto */
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.actions-container .btn-delete-pro, 
+.actions-container button.btn-delete-pro {
+  background-color: #f1f5f9 !important; /* Cinza */
+  color: #64748b !important;
+  padding: 10px 25px !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  border: 1px solid #e2e8f0 !important;
+  cursor: pointer !important;
+}
+
+/* Efeito de Hover */
+.btn-edit-pro:hover { background-color: #13505B !important; }
+.btn-delete-pro:hover { 
+  background-color: #fee2e2 !important; 
+  color: #ef4444 !important; 
+  border-color: #fecaca !important; 
+}
+
+/* 1. CONTAINER DOS BOTÕES */
+.actions-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 15px !important;
+    margin-top: 40px !important;
+    width: 100% !important;
+}
+
+/* 1. REGRA MESTRE (IGUALDADE ABSOLUTA) */
+.btn-pro-size, 
+.actions-container a, 
+.actions-container button,
+.actions-container input[type="submit"] {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 150px !important;
+    height: 48px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border-radius: 12px !important;
+    font-size: 0.95rem !important;
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    border: none !important;
+    box-sizing: border-box !important;
+    /* Removemos qualquer transição de movimento aqui */
+    transition: background-color 0.2s ease !important; 
+    transform: none !important; 
+}
+
+/* 2. CORES E HOVER DO EDITAR (SÓ MUDA A COR) */
+.btn-edit-pro, input[type="submit"] {
+    background-color: #119DA4 !important;
+    color: white !important;
+}
+
+.btn-edit-pro:hover, input[type="submit"]:hover {
+    background-color: #13505B !important;
+    transform: none !important; /* Garante que não vai "pular" */
+}
+
+/* 3. CORES E HOVER DO CANCELAR/EXCLUIR */
+.btn-delete-pro, .btn-secondary {
+    background-color: #f1f5f9 !important;
+    color: #64748b !important;
+    border: 1px solid #e2e8f0 !important;
+}
+
+.btn-delete-pro:hover, .btn-secondary:hover {
+    background-color: #fee2e2 !important;
+    color: #ef4444 !important;
+    border: 1px solid #fecaca !important;
+    transform: none !important; /* Garante que não vai "pular" */
+}
+
+/* 4. RESET DE FORMULÁRIO DO RAILS */
+.actions-container form {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+}
+
+/* Container do mini-card */
+.resident-mini-card {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding: 12px 15px !important;
+  background-color: white !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  margin-bottom: 8px !important;
+  transition: all 0.2s ease;
+}
+
+.resident-mini-card:hover {
+  background-color: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+}
+
+/* O SVG do Usuário (Tamanho e Cor) */
+.resident-icon-svg {
+  width: 28px !important; /* Tamanho idêntico ao emoji de 1.2rem */
+  height: 28px !important;
+  flex-shrink: 0; /* Garante que ele não amasse se o nome for grande */
+}
+
+/* Informações do texto */
+.resident-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.resident-name {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.resident-email {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin-top: -2px; /* Pequeno ajuste de alinhamento vertical */
+}
+
+/* Container das ações na tabela */
+.action-buttons-row {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+  padding-right: 15px !important;
+}
+
+/* Base do botão estilo "Pill" (Pastilha) */
+.btn-action-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 6px 14px !important;
+  border-radius: 50px !important; /* Estilo arredondado */
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  border: 1px solid transparent !important;
+}
+
+/* Botão Detalhes (Cinza/Teal Sutil) */
+.btn-details-pill {
+  background-color: #f1f5f9 !important;
+  color: #119DA4 !important;
+  border-color: #e2e8f0 !important;
+}
+
+.btn-details-pill:hover {
+  background-color: #eefafa !important;
+  border-color: #119DA4 !important;
+}
+
+/* Botão Editar (Azul Sutil) */
+.btn-edit-pill {
+  background-color: #eef2ff !important;
+  color: #4338ca !important;
+}
+
+.btn-edit-pill:hover {
+  background-color: #e0e7ff !important;
+  filter: brightness(0.95);
+}
+
+/* application.css */
+
+/* ... (seu código existente) ... */
+
+/* --- PADRONIZAÇÃO DE BOTÕES NA TABELA (ESTILO PILL) --- */
+
+/* Container para alinhar os botões na célula da tabela */
+.action-buttons-row {
+    display: flex !important;
+    justify-content: flex-end !important; /* Alinha os botões à direita */
+    gap: 8px !important; /* Espaço entre eles */
+    padding-right: 15px !important;
+}
+
+/* Base do botão estilo "Pill" (Pastilha) */
+.btn-action-pill {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    /* Tamanho Fixo e Sutil */
+    padding: 6px 16px !important;
+    height: 32px !important;
+    
+    /* Estilo Arredondado */
+    border-radius: 50px !important;
+    
+    /* Fontes e Texto */
+    font-size: 0.75rem !important; /* Texto menor para não gritar */
+    font-weight: 700 !important;
+    text-decoration: none !important;
+    transition: all 0.2s ease !important;
+    border: none !important;
+    cursor: pointer !important;
+}
+
+/* Cor: Detalhes (Cinza/Teal Sutil) */
+.btn-details-pill {
+    background-color: #f1f5f9 !important; /* Fundo cinza gelo */
+    color: #119DA4 !important;          /* Texto Teal */
+    border: 1px solid #e2e8f0 !important;
+}
+
+.btn-details-pill:hover {
+    background-color: #eefafa !important; /* Fundo teal clarinho */
+    border-color: #119DA4 !important;
+}
+
+/* Cor: Editar (Azul Sutil) */
+.btn-edit-pill {
+    background-color: #eef2ff !important; /* Fundo índigo clarinho */
+    color: #4338ca !important;          /* Texto índigo */
+}
+
+.btn-edit-pill:hover {
+    filter: brightness(0.95); /* Escurece um tiquinho no hover */
+}
+
+/* Reduzi o padding de 16px para 12px para caber melhor na tabela */
+.btn-action-pill {
+    padding: 6px 12px !important; 
+    min-width: 80px !important; /* Garante um tamanho mínimo bacana */
+    white-space: nowrap !important; /* Impede o texto de quebrar linha */
+}
+
+/* Garante que a tabela use 100% do espaço sem espremer colunas */
+.data-table {
+    width: 100% !important;
+    table-layout: fixed !important; /* Isso obriga o navegador a respeitar as larguras em % que colocamos */
+}
+
+.data-table td {
+    overflow: hidden;
+    text-overflow: ellipsis; /* Se o texto for gigante, ele coloca "..." em vez de quebrar o layout */
 }

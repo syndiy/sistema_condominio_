@@ -1,128 +1,100 @@
-<div class="ticket-card" style="border: 1px solid #ccc; padding: 20px; border-radius: 10px; background: #fff;">
-  <h2><%= @ticket.title %></h2>
-  <hr>
-  
-  <p><strong>Status:</strong> 
-    <span style="padding: 5px 10px; border-radius: 5px; background: #e0f0ff; color: #007bff; font-weight: bold;">
-      <%= @ticket.status.name.upcase %>
-    </span>
-  </p>
+<div class="container-crud" style="max-width: 850px;">
+  <div class="card-standard">
+    <%# HEADER DO CHAMADO %>
+    <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #13505B; margin: 0;"><%= @ticket.title %></h1>
+        <p style="color: #64748b; margin-top: 5px; font-size: 0.9rem;">Aberto em: <%= @ticket.created_at.strftime("%d/%m/%Y às %H:%M") %></p>
+      </div>
+      
+      <%# CORREÇÃO DA COR: Verde para concluído %>
+      <% status_nome = @ticket.status.name.downcase %>
+      <% status_class = (status_nome.include?('concluido') || status_nome.include?('concluído')) ? 'status-badge morador' : 'status-badge admin' %>
+      
+      <span class="<%= status_class %>" style="font-size: 0.8rem; padding: 8px 15px;">
+        <%= @ticket.status.name.upcase %>
+      </span>
+    </div>
 
-  <p><strong>Local:</strong> <%= @ticket.unit.number %> (<%= @ticket.unit.block.identification %>)</p>
-  <p><strong>Tipo de Problema:</strong> <%= @ticket.ticket_type.title %></p>
-  <p><strong>Descrição:</strong><br><%= @ticket.description %></p>
+    <%# GRID DE INFORMAÇÕES %>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 35px;">
+      <div class="info-group">
+        <label class="form-label-login" style="font-size: 0.7rem;">LOCALIZAÇÃO</label>
+        <p style="font-weight: 700; color: #1e293b; font-size: 1rem;"><%= @ticket.unit.number %> (<%= @ticket.unit.block.identification %>)</p>
+      </div>
+      <div class="info-group">
+        <label class="form-label-login" style="font-size: 0.7rem;">CATEGORIA</label>
+        <p style="font-weight: 700; color: #1e293b; font-size: 1rem;"><%= @ticket.ticket_type.title %></p>
+      </div>
+    </div>
 
-  <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px;">
-    <h3 style="border-bottom: 2px solid #ddd; padding-bottom: 10px;">🖼️ Arquivos e Fotos do Problema</h3>
+    <div style="margin-bottom: 35px;">
+      <label class="form-label-login" style="font-size: 0.7rem;">DESCRIÇÃO DO PROBLEMA</label>
+      <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; color: #334155; line-height: 1.6;">
+        <%= @ticket.description %>
+      </div>
+    </div>
 
-    <% if @ticket.attachments.attached? %>
-      <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-top: 15px;">
-        <% @ticket.attachments.each do |attachment| %>
-          <div style="text-align: center; border: 1px solid #ccc; padding: 10px; border-radius: 8px; background: white; max-width: 220px;">
-            <% if attachment.variable? %>
-              <%= image_tag attachment.variant(resize_to_limit: [200, 200]), style: "max-width: 100%; border-radius: 5px;" rescue attachment.filename %>
-            <% else %>
-              <div style="font-size: 50px;">📄</div>
-              <p style="font-size: 0.8em; word-break: break-all;"><%= attachment.filename %></p>
-            <% end %>
+    <%# PARECER TÉCNICO COM INFO DE FINALIZAÇÃO %>
+    <% if @ticket.tech_notes.present? %>
+      <div style="background: #eefafa; border: 2px solid #119DA4; border-radius: 15px; padding: 25px; margin-bottom: 35px; position: relative;">
+        <div style="position: absolute; top: 0; right: 0; padding: 5px 15px; background: #119DA4; color: white; font-size: 0.65rem; font-weight: 900; border-bottom-left-radius: 10px;">SOLUÇÃO</div>
+        
+        <h3 style="color: #13505B; font-size: 0.9rem; margin-bottom: 10px; text-transform: uppercase;">✅ Notas de Manutenção</h3>
+        <p style="color: #1e293b; line-height: 1.6; margin-bottom: 15px;"><%= @ticket.tech_notes %></p>
 
-            <div style="margin-top: 10px;">
-              <%= link_to "🔍 Abrir Original", url_for(attachment), target: "_blank", style: "color: #007bff; text-decoration: none; font-size: 0.9em;" %>
-            </div>
+        <% if @ticket.finished_at.present? %>
+          <div style="display: flex; align-items: center; gap: 8px; padding-top: 15px; border-top: 1px solid rgba(17, 157, 164, 0.2); color: #119DA4; font-weight: 700; font-size: 0.9rem;">
+            <span>🎉</span>
+            <span>Resolvido em: <%= @ticket.finished_at.strftime("%d/%m/%Y às %H:%M") %></span>
           </div>
         <% end %>
       </div>
-    <% else %>
-      <p style="color: #888; font-style: italic;">Nenhuma foto ou anexo foi enviado.</p>
     <% end %>
+
+    <%# BOTÕES DE AÇÃO %>
+    <div class="actions-container" style="justify-content: flex-start; gap: 15px;">
+      <%= link_to "Editar Chamado", edit_ticket_path(@ticket), class: "btn-pro-size btn-edit-pro" %>
+      <%= link_to "Voltar", tickets_path, class: "btn-pro-size btn-delete-pro" %>
+    </div>
   </div>
 
-  <p style="margin-top: 20px;"><strong>Aberto em:</strong> <%= @ticket.created_at.strftime("%d/%m/%Y às %H:%M") %></p>
+  <%# SEÇÃO DE CHAT %>
+  <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #f1f5f9;">
+    <h3 style="color: #13505B; font-size: 1.1rem; margin-bottom: 25px; display: flex; align-items: center; gap: 8px;">
+      <span>💬</span> Histórico e Evolução
+    </h3>
 
-  <% if @ticket.finished_at.present? %>
-    <p style="color: green; font-weight: bold;">✅ Resolvido em: <%= @ticket.finished_at.strftime("%d/%m/%Y às %H:%M") %></p>
-  <% else %>
-    <p style="color: orange;">
-      <strong>Prazo Estimado:</strong> 
-      <%= (@ticket.created_at + @ticket.ticket_type.sla_hours.hours).strftime("%d/%m/%Y %H:%M") %>
-    </p>
-  <% end %>
-</div>
-
-<div style="margin-top: 20px;">
-  <%= link_to "Editar Chamado", edit_ticket_path(@ticket), class: "btn" %> |
-  <%= link_to "Voltar para Meus Chamados", tickets_path %>
-</div>
-
-<hr style="margin: 40px 0;">
-
-<div class="comments-section">
-  <h3 style="color: #1e293b; margin-bottom: 20px;">💬 Histórico e Evolução</h3>
-
-  <%# --- BLOCO DE PARECER TÉCNICO (Aparece quando o Admin/Colaborador preenche o Painel de Gestão) --- %>
-  <% if @ticket.tech_notes.present? %>
-    <div style="padding: 20px; border: 1px solid #ffeeba; background: #fffdf5; border-radius: 10px; margin-bottom: 25px;">
-      <p style="margin: 0; color: #856404; font-weight: 700; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px;">
-        ⚠️ Parecer Final / Notas de Manutenção
-      </p>
-      <p style="margin: 15px 0; font-size: 1.1rem; color: #1e293b; line-height: 1.5;"><%= @ticket.tech_notes %></p>
-      
-      <% if @ticket.resolution_media.attached? %>
-        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          <% @ticket.resolution_media.each do |media| %>
-            <%= link_to url_for(media), target: "_blank", style: "text-decoration: none;" do %>
-              <div style="padding: 5px 12px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 5px; color: #92400e; font-size: 0.8rem;">
-                🖼️ Ver Prova de Resolução
-              </div>
-            <% end %>
-          <% end %>
+    <div id="comments-list">
+      <% @ticket.comments.each do |comment| %>
+        <% is_mine = (comment.user == current_user) %>
+        <div style="display: flex; flex-direction: column; <%= is_mine ? 'align-items: flex-end;' : 'align-items: flex-start;' %>">
+          <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; margin-bottom: 4px; text-transform: uppercase; margin-<%= is_mine ? 'right' : 'left' %>: 10px;">
+            <%= comment.user.name %> • <%= comment.created_at.strftime("%H:%M") %>
+          </span>
+          <div style="max-width: 75%; padding: 12px 18px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5;
+            <%= is_mine ? 'background: #119DA4; color: white; border-bottom-right-radius: 4px;' : 'background: #f1f5f9; color: #334155; border-bottom-left-radius: 4px; border: 1px solid #e2e8f0;' %>">
+            <%= comment.content %>
+          </div>
         </div>
       <% end %>
     </div>
-  <% end %>
 
-  <%# --- LISTA DE COMENTÁRIOS COM ETIQUETAS DE CARGO --- %>
-  <div id="comments-list" style="margin-bottom: 30px;">
-    <% @ticket.comments.each do |comment| %>
-      <div class="card-base" style="padding: 15px; margin-bottom: 12px; background: #f8fafc; border-left: 4px solid #cbd5e1;">
-        <p style="margin: 0; font-size: 0.95rem; color: #334155;">
-          <strong style="color: #1e293b;"><%= comment.user.name %></strong>
-          <%# ETIQUETA DE CARGO %>
-          <span style="font-size: 10px; padding: 2px 8px; border-radius: 10px; background: #e2e8f0; color: #475569; margin-left: 8px; font-weight: 800; text-transform: uppercase;">
-            <%= comment.user.role %>
-          </span>
-        </p>
+    <%# FORMULÁRIO DE COMENTÁRIO %>
+    <div class="card-standard" style="padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; margin: 0; box-shadow: none;">
+      <%= form_with(model: [ @ticket, Comment.new ], local: true) do |f| %>
+        <%= f.text_area :content, placeholder: "Escreva aqui sua dúvida ou atualização...", 
+            style: "width: 100%; border-radius: 12px; border: 1px solid #cbd5e1; padding: 15px; font-size: 0.95rem; height: 90px; resize: none; box-sizing: border-box; font-family: inherit;" %>
         
-        <p style="margin: 8px 0; color: #4b5563;"><%= comment.content %></p>
-        
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <small style="color: #94a3b8;"><%= comment.created_at.strftime("%d/%m/%Y %H:%M") %></small>
-          
-          <% if comment.medias.attached? %>
-            <div style="display: flex; gap: 8px;">
-              <% comment.medias.each do |media| %>
-                <%= link_to "📎 Ver Mídia", url_for(media), target: "_blank", style: "font-size: 0.75rem; color: #6366f1; font-weight: 600;" %>
-              <% end %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    <% end %>
-  </div>
+        <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center;">
+          <label style="cursor: pointer; font-size: 0.85rem; color: #119DA4; font-weight: 700; display: flex; align-items: center; gap: 8px;">
+            <span>📸</span> Anexar Fotos
+            <%= f.file_field :medias, multiple: true, style: "display: none;" %>
+          </label>
 
- <%# --- FORMULÁRIO DE COMENTÁRIOS (Liberado para todos) --- %>
-  <div style="background: #f1f5f9; padding: 25px; border-radius: 12px; border: 1px solid #e2e8f0;">
-    <h4 style="margin-top: 0; color: #1e293b;">💬 Enviar um Comentário</h4>
-    <%= form_with(model: [ @ticket, Comment.new ], local: true, multipart: true) do |f| %>
-      <%= f.text_area :content, placeholder: "Escreva aqui sua dúvida ou mensagem...", style: "width: 100%; border-radius: 8px; border: 1px solid #cbd5e1; padding: 12px; font-family: inherit;", rows: 3 %>
-      
-      <div style="margin-top: 15px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-        <div>
-          <%= f.label :medias, "📸 Enviar Foto/Vídeo", style: "font-size: 0.85rem; font-weight: 600; color: #475569;" %><br>
-          <%= f.file_field :medias, multiple: true, style: "font-size: 0.8rem; margin-top: 5px;" %>
+          <%= f.submit "Enviar Mensagem", style: "background-color: #119DA4; color: white; border: none; padding: 0 25px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; height: 42px; display: flex; align-items: center; justify-content: center;" %>
         </div>
-
-        <%= f.submit "Enviar Mensagem", class: "btn btn-primary", style: "padding: 10px 20px;" %>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
+</div>

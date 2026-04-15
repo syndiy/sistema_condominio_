@@ -1,43 +1,74 @@
-<div class="page-shell">
-  <%# Card único que centraliza tudo no meio da tela %>
-  <div class="card-base" style="max-width: 900px; margin: 0 auto;">
-    
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-      <h1 style="margin: 0; font-size: 1.6rem; color: #1e293b;">👥 Gestão de Usuários</h1>
-      <%= link_to '➕ Novo Usuário', new_admin_user_path, class: "btn btn-primary" %>
-    </div>
+<div class="header-section">
+  <h1 class="page-title">Gestão de Usuários</h1>
+  
+  <%= link_to new_admin_user_path, class: "btn-primary btn-with-icon" do %>
+   
+    Novo Usuário
+  <% end %>
+</div>
 
-    <table class="table-chique">
-      <thead>
-        <tr>
-          <th>NOME</th>
-          <th>E-MAIL</th>
-          <th style="text-align: center;">CARGO</th>
-          <th style="text-align: right;">AÇÕES</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @users.each do |user| %>
-          <tr>
-            <td style="font-weight: 700; color: #1e293b;"><%= user.name.present? ? user.name : "Sem nome" %></td>
-            <td style="color: #64748b;"><%= user.email %></td>
-            <td style="text-align: center;">
-              <span class="badge badge-<%= user.role %>"><%= user.role %></span>
-            </td>
-            <td style="text-align: right;">
-              <div style="display: inline-flex; gap: 10px; align-items: center;">
-                <%= link_to 'Editar', edit_admin_user_path(user), class: "btn-edit" %>
-                
-                <%= button_to 'Excluir', admin_user_path(user), 
-                    method: :delete, 
-                    form: { data: { turbo_confirm: "Deseja remover #{user.email}?" }, style: "display: inline;" }, 
-                    class: "btn-delete-table" %>
-              </div>
-            </td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
-    
+<div class="card-table">
+<table class="data-table">
+ <thead>
+  <tr>
+    <th>NOME</th>
+    <th>E-MAIL</th>
+    <th>CARGO</th>
+    <%# Adicione text-right aqui %>
+    <th class="text-right">AÇÕES</th>
+  </tr>
+</thead>
+<tbody>
+  <% @users.each do |user| %>
+    <tr>
+  <td class="font-bold"><%= user.name %></td>
+  <td class="text-muted"><%= user.email %></td>
+  
+  <td>
+    <span class="status-badge <%= user.role %>"><%= user.role %></span>
+  </td>
+
+    <td>
+    <div class="action-buttons" style="justify-content: flex-start; gap: 8px;">
+      <%= link_to 'Editar', edit_admin_user_path(user), class: "btn-action btn-edit" %>
+      <%# 1. O Botão que o usuário vê na tabela %>
+<button onclick="document.getElementById('modal-<%= user.id %>').style.display='flex'" class="btn-action-pill btn-delete-pill" style="border: none; cursor: pointer;">
+  Excluir
+</button>
+
+<%# 2. A "Div de Aviso" (Modal) - Fica escondida até o clique %>
+<%# ... (todo o resto do modal de aviso igual) ... %>
+<%# 2. A "Div de Aviso" (Modal) - Agora com a variável certa: user %>
+<div id="modal-<%= user.id %>" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+  <div class="card-standard" style="max-width: 400px; text-align: center; padding: 30px; border-top: 5px solid #ef4444;">
+    <span style="font-size: 3rem;">⚠️</span>
+    <h2 style="color: #13505B; margin: 15px 0;">Confirmar Exclusão?</h2>
+    <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px;">
+      Você está prestes a apagar permanentemente o usuário <strong><%= user.name %></strong>.<br>
+      Esta ação não pode ser desfeita e todos os dados vinculados sumirão.
+    </p>
+
+    <div style="display: flex; gap: 10px; justify-content: center; width: 100%;">
+      <%# BOTÃO DE VERDADE (AJUSTADO PARA USER) %>
+      <%= button_to "Sim, excluir", admin_user_path(user), 
+          method: :delete, 
+          class: "btn-pro-size btn-delete-pro", 
+          style: "width: 160px !important; display: flex; align-items: center; justify-content: center;" %>
+
+      <%# BOTÃO CANCELAR %>
+      <button onclick="document.getElementById('modal-<%= user.id %>').style.display='none'" 
+              class="btn-pro-size btn-secondary" 
+              style="width: 140px !important; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; background-color: #64748b !important; color: white !important;">
+        Cancelar
+      </button>
+    </div>
   </div>
+</div>
+    </div>
+  </td>
+
+</tr>
+  <% end %>
+</tbody>
+</table>
 </div>

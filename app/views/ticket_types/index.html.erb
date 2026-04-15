@@ -1,16 +1,55 @@
-<p style="color: green"><%= notice %></p>
+<div class="container-crud">
+  <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+      <h1 class="brand-name" style="font-size: 2rem;">Configurações de <span class="brand-bold">SLA</span></h1>
+      <p class="login-subtitle" style="margin-top: 5px;">Defina os prazos de resolução para cada tipo de chamado.</p>
+    </div>
+    <%= link_to "+ Nova Categoria", new_ticket_type_path, class: "btn-pro-size btn-edit-pro", style: "width: 200px !important;" %>
+  </div>
 
-<% content_for :title, "Ticket types" %>
+  <div class="card-table">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 40%;">CATEGORIA / TIPO DE PROBLEMA</th>
+          <th style="width: 30%;">PRAZO ESTIMADO (SLA)</th>
+          <th style="width: 30%; text-align: right; padding-right: 25px;">AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @ticket_types.each do |ticket_type| %>
+          <tr>
+            <td>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="background: #eefafa; padding: 8px; border-radius: 8px; font-size: 1.1rem;">
+                  <%# Ícone dinâmico simples %>
+                  <%= case ticket_type.title.downcase
+                      when /eletrica/ then ""
+                      when /seguranca/ then ""
+                      when /manutencao/ then ""
+                      when /comportamento/ then ""
+                      else end %>
+                </div>
+                <strong style="color: #13505B; font-size: 0.95rem;"><%= ticket_type.title %></strong>
+              </div>
+            </td>
+            
+            <td>
+              <div style="display: flex; align-items: center; gap: 6px; color: #475569; font-weight: 600;">
+               
+                <%= ticket_type.sla_hours %> horas
+              </div>
+            </td>
 
-<h1>Ticket types</h1>
-
-<div id="ticket_types">
-  <% @ticket_types.each do |ticket_type| %>
-    <%= render ticket_type %>
-    <p>
-      <%= link_to "Show this ticket type", ticket_type %>
-    </p>
-  <% end %>
+            <td>
+              <div class="action-buttons-row">
+                <%= link_to "Ver", ticket_type, class: "btn-action-pill btn-details-pill" %>
+                <%= link_to "Editar", edit_ticket_type_path(ticket_type), class: "btn-action-pill btn-edit-pill" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>
-
-<%= link_to "New ticket type", new_ticket_type_path %>

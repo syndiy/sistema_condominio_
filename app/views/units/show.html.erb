@@ -1,44 +1,62 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @unit %>
-
-<div style="border: 1px solid #ddd; padding: 20px; border-radius: 10px;">
-  <h1>Detalhes da Unidade</h1>
-  
-  <p><strong>Número da Unidade:</strong> <%= @unit.number %></p>
-<p><strong>Andar:</strong> <%= @unit.floor %></p>
-<p><strong>Pertence ao Bloco:</strong> <%= @unit.block.identification %></p>
-<p><strong>Configuração do Bloco:</strong> 
-  Este prédio tem <%= @unit.block.floors_count %> andares e 
-  <%= @unit.block.apartments_per_floor %> apartamentos por andar.
-</p>
-
-<p>
-  <strong>Moradores Vinculados:</strong>
-  <% if @unit.users.any? %>
-    <ul>
-      <% @unit.users.each do |user| %>
-        <li><%= user.name %> (<%= user.email %>)</li>
-      <% end %>
-    </ul>
-  <% else %>
-    <span style="color: #dc3545;">Nenhum morador vinculado ainda.</span>
-  <% end %>
-</p>
-
- <hr>
-  <div style="display: flex; gap: 10px; align-items: center;">
-    <%= link_to "Editar esta unidade", edit_unit_path(@unit), style: "text-decoration: none; color: #007bff;" %> |
-    <%= link_to "Voltar para a lista", units_path, style: "text-decoration: none; color: #6c757d;" %>
+<div class="container-crud">
+  <div class="card-standard">
     
-    <%# O botão de destruir com o aviso dinâmico que você pediu %>
-    <%= button_to "Excluir Unidade", @unit, method: :delete, 
-        form: { data: { turbo_confirm: @unit.users.any? ? 
-          "⚠️ ATENÇÃO: Esta unidade possui moradores vinculados! Se você continuar, os vínculos de moradia serão apagados. Tem certeza que deseja excluir?" : 
-          "Tem certeza que deseja excluir esta unidade?" } },
-        style: "background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;" %>
+    <div class="login-header" style="text-align: center; margin-bottom: 40px;">
+   
+      <h1 class="brand-name">Detalhes da <span class="brand-bold">Unidade</span></h1>
+      <p class="login-subtitle">Informações completas sobre o apartamento e residentes.</p>
+    </div>
+
+    <div class="info-section-pro" style="margin-bottom: 30px;">
+      <h3 style="font-size: 0.85rem; font-weight: 800; color: #13505B; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
+        Informações Básicas
+      </h3>
+      
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        <div>
+          <span class="form-label-login" style="font-size: 0.7rem;">NÚMERO</span>
+          <p style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 5px 0;"><%= @unit.number %></p>
+        </div>
+        <div>
+          <span class="form-label-login" style="font-size: 0.7rem;">ANDAR</span>
+          <p style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 5px 0;"><%= @unit.floor %>º</p>
+        </div>
+        <div>
+          <span class="form-label-login" style="font-size: 0.7rem;">BLOCO / TORRE</span>
+          <p style="font-size: 1.1rem; font-weight: 700; color: #1e293b; margin: 5px 0;"><%= @unit.block.identification %></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-section-pro" style="margin-bottom: 40px;">
+      <h3 style="font-size: 0.85rem; font-weight: 800; color: #13505B; margin-bottom: 15px; text-transform: uppercase;">Residentes Vinculados</h3>
+      
+      <% if @unit.users.any? %>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <% @unit.users.each do |user| %>
+            <div class="resident-mini-card">
+              <div class="resident-icon-wrapper" style="width: 40px; height: 40px; background-color: rgba(17, 157, 164, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                  <circle cx="12" cy="7" r="4" stroke="#119DA4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 21V17C4 15.8954 4.89543 15 6 15H18C19.1046 15 20 15.8954 20 17V21" stroke="#119DA4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="resident-info">
+                <strong class="resident-name"><%= user.name %></strong>
+                <span class="resident-email"><%= user.email %></span>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <p style="font-size: 0.9rem; color: #94a3b8; font-style: italic; text-align: center;">Nenhum residente vinculado.</p>
+      <% end %>
+    </div>
+
+    <div class="actions-container">
+      <%= link_to "Editar", edit_unit_path(@unit), class: "btn-pro-size btn-edit-pro" %>
+      <%= link_to "Voltar", units_path, class: "btn-pro-size btn-delete-pro" %>
+    </div>
+
   </div>
-</div>
-
-
 </div>

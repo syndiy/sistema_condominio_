@@ -1,27 +1,35 @@
-<div class="page-shell">
-  <div class="card-base" style="max-width: 500px; margin: 0 auto;">
-    <h1 style="margin-top: 0;">✏️ Editar Bloco</h1>
+<div class="container-crud">
+  <div class="card-standard">
+    
+    <div class="login-header" style="text-align: center; margin-bottom: 40px;">
+      <h1 class="brand-name">Editar <span class="brand-bold">Bloco</span></h1>
+      <p class="login-subtitle">Atualize as informações da torre ou bloco selecionado.</p>
+    </div>
 
-    <%= form_with(model: @block) do |f| %>
-      <div style="margin-bottom: 15px;">
-        <%= f.label :identification, "Identificação do Bloco", class: "form-label", style: "font-weight: 700;" %>
-        <%= f.text_field :identification, class: "form-input", placeholder: "Ex: Bloco C" %>
+    <%= form_with(model: @block, local: true) do |f| %>
+      
+      <div class="form-group-login">
+        <%= f.label :identification, "IDENTIFICAÇÃO DO BLOCO", class: "form-label-login" %>
+        <%= f.text_field :identification, class: "form-input-login" %>
       </div>
 
-      <div style="margin-bottom: 15px;">
-        <%= f.label :floors_count, "Quantidade de Andares", class: "form-label", style: "font-weight: 700;" %>
-        <%= f.number_field :floors_count, class: "form-input" %>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        <div class="form-group-login">
+          <%= f.label :floors_count, "QUANTIDADE DE ANDARES", class: "form-label-login" %>
+          <%= f.number_field :floors_count, class: "form-input-login" %>
+        </div>
+
+        <div class="form-group-login">
+          <%= f.label :apartments_per_floor, "APTOS POR ANDAR", class: "form-label-login" %>
+          <%= f.number_field :apartments_per_floor, class: "form-input-login" %>
+        </div>
       </div>
 
-      <div style="margin-bottom: 25px;">
-        <%= f.label :apartments_per_floor, "Apartamentos por Andar", class: "form-label", style: "font-weight: 700;" %>
-        <%= f.number_field :apartments_per_floor, class: "form-input" %>
+      <div class="actions-container">
+        <%= f.submit "Salvar Alterações", class: "btn-pro-size btn-edit-pro" %>
+        <%= link_to "Cancelar", block_path(@block), class: "btn-pro-size btn-delete-pro" %>
       </div>
 
-      <div style="display: flex; gap: 10px;">
-        <%= f.submit "Atualizar Bloco", class: "btn btn-primary" %>
-        <%= link_to "Cancelar", blocks_path, class: "btn", style: "background: #f3f4f6; color: #4b5563;" %>
-      </div>
     <% end %>
   </div>
 </div>

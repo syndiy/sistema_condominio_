@@ -1,28 +1,77 @@
-<div class="page-shell">
-  <div class="card-base" style="max-width: 500px; margin: 0 auto;">
-    <h1 style="margin-bottom: 25px;">👤 Cadastrar Novo Usuário</h1>
+<div class="container-crud">
+  <div class="card-standard">
+    
+    <div class="login-header" style="text-align: center; margin-bottom: 40px;">
 
-    <%= form_with(model: [:admin, @user]) do |f| %>
-      <div class="form-group" style="margin-bottom: 15px;">
-        <%= f.label :name, "Nome Completo", class: "form-label" %>
-        <%= f.text_field :name, class: "form-input", placeholder: "Ex: Eduarda Keila Silva" %>
+      <h1 class="brand-name">Cadastrar <span class="brand-bold">Usuário</span></h1>
+      <p class="login-subtitle">Preencha as credenciais e defina o nível de acesso.</p>
+    </div>
+
+    <%= form_with(model: [:admin, @user], local: true) do |f| %>
+      
+      <div class="form-group-login">
+        <%= f.label :name, "NOME COMPLETO", class: "form-label-login" %>
+        <%= f.text_field :name, class: "form-input-login", placeholder: "Ex: Eduarda Keila Silva" %>
       </div>
 
-      <div class="form-group" style="margin-bottom: 15px;">
-        <%= f.label :email, "E-mail", class: "form-label" %>
-        <%= f.email_field :email, class: "form-input", placeholder: "email@exemplo.com" %>
+      <div class="form-group-login">
+        <%= f.label :email, "E-MAIL", class: "form-label-login" %>
+        <%= f.email_field :email, class: "form-input-login", placeholder: "email@exemplo.com" %>
       </div>
 
-      <div class="form-group" style="margin-bottom: 25px;">
-        <%= f.label :role, "Tipo de Usuário", class: "form-label" %>
-        <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, class: "form-input" %>
+      <div class="form-group-login">
+        <%= f.label :password, "SENHA PROVISÓRIA", class: "form-label-login" %>
+        <%= f.password_field :password, class: "form-input-login", placeholder: "Mínimo 6 caracteres" %>
       </div>
 
-      <%# Localize a parte dos botões no seu new.html.erb e troque por isso %>
-<div style="display: flex; gap: 15px; align-items: center; margin-top: 10px;">
-  <%= f.submit "Cadastrar Usuário", class: "btn btn-primary", style: "flex: 1;" %>
-  <%= link_to "Cancelar", admin_users_path, style: "text-decoration: none; color: #64748b; font-weight: 600; font-size: 14px;" %>
-</div>
+      <div class="form-group-login">
+        <%= f.label :role, "TIPO DE USUÁRIO", class: "form-label-login" %>
+        <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, id: "role-select", class: "form-input-login" %>
+      </div>
+
+      <%# Painel de Responsabilidades (Lógica mantida) %>
+      <div id="responsabilidades-section" style="display: none; background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e2e8f0;">
+        <h3 style="font-size: 0.85rem; font-weight: 800; color: #13505B; margin-bottom: 10px; text-transform: uppercase;">Responsabilidades</h3>
+        <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Selecione as categorias que este colaborador atende:</p>
+        
+        <div class="checkbox-compact-grid">
+          <%= f.collection_check_boxes :ticket_type_ids, TicketType.all, :id, :title do |b| %>
+            <label class="chip-checkbox">
+              <%= b.check_box %>
+              <span class="chip-label">
+                <span class="chip-icon">+</span>
+                <%= b.text %>
+              </span>
+            </label>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="actions-container">
+        <%= f.submit "Salvar Usuário", class: "btn-pro-size btn-edit-pro" %>
+        <%= link_to "Cancelar", admin_users_path, class: "btn-pro-size btn-delete-pro" %>
+      </div>
+
     <% end %>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const roleSelect = document.getElementById('role-select');
+    const responsabilidadesSection = document.getElementById('responsabilidades-section');
+
+    function toggleSection() {
+      if (roleSelect && roleSelect.value === "colaborador") {
+        responsabilidadesSection.style.display = "block";
+      } else if (responsabilidadesSection) {
+        responsabilidadesSection.style.display = "none";
+      }
+    }
+
+    if (roleSelect) {
+      roleSelect.addEventListener("change", toggleSection);
+      toggleSection();
+    }
+  });
+</script>

@@ -1,57 +1,67 @@
-<h1 style="margin-bottom: 20px;">Unidades (Apartamentos)</h1>
-
-<%= form_with url: units_path, method: :get, local: true, style: "margin-bottom: 20px;" do |f| %>
-  <%= f.text_field :query, placeholder: "Buscar por número ou bloco...", 
-      value: params[:query], style: "padding: 8px; width: 300px;" %>
-  <%= f.submit "Pesquisar", style: "padding: 8px 15px; cursor: pointer;" %>
-  <%= link_to "Limpar", units_path if params[:query].present? %>
-<% end %>
-
-<table style="width: 100%; border-collapse: collapse;">
-  <thead>
-    <tr style="background-color: #333; color: white; text-align: left;">
-      <th style="padding: 12px;">Etiqueta</th>
-      <th style="padding: 12px;">Bloco</th>
-      <th style="padding: 12px;">Andar</th>
-      <th style="padding: 12px;">Morador</th> <th style="padding: 12px;">Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% 
-      current_block = nil
-      row_color = "#f2f2f2" 
-    %>
-    
-    <% @units.each do |unit| %>
-      <% 
-        if unit.block_id != current_block
-          current_block = unit.block_id
-          row_color = (row_color == "#ffffff" ? "#f2f2f2" : "#ffffff")
-        end 
-      %>
-
-      <tr style="background-color: <%= row_color %>; border-bottom: 1px solid #ddd;">
-        <td style="padding: 10px;"><strong><%= unit.number %></strong></td>
-        <td style="padding: 10px;"><%= unit.block.identification %></td>
-        <td style="padding: 10px;"><%= unit.floor %></td>
-        
-  <td style="padding: 10px;">
-  <% if unit.users.any? %>
-    <%# Exibe o e-mail dos moradores vinculados %>
-    <%= unit.users.map(&:email).join(", ") %>
-  <% else %>
-    <span style="color: #999;">--</span>
+<div class="header-section">
+  <h1 class="page-title">Unidades (Apartamentos)</h1>
+  <%= link_to new_unit_path, class: "btn-primary" do %>
+    + Nova Unidade
   <% end %>
-</td>
-        <td style="padding: 10px;">
-          <%= link_to "Ver", unit %> |
-          <%= link_to "Editar", edit_unit_path(unit) %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+</div>
 
-<div style="margin-top: 20px;">
-  <%= link_to "Nova Unidade", new_unit_path, style: "background: #28a745; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none;" %>
+<%# BARRA DE PESQUISA MODERNA %>
+<div class="search-container" style="margin-bottom: 25px;">
+  <%= form_with url: units_path, method: :get, class: "modern-search-form" do |f| %>
+    <div class="search-input-wrapper" style="display: flex; gap: 10px; align-items: center;">
+      <%= f.text_field :query, value: params[:query], placeholder: "Buscar por número ou bloco...", 
+          class: "form-input", style: "margin: 0; flex: 1; height: 42px;" %>
+      
+      <%= f.submit "Pesquisar", class: "btn-secondary", style: "
+        background-color: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;
+        padding: 0 20px; border-radius: 8px; font-weight: 700; height: 42px; cursor: pointer;
+      " %>
+      
+      <% if params[:query].present? %>
+        <%= link_to "Limpar", units_path, class: "text-muted", style: "font-size: 0.85rem;" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<div class="card-table">
+  <table class="data-table" style="table-layout: fixed; width: 100%;">
+    <thead>
+      <tr>
+        <th style="width: 15%;">ETIQUETA</th>
+        <th style="width: 20%;">BLOCO</th>
+        <th style="width: 15%;">ANDAR</th>
+        <th style="width: 25%;">MORADOR(ES)</th>
+        <th style="width: 25%;">AÇÕES</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @units.each do |unit| %>
+        <tr>
+          <td class="font-bold"><%= unit.number %></td>
+          <td><%= unit.block.identification %></td>
+          <td class="text-muted"><%= unit.floor %>º andar</td>
+          <td>
+            <% if unit.users.any? %>
+              <span class="text-muted" style="font-size: 0.85rem;"><%= unit.users.first.email %></span>
+            <% else %>
+            <span style="color: #94a3b8; font-size: 1rem; letter-spacing: 1px;">--</span>
+            <% end %>
+          </td>
+          <td>
+            <div class="action-buttons" style="display: flex; gap: 8px; justify-content: flex-start; align-items: center;">
+              <%= link_to "Ver", unit_path(unit), class: "btn-action", style: "
+                background-color: #f1f5f9; color: #475569; padding: 6px 12px; 
+                border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 700;
+              " %>
+              <%= link_to "Editar", edit_unit_path(unit), class: "btn-action", style: "
+                background-color: #eef2ff; color: #4338ca; padding: 6px 12px; 
+                border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 700;
+              " %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>

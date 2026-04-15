@@ -1,49 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Sistema Condomínio</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  </head>
+ <head>
+  <title>CondomínioPro</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%# ESTA LINHA É A MAIS IMPORTANTE: %>
+  <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+</head>
+
   <body>
+    <%# Renderiza a Navbar que vamos criar abaixo %>
+    <%= render 'layouts/navbar' %>
 
-    <%# LÓGICA: SÓ MOSTRA A NAVBAR SE NÃO FOR A HOME PAGE %>
-    <%# LÓGICA: SÓ MOSTRA A NAVBAR SE NÃO FOR A HOME PAGE %>
-<% unless current_page?(root_path) || current_page?(admin_dashboard_path) %>
-  <nav style="background: white; border-bottom: 1px solid #e5e7eb; padding: 15px 0; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
-    <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center;">
-      
-      <div style="display: flex; gap: 20px; align-items: center;">
-        <span style="font-weight: 800; color: #5b21b6; font-size: 1.2rem;">🏢 CondomínioPro</span>
-        
-        <div style="display: flex; gap: 12px; border-left: 1px solid #e5e7eb; padding-left: 20px; flex-wrap: wrap;">
-          <%= link_to 'Início', admin_dashboard_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
-          <%= link_to 'Usuários', admin_users_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
-          <%= link_to 'Blocos', blocks_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
-          <%= link_to 'Unidades', units_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
-          <%= link_to 'Vincular', user_units_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
-          <%= link_to 'Chamados', tickets_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
-          <%= link_to 'Tipos/SLA', ticket_types_path, style: "text-decoration: none; color: #4b5563; font-weight: 600; font-size: 13px;" %>
-        </div>
+    <main class="main-content">
+      <div class="container">
+        <%# Alertas de Sucesso/Erro %>
+        <% if notice %> <p class="alert alert-success"><%= notice %></p> <% end %>
+        <% if alert %> <p class="alert alert-danger"><%= alert %></p> <% end %>
+
+        <%= yield %>
       </div>
-
-      <div style="display: flex; align-items: center; gap: 15px;">
-  <% if user_signed_in? %>
-    <div style="text-align: right;">
-      <div style="font-weight: 700; font-size: 14px;"><%= current_user.email %></div>
-      <div style="font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px;"><%= current_user.role %></div>
-    </div>
-    <%= button_to 'Sair', destroy_user_session_path, method: :delete, style: "background: #f3f4f6; border: 1px solid #d1d5db; padding: 6px 12px; border-radius: 8px; font-weight: 600; cursor: pointer; color: #4b5563; font-size: 13px;" %>
-  <% else %>
-    <%= link_to 'Entrar', new_user_session_path, style: "text-decoration: none; color: #4b5563; font-weight: 600;" %>
-  <% end %>
-</div>
-
-    </div>
-  </nav>
-<% end %>
-
-    <%= yield %>
+    </main>
   </body>
 </html>

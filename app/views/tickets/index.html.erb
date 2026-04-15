@@ -1,35 +1,65 @@
-<h1>Meus Chamados de Manutenção</h1>
+<div class="container-crud">
+  <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+    <div>
+      <h1 class="brand-name" style="font-size: 2rem;">Meus <span class="brand-bold">Chamados</span></h1>
+      <p class="login-subtitle" style="margin-top: 5px;">Acompanhe as solicitações de manutenção do condomínio.</p>
+    </div>
+    <%= link_to "+ Abrir Novo Chamado", new_ticket_path, class: "btn-pro-size btn-edit-pro", style: "width: 220px !important;" %>
+  </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Assunto</th>
-      <th>Apartamento</th>
-      <% if current_user.admin? || current_user.colaborador? %>
-        <th>Morador (Solicitante)</th> <% end %>
-      <th>Situação</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @tickets.each do |ticket| %>
+<div class="card-table">
+  <table class="data-table">
+    <thead>
       <tr>
-        <td><%= ticket.title %></td>
-        <td><%= ticket.unit.number %></td>
-        <% if current_user.admin? || current_user.colaborador? %>
-          <td><%= ticket.user.email %></td>
-        <% end %>
-        <td><%= ticket.status.name %></td>
-        <td>
-          <%= link_to "Ver Detalhes", ticket %>
-          <% if current_user.admin? || current_user.colaborador? %>
-            | <%= link_to "Mudar Status", edit_ticket_path(ticket) %> <% end %>
-        </td>
+        <th style="width: 25%;">ASSUNTO</th>
+        <th style="width: 10%;">APTO</th> <%# Diminuí aqui %>
+        <th style="width: 25%;">SOLICITANTE</th>
+        <th style="width: 15%;">SITUAÇÃO</th>
+        <th style="width: 25%; text-align: right; padding-right: 25px;">AÇÕES</th> <%# Aumentei aqui %>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @tickets.each do |ticket| %>
+        <tr>
+          <td>
+            <div style="display: flex; flex-direction: column;">
+              <strong style="color: #13505B; font-size: 0.95rem;"><%= ticket.title %></strong>
+              <span style="font-size: 0.75rem; color: #64748b;"><%= ticket.created_at.strftime("%d/%m/%Y às %H:%M") %></span>
+            </div>
+          </td>
 
-<br>
+          <td>
+            <span style="font-weight: 700; color: #1e293b;"><%= ticket.unit.number %></span>
+          </td>
 
-<%= link_to 'Abrir Novo Chamado', new_ticket_path %>
+          <td>
+            <div style="font-size: 0.85rem;">
+              <div style="font-weight: 600; color: #1e293b;"><%= ticket.user.name %></div>
+              <div style="color: #64748b;"><%= ticket.user.email %></div>
+            </div>
+          </td>
+
+          <td>
+            <% status_nome = ticket.status.name.downcase %>
+            <% status_class = case 
+               when status_nome.include?('concluido') || status_nome.include?('concluído') then 'status-badge morador'
+               when status_nome.include?('aberto') then 'status-badge admin'
+               else 'status-badge colaborador'
+               end %>
+            <span class="<%= status_class %>">
+              <%= ticket.status.name.upcase %>
+            </span>
+          </td>
+
+          <td>
+            <%# Usei inline-flex aqui pra garantir que eles fiquem um do lado do outro sem frescura %>
+            <div style="display: inline-flex; justify-content: flex-end; gap: 8px; width: 100%; white-space: nowrap;">
+              <%= link_to "Detalhes", ticket, class: "btn-action-pill btn-details-pill" %>
+              <%= link_to "Mudar Status", edit_ticket_path(ticket), class: "btn-action-pill btn-edit-pill" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
