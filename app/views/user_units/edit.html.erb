@@ -1,12 +1,42 @@
-<% content_for :title, "Editing user unit" %>
+<div class="container-crud" style="width: 90%; max-width: 600px; margin: 60px auto;">
+  <div class="card-standard" style="padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;">
+    
+    <%# HEADER DO EDIT %>
+    <div style="margin-bottom: 30px; border-bottom: 1px solid #f1f5f9; padding-bottom: 20px;">
+      <h1 style="font-size: 1.6rem; font-weight: 800; color: #13505B; margin: 0;">Editar Vínculo</h1>
+      <p style="color: #64748b; margin-top: 5px; font-size: 0.9rem;">Atualize a unidade ou o morador deste registro.</p>
+    </div>
 
-<h1>Editing user unit</h1>
+    <%= form_with(model: @user_unit, local: true) do |f| %>
+      <%# SELEÇÃO DE MORADOR %>
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; color: #119DA4; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
+          Morador
+        </label>
+        <%= f.collection_select :user_id, User.morador, :id, :name, 
+            { prompt: "Selecione o morador" }, 
+            { style: "width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; color: #1e293b; font-size: 0.9rem;" } %>
+      </div>
 
-<%= render "form", user_unit: @user_unit %>
+      <%# SELEÇÃO DE UNIDADE %>
+      <div style="margin-bottom: 35px;">
+        <label style="display: block; color: #119DA4; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">
+          Unidade (Apartamento)
+        </label>
+        <%= f.collection_select :unit_id, Unit.all, :id, :number, 
+            { prompt: "Selecione a unidade" }, 
+            { style: "width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; background: #f8fafc; color: #1e293b; font-size: 0.9rem;" } %>
+      </div>
 
-<br>
+      <%# BOTÕES DE AÇÃO %>
+      <div style="display: flex; gap: 12px; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 25px;">
+        <%= f.submit "Salvar Alterações", 
+            style: "background: #119DA4; color: white; border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; flex: 2;" %>
+        
+        <%= link_to "Cancelar", user_units_path, 
+            style: "flex: 1; text-align: center; color: #64748b; text-decoration: none; font-weight: 600; font-size: 0.9rem; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px;" %>
+      </div>
+    <% end %>
 
-<div>
-  <%= link_to "Show this user unit", @user_unit %> |
-  <%= link_to "Back to user units", user_units_path %>
+  </div>
 </div>

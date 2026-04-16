@@ -1,4 +1,4 @@
-<div class="container-crud" style="max-width: 850px;">
+<div class="container-crud" style="max-width: 850px; margin: 0 auto;">
   <div class="card-standard">
     <%# HEADER DO CHAMADO %>
     <div style="border-bottom: 1px solid #e2e8f0; padding-bottom: 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
@@ -7,7 +7,6 @@
         <p style="color: #64748b; margin-top: 5px; font-size: 0.9rem;">Aberto em: <%= @ticket.created_at.strftime("%d/%m/%Y às %H:%M") %></p>
       </div>
       
-      <%# CORREÇÃO DA COR: Verde para concluído %>
       <% status_nome = @ticket.status.name.downcase %>
       <% status_class = (status_nome.include?('concluido') || status_nome.include?('concluído')) ? 'status-badge morador' : 'status-badge admin' %>
       
@@ -34,54 +33,86 @@
         <%= @ticket.description %>
       </div>
     </div>
+<%# PARECER TÉCNICO DINÂMICO %>
+    <% if @ticket.tech_notes.present? || status_nome.include?('concluido') || status_nome.include?('concluído') %>
+      <%# Muda a cor se for apenas atendimento ou se for conclusão %>
+      <% is_concluido = status_nome.include?('concluido') || status_nome.include?('concluído') %>
+      <% cor_principal = is_concluido ? '#119DA4' : '#E9C46A' %> <%# Azul para conclusão, Amarelo/Dourado para atendimento %>
+      <% fundo_container = is_concluido ? '#eefafa' : '#fffdf5' %>
 
-    <%# PARECER TÉCNICO COM INFO DE FINALIZAÇÃO %>
-    <% if @ticket.tech_notes.present? %>
-      <div style="background: #eefafa; border: 2px solid #119DA4; border-radius: 15px; padding: 25px; margin-bottom: 35px; position: relative;">
-        <div style="position: absolute; top: 0; right: 0; padding: 5px 15px; background: #119DA4; color: white; font-size: 0.65rem; font-weight: 900; border-bottom-left-radius: 10px;">SOLUÇÃO</div>
+      <div style="background: <%= fundo_container %>; border: 2px solid <%= cor_principal %>; border-radius: 15px; padding: 25px; margin-bottom: 35px; position: relative;">
+        <%# ETIQUETA DINÂMICA %>
+        <div style="position: absolute; top: 0; right: 0; padding: 5px 15px; background: <%= cor_principal %>; color: white; font-size: 0.65rem; font-weight: 900; border-bottom-left-radius: 10px; border-top-right-radius: 12px;">
+          <%= is_concluido ? 'SOLUÇÃO' : 'EM ANDAMENTO' %>
+        </div>
         
-        <h3 style="color: #13505B; font-size: 0.9rem; margin-bottom: 10px; text-transform: uppercase;">✅ Notas de Manutenção</h3>
-        <p style="color: #1e293b; line-height: 1.6; margin-bottom: 15px;"><%= @ticket.tech_notes %></p>
+        <h3 style="color: #13505B; font-size: 0.9rem; margin-bottom: 15px; text-transform: uppercase; display: flex; align-items: center; gap: 10px; font-weight: 800;">
+          <span style="background: <%= cor_principal %>; color: white; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; border-radius: 4px; font-size: 0.7rem;">
+            <%= is_concluido ? '✔' : '⏳' %>
+          </span> 
+          NOTAS DE MANUTENÇÃO
+        </h3>
+        
+        <div style="color: #1e293b; line-height: 1.6; margin-bottom: 20px; font-size: 0.95rem;">
+          <%= @ticket.tech_notes.presence || "O chamado está sendo processado pela equipe técnica." %>
+        </div>
 
-        <% if @ticket.finished_at.present? %>
-          <div style="display: flex; align-items: center; gap: 8px; padding-top: 15px; border-top: 1px solid rgba(17, 157, 164, 0.2); color: #119DA4; font-weight: 700; font-size: 0.9rem;">
-            <span>🎉</span>
-            <span>Resolvido em: <%= @ticket.finished_at.strftime("%d/%m/%Y às %H:%M") %></span>
+        <%# FOTOS SE HOUVER %>
+        <% if @ticket.resolution_media.attached? %>
+          <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 15px;">
+            <% @ticket.resolution_media.each do |foto| %>
+              <%= image_tag foto, style: "width: 120px; height: 90px; object-fit: cover; border-radius: 8px; border: 2px solid white; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" %>
+            <% end %>
           </div>
         <% end %>
+
+        <%# RODAPÉ COM DATA %>
+        <div style="display: flex; align-items: center; gap: 8px; padding-top: 15px; border-top: 1px solid rgba(0,0,0,0.05); color: <%= cor_principal %>; font-weight: 700; font-size: 0.85rem;">
+          <span><%= is_concluido ? '🎉' : '🛠️' %></span>
+          <span><%= is_concluido ? 'Resolvido em:' : 'Última atualização:' %> <%= (@ticket.finished_at || @ticket.updated_at).strftime("%d/%m/%Y às %H:%M") %></span>
+        </div>
       </div>
     <% end %>
 
     <%# BOTÕES DE AÇÃO %>
-    <div class="actions-container" style="justify-content: flex-start; gap: 15px;">
-      <%= link_to "Editar Chamado", edit_ticket_path(@ticket), class: "btn-pro-size btn-edit-pro" %>
-      <%= link_to "Voltar", tickets_path, class: "btn-pro-size btn-delete-pro" %>
+    <div class="actions-container" style="display: flex; justify-content: flex-start; gap: 15px;">
+      <%= link_to "Editar Chamado", edit_ticket_path(@ticket), class: "btn-pro-size btn-edit-pro", style: "text-decoration: none;" %>
+      <%= link_to "Voltar", tickets_path, class: "btn-pro-size btn-delete-pro", style: "text-decoration: none;" %>
     </div>
   </div>
 
-  <%# SEÇÃO DE CHAT %>
-  <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #f1f5f9;">
+  <%# SEÇÃO DE CHAT / HISTÓRICO - COM FOTOS NOS COMENTÁRIOS %>
+  <div style="margin-top: 40px; padding: 20px; background: white; border-radius: 15px; border-top: 2px solid #f1f5f9;">
     <h3 style="color: #13505B; font-size: 1.1rem; margin-bottom: 25px; display: flex; align-items: center; gap: 8px;">
       <span>💬</span> Histórico e Evolução
     </h3>
 
-    <div id="comments-list">
+    <div id="comments-list" style="margin-bottom: 30px; display: flex; flex-direction: column; gap: 20px;">
       <% @ticket.comments.each do |comment| %>
         <% is_mine = (comment.user == current_user) %>
         <div style="display: flex; flex-direction: column; <%= is_mine ? 'align-items: flex-end;' : 'align-items: flex-start;' %>">
-          <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; margin-bottom: 4px; text-transform: uppercase; margin-<%= is_mine ? 'right' : 'left' %>: 10px;">
+          <span style="font-size: 0.7rem; font-weight: 800; color: #64748b; margin-bottom: 4px; text-transform: uppercase;">
             <%= comment.user.name %> • <%= comment.created_at.strftime("%H:%M") %>
           </span>
           <div style="max-width: 75%; padding: 12px 18px; border-radius: 18px; font-size: 0.95rem; line-height: 1.5;
             <%= is_mine ? 'background: #119DA4; color: white; border-bottom-right-radius: 4px;' : 'background: #f1f5f9; color: #334155; border-bottom-left-radius: 4px; border: 1px solid #e2e8f0;' %>">
             <%= comment.content %>
+
+            <%# EXIBIÇÃO DE FOTOS NO CHAT %>
+            <% if comment.medias.attached? %>
+              <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;">
+                <% comment.medias.each do |media| %>
+                  <%= image_tag media, style: "width: 80px; height: 80px; object-fit: cover; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3);" %>
+                <% end %>
+              </div>
+            <% end %>
           </div>
         </div>
       <% end %>
     </div>
 
     <%# FORMULÁRIO DE COMENTÁRIO %>
-    <div class="card-standard" style="padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; margin: 0; box-shadow: none;">
+    <div style="padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 15px;">
       <%= form_with(model: [ @ticket, Comment.new ], local: true) do |f| %>
         <%= f.text_area :content, placeholder: "Escreva aqui sua dúvida ou atualização...", 
             style: "width: 100%; border-radius: 12px; border: 1px solid #cbd5e1; padding: 15px; font-size: 0.95rem; height: 90px; resize: none; box-sizing: border-box; font-family: inherit;" %>
@@ -92,7 +123,7 @@
             <%= f.file_field :medias, multiple: true, style: "display: none;" %>
           </label>
 
-          <%= f.submit "Enviar Mensagem", style: "background-color: #119DA4; color: white; border: none; padding: 0 25px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; height: 42px; display: flex; align-items: center; justify-content: center;" %>
+          <%= f.submit "Enviar Mensagem", style: "background-color: #119DA4; color: white; border: none; padding: 10px 25px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: flex; align-items: center; justify-content: center;" %>
         </div>
       <% end %>
     </div>

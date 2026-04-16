@@ -1,11 +1,38 @@
-<% content_for :title, "New user unit" %>
+<div class="container-crud" style="max-width: 650px; margin: 0 auto;">
+  <div class="card-standard" style="padding: 40px; border-radius: 15px;">
+    <%# HEADER DO FORMULÁRIO %>
+    <div style="margin-bottom: 35px; border-bottom: 1px solid #f1f5f9; padding-bottom: 20px;">
+      <h1 style="font-size: 1.6rem; font-weight: 800; color: #13505B; margin: 0;">Novo Vínculo</h1>
+      <p style="color: #64748b; margin-top: 5px; font-size: 0.9rem;">Selecione o morador e a unidade correspondente.</p>
+    </div>
 
-<h1>New user unit</h1>
+    <%= form_with(model: @user_unit, local: true) do |f| %>
+      <%# CAMPO: MORADOR %>
+      <div style="margin-bottom: 25px;">
+        <label style="display: block; color: #119DA4; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">
+          Selecione o Morador
+        </label>
+        <%= f.collection_select :user_id, User.morador, :id, :name, 
+            { prompt: "Escolha um morador..." }, 
+            { style: "width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; color: #1e293b; font-size: 0.95rem; cursor: pointer;" } %>
+      </div>
 
-<%= render "form", user_unit: @user_unit %>
+      <%# CAMPO: UNIDADE %>
+      <div style="margin-bottom: 35px;">
+        <label style="display: block; color: #119DA4; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">
+          Selecione a Unidade (Ex: A101)
+        </label>
+        <%= f.collection_select :unit_id, Unit.all.includes(:block), :id, ->(u) { "#{u.block.identification} - #{u.number}" }, 
+            { prompt: "Escolha uma unidade..." }, 
+            { style: "width: 100%; padding: 12px 15px; border-radius: 8px; border: 1px solid #cbd5e1; background: #f8fafc; color: #1e293b; font-size: 0.95rem; cursor: pointer;" } %>
+      </div>
 
-<br>
-
-<div>
-  <%= link_to "Back to user units", user_units_path %>
+      <%# AÇÕES %>
+      <div style="display: flex; gap: 15px; align-items: center; border-top: 1px solid #f1f5f9; padding-top: 30px;">
+        <%= f.submit "Finalizar Vínculo", class: "btn-pro-size btn-edit-pro", style: "background: #119DA4; color: white; border: none; padding: 12px 30px; border-radius: 8px; font-weight: 700; cursor: pointer; flex-grow: 1;" %>
+        
+        <%= link_to "Cancelar", user_units_path, style: "color: #64748b; text-decoration: none; font-weight: 600; font-size: 0.9rem;" %>
+      </div>
+    <% end %>
+  </div>
 </div>

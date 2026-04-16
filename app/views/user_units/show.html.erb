@@ -1,16 +1,60 @@
-<p style="color: green"><%= notice %></p>
+<div class="container-crud" style="max-width: 800px; margin: 0 auto;">
+  <div class="card-standard" style="padding: 40px; border-radius: 15px;">
+    <%# HEADER DOS DETALHES %>
+    <div style="border-bottom: 1px solid #f1f5f9; padding-bottom: 25px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-start;">
+      <div>
+        <h1 style="font-size: 1.8rem; font-weight: 800; color: #13505B; margin: 0;">Detalhes do Vínculo</h1>
+        <p style="color: #64748b; margin-top: 5px; font-size: 0.9rem;">Informações sobre a relação entre morador e unidade.</p>
+      </div>
+      <div style="background: #eefafa; color: #119DA4; padding: 8px 15px; border-radius: 20px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase;">
+        Ativo
+      </div>
+    </div>
 
-<h1>Detalhes do Vínculo</h1>
+    <%# GRID DE INFORMAÇÕES %>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 40px;">
+      <%# MORADOR %>
+      <div class="info-group">
+        <label style="display: block; color: #119DA4; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Morador</label>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 40px; height: 40px; background: #13505B; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800;">
+            <%= @user_unit.user.name[0..1].upcase %>
+          </div>
+          <div>
+            <p style="margin: 0; font-weight: 700; color: #1e293b; font-size: 1.1rem;"><%= @user_unit.user.name %></p>
+            <p style="margin: 0; font-size: 0.85rem; color: #64748b;"><%= @user_unit.user.email %></p>
+          </div>
+        </div>
+      </div>
 
-<div style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; background: #f9f9f9;">
-  <%= render @user_unit %>
-</div>
+      <%# CARGO %>
+      <div class="info-group">
+        <label style="display: block; color: #119DA4; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Cargo do Usuário</label>
+        <p style="font-weight: 700; color: #1e293b; font-size: 1.1rem;"><%= @user_unit.user.role.titleize %></p>
+      </div>
 
-<div style="margin-top: 20px;">
-  <%= link_to "Editar este vínculo", edit_user_unit_path(@user_unit) %> |
-  <%= link_to "Voltar para a lista", user_units_path %>
+      <%# UNIDADE %>
+      <div class="info-group">
+        <label style="display: block; color: #119DA4; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Unidade (Apartamento)</label>
+        <p style="font-weight: 700; color: #1e293b; font-size: 1.1rem;"><%= @user_unit.unit.number %></p>
+      </div>
 
-  <div style="margin-top: 10px;">
-    <%= button_to "Remover este vínculo", @user_unit, method: :delete, data: { confirm: "Tem certeza?" }, style: "color: red;" %>
+      <%# BLOCO %>
+      <div class="info-group">
+        <label style="display: block; color: #119DA4; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Bloco / Prédio</label>
+        <p style="font-weight: 700; color: #1e293b; font-size: 1.1rem;"><%= @user_unit.unit.block.identification %></p>
+      </div>
+    </div>
+
+    <%# BOTÕES DE AÇÃO %>
+    <div style="border-top: 1px solid #f1f5f9; padding-top: 30px; display: flex; justify-content: space-between; align-items: center;">
+      <div style="display: flex; gap: 15px;">
+        <%= link_to "Voltar para a lista", user_units_path, style: "color: #64748b; text-decoration: none; font-weight: 600; font-size: 0.9rem;" %>
+        <%= link_to "Editar este vínculo", edit_user_unit_path(@user_unit), style: "color: #119DA4; text-decoration: none; font-weight: 700; font-size: 0.9rem;" %>
+      </div>
+
+      <%= button_to "Remover este vínculo", @user_unit, method: :delete, data: { confirm: "Tem certeza que deseja desvincular o morador?" }, 
+          style: "background: #fee2e2; color: #ef4444; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer;" %>
+    </div>
   </div>
 </div>

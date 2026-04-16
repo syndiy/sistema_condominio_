@@ -1,94 +1,107 @@
 class TicketsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_ticket, only: %i[ show edit update destroy ]
+  before_action :authorize_criacao!, only: [:new, :create]
+  before_action :set_unidades_disponiveis, only: [:new, :edit, :create, :update]
 
-  # GET /tickets
   def index
-    if current_user.admin? || current_user.colaborador?
+    if current_user.admin?
       @tickets = Ticket.all
-      # Filtro de status para o Admin/Colaborador
-      @tickets = @tickets.where(status_id: params[:status_id]) if params[:status_id].present?
+    elsif current_user.colaborador?
+      @tickets = Ticket.where(ticket_type_id: current_user.assigned_category_ids)
     else
-      @tickets = current_user.tickets # Morador vê apenas os seus
+      @tickets = current_user.tickets
+    end
+    @tickets = @tickets.where(status_id: params[:status_id]) if params[:status_id].present?
+  end
+
+  def show
+    if current_user.morador? && @ticket.user != current_user
+      redirect_to tickets_path, alert: "Acesso negado."
     end
   end
 
-  # GET /tickets/1
-  def show
-  end
-
-  # GET /tickets/new
   def new
     @ticket = Ticket.new
   end
 
-  # GET /tickets/1/edit
   def edit
   end
 
-  # POST /tickets
   def create
     @ticket = Ticket.new(ticket_params)
-    
-    # Se o Admin não selecionou um morador (retroativo), o dono é o próprio Admin
-    # Se for morador criando, o dono é o próprio morador
     @ticket.user = current_user if @ticket.user.nil?
+    
+    # Define status Aberto apenas se não vier nada do form
+    if @ticket.status.nil?
+      @ticket.status = Status.find_by(name: "Aberto")
+    end
 
-    # Status inicial padrão caso não venha no formulário
-    @ticket.status = Status.find_by(name: "Aberto") if @ticket.status.nil?
+    # Se já criar como concluído, grava a data
+    status_nome = @ticket.status&.name&.downcase || ""
+    if status_nome.include?('concluido') || status_nome.include?('concluído')
+      @ticket.finished_at = Time.current
+    end
 
     if @ticket.save
       redirect_to @ticket, notice: "Chamado registrado com sucesso!"
     else
+      set_unidades_disponiveis
       render :new, status: :unprocessable_entity
     end
   end
 
-  # PATCH/PUT /tickets/1
   def update
-  # Carrega os parâmetros
-  params_to_update = ticket_params.to_h
+    if ticket_params[:status_id].present?
+      status_nome = Status.find(ticket_params[:status_id]).name.downcase
+      if status_nome.include?('concluido') || status_nome.include?('concluído')
+        @ticket.finished_at = Time.current
+      end
+    end
 
-  # Se o campo veio vazio porque estava 'disabled' no HTML, removemos da atualização
-  # para o Rails não apagar o que já existe no banco.
-  params_to_update.delete_if { |key, value| value.blank? && ["title", "description", "unit_id", "ticket_type_id"].include?(key) }
-
-  if ticket_params[:status_id] == "3"
-    @ticket.finished_at = Time.current
+    if @ticket.update(ticket_params)
+      redirect_to @ticket, notice: "Chamado atualizado com sucesso!"
+    else
+      set_unidades_disponiveis
+      render :edit, status: :unprocessable_entity
+    end
   end
 
-  if @ticket.update(params_to_update)
-    redirect_to @ticket, notice: "Chamado atualizado com sucesso!"
-  else
-    render :edit, status: :unprocessable_entity
-  end
-end
-
-  # DELETE /tickets/1
   def destroy
     @ticket.destroy!
-    redirect_to tickets_path, notice: "Chamado excluído.", status: :see_other
+    redirect_to tickets_path, notice: "Chamado excluído."
   end
 
   private
 
+  def set_unidades_disponiveis
+    if current_user.admin?
+      @unidades_disponiveis = Unit.all.includes(:block).order(:number)
+    else
+      @unidades_disponiveis = current_user.units.includes(:block)
+    end
+  end
+
+  def authorize_criacao!
+    unless current_user.morador? || current_user.admin?
+      redirect_to tickets_path, alert: "Apenas moradores e admins podem abrir chamados."
+    end
+  end
+
   def set_ticket
-    # Use params[:id] para garantir compatibilidade
     @ticket = Ticket.find(params[:id])
   end
 
   def ticket_params
-    # AQUI ESTÁ A CHAVE: Liberamos tech_notes, user_id (retroativo) e resolution_media
-    params.require(:ticket).permit(
-      :title, 
-      :description, 
-      :unit_id, 
-      :ticket_type_id, 
-      :status_id, 
-      :user_id, 
-      :tech_notes, 
-      attachments: [], 
-      resolution_media: []
-    )
+    # resolution_media: [] permite as fotos que o Rails estava bloqueando
+    common_params = [:title, :description, :unit_id, :ticket_type_id, :user_id, resolution_media: []]
+    
+    if current_user.admin?
+      params.require(:ticket).permit(*common_params, :status_id, :tech_notes)
+    elsif current_user.colaborador?
+      params.require(:ticket).permit(:status_id, :tech_notes, resolution_media: [])
+    else
+      params.require(:ticket).permit(:title, :description, :unit_id, :ticket_type_id, resolution_media: [])
+    end
   end
 end

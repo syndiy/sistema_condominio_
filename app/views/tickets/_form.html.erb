@@ -1,14 +1,13 @@
 <div class="container-crud">
   <div class="card-standard">
-    <div class="login-header" style="text-align: center; margin-bottom: 40px;">
-      <span class="brand-icon">🛠️</span>
-      <h1 class="brand-name">Editar <span class="brand-bold">Chamado</span></h1>
+    <div style="text-align: center; margin-bottom: 40px;">
+      <h1 style="color: #13505B; font-weight: 800;">Salvar <span style="color: #119DA4;">Chamado</span></h1>
       <p class="login-subtitle">Gerencie as informações e o status da manutenção.</p>
     </div>
 
     <%= form_with(model: @ticket, local: true, multipart: true) do |form| %>
       
-      <%# MENSAGENS DE ERRO %>
+      <%# 1. MENSAGENS DE ERRO %>
       <% if @ticket.errors.any? %>
         <div style="background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; border: 1px solid #fecaca;">
           <strong style="display: block; margin-bottom: 5px;"><%= pluralize(@ticket.errors.count, "erro") %> impediram a gravação:</strong>
@@ -20,34 +19,39 @@
         </div>
       <% end %>
 
-      <%# 1. SELEÇÃO DO MORADOR (SÓ ADMIN) %>
+      <%# 2. SELEÇÃO DO DONO (SÓ ADMIN) %>
       <% if current_user.admin? %>
-        <div style="background: #f0f9ff; padding: 20px; border-radius: 12px; border: 1px solid #bae6fd; margin-bottom: 30px;">
-          <label class="form-label-login" style="font-size: 0.7rem; color: #0369a1;">👤 DONO DO CHAMADO (REGISTRO RETROATIVO)</label>
-          <%= form.collection_select :user_id, User.where(role: :morador), :id, :name, { prompt: "Selecione o morador..." }, class: "form-input-login" %>
+        <div style="background: #f0f9ff; padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #bae6fd;">
+          <label class="form-label-login" style="color: #0369a1; font-weight: 800; font-size: 0.7rem;">👤 DONO DO CHAMADO</label>
+          <%= form.collection_select :user_id, User.morador, :id, :name, 
+              { prompt: "Selecione o morador..." }, 
+              { class: "form-input-login", id: "id-morador-select", onchange: "rodarFiltro(this.value)" } %>
         </div>
       <% end %>
 
-      <%# 2. DADOS BÁSICOS %>
+      <%# 3. DADOS BÁSICOS %>
       <div class="form-group-login">
         <%= form.label :title, "ASSUNTO", class: "form-label-login" %>
-        <%= form.text_field :title, class: "form-input-login", 
+        <%= form.text_field :title, class: "form-input-login", required: true,
             readonly: !current_user.morador? && !current_user.admin?, 
             style: (!current_user.morador? && !current_user.admin?) ? "background: #f1f5f9;" : "" %>
       </div>
 
       <div class="form-group-login">
         <%= form.label :description, "DESCRIÇÃO DETALHADA", class: "form-label-login" %>
-        <%= form.text_area :description, class: "form-input-login", rows: 4, 
+        <%= form.text_area :description, class: "form-input-login", rows: 4, required: true,
             readonly: !current_user.morador? && !current_user.admin?, 
             style: "height: auto; resize: none; #{(!current_user.morador? && !current_user.admin?) ? 'background: #f1f5f9;' : ''}" %>
       </div>
 
+      <%# 4. GRID COM UNIDADE E TIPO %>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
         <div>
           <%= form.label :unit_id, "UNIDADE/APARTAMENTO", class: "form-label-login" %>
           <% if current_user.morador? || current_user.admin? %>
-            <%= form.collection_select :unit_id, (current_user.admin? ? Unit.all : current_user.units), :id, :number, { prompt: "Selecione a unidade" }, class: "form-input-login" %>
+            <%= form.collection_select :unit_id, @unidades_disponiveis, :id, ->(u) { "#{u.number} (#{u.block.identification})" }, 
+                { prompt: "Selecione..." }, 
+                { class: "form-input-login", id: "id-unidade-select", required: true } %>
           <% else %>
             <div class="form-input-login" style="background: #f1f5f9; display: flex; align-items: center;"><%= @ticket.unit&.number %></div>
             <%= form.hidden_field :unit_id %>
@@ -57,7 +61,7 @@
         <div>
           <%= form.label :ticket_type_id, "TIPO DE PROBLEMA", class: "form-label-login" %>
           <% if current_user.morador? || current_user.admin? %>
-            <%= form.collection_select :ticket_type_id, TicketType.all, :id, :title, { prompt: "Selecione o tipo" }, class: "form-input-login" %>
+            <%= form.collection_select :ticket_type_id, TicketType.all, :id, :title, { prompt: "Selecione o tipo" }, class: "form-input-login", required: true %>
           <% else %>
             <div class="form-input-login" style="background: #f1f5f9; display: flex; align-items: center;"><%= @ticket.ticket_type&.title %></div>
             <%= form.hidden_field :ticket_type_id %>
@@ -65,7 +69,7 @@
         </div>
       </div>
 
-      <%# 3. PAINEL DE GESTÃO (SÓ ADMIN E COLABORADOR) %>
+      <%# 5. PAINEL DE GESTÃO TÉCNICA (SÓ ADMIN E COLABORADOR) %>
       <% if current_user.admin? || current_user.colaborador? %>
         <div style="background: #fffdf5; border: 2px solid #fcd34d; padding: 25px; border-radius: 15px; margin-top: 20px; margin-bottom: 30px;">
           <h3 style="font-size: 0.85rem; font-weight: 800; color: #92400e; margin-bottom: 20px; text-transform: uppercase;">🛠️ Painel de Gestão Técnica</h3>
@@ -81,18 +85,59 @@
               <%= form.collection_select :status_id, Status.all, :id, :name, {}, class: "form-input-login", style: "border-color: #fcd34d;" %>
             </div>
             <div>
-              <%= form.label :resolution_media, "PROVA DE RESOLUÇÃO", class: "form-label-login" %>
+              <%= form.label :resolution_media, "PROVA DE RESOLUÇÃO (FOTOS)", class: "form-label-login" %>
               <%= form.file_field :resolution_media, multiple: true, class: "form-input-login", style: "border-color: #fcd34d; padding-top: 10px;" %>
             </div>
           </div>
+          
+          <% if @ticket.persisted? && @ticket.finished_at.present? %>
+            <div style="margin-top: 15px; font-size: 0.8rem; color: #92400e;">
+              <strong>Encerrado em:</strong> <%= @ticket.finished_at.strftime("%d/%m/%Y %H:%M") %>
+            </div>
+          <% end %>
         </div>
       <% end %>
 
-      <%# BOTÕES FINAIS %>
-      <div class="actions-container" style="margin-top: 20px;">
-        <%= form.submit "Salvar Alterações", class: "btn-pro-size btn-edit-pro" %>
-        <%= link_to "Cancelar", tickets_path, class: "btn-pro-size btn-delete-pro" %>
+      <%# 6. BOTÕES FINAIS %>
+      <div class="actions-container" style="margin-top: 20px; display: flex; gap: 15px;">
+        <%= form.submit "Salvar Alterações", class: "btn-pro-size btn-edit-pro", style: "flex: 2;" %>
+        <%= link_to "Cancelar", tickets_path, class: "btn-pro-size btn-delete-pro", style: "flex: 1; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center;" %>
       </div>
     <% end %>
   </div>
 </div>
+
+<script>
+  // Mapa de Unidades por Morador para o filtro instantâneo
+  const dbUnidades = {
+    <% User.morador.each do |m| %>
+      "<%= m.id %>": [
+        <% m.units.each do |u| %>
+          { id: "<%= u.id %>", text: "<%= u.number %> (<%= u.block.identification %>)" },
+        <% end %>
+      ],
+    <% end %>
+  };
+
+  function rodarFiltro(userId) {
+    const campoUnidade = document.getElementById('id-unidade-select');
+    if (!campoUnidade) return;
+
+    campoUnidade.innerHTML = '<option value="">Selecione a unidade...</option>';
+
+    if (dbUnidades[userId]) {
+      dbUnidades[userId].forEach(u => {
+        const op = document.createElement('option');
+        op.value = u.id;
+        op.text = u.text;
+        campoUnidade.appendChild(op);
+      });
+    }
+  }
+
+  // Executa ao carregar caso seja uma edição (Edit)
+  document.addEventListener("DOMContentLoaded", () => {
+    const moradorId = document.getElementById('id-morador-select')?.value;
+    if (moradorId) rodarFiltro(moradorId);
+  });
+</script>

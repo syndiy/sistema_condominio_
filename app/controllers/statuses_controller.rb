@@ -1,4 +1,5 @@
 class StatusesController < ApplicationController
+  before_action :authorize_admin!
   before_action :authenticate_user! # Garante que só logado acessa
   before_action :set_status, only: %i[ show edit update destroy ]
 

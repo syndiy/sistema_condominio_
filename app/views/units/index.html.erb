@@ -1,67 +1,46 @@
-<div class="header-section">
-  <h1 class="page-title">Unidades (Apartamentos)</h1>
-  <%= link_to new_unit_path, class: "btn-primary" do %>
-    + Nova Unidade
-  <% end %>
-</div>
-
-<%# BARRA DE PESQUISA MODERNA %>
-<div class="search-container" style="margin-bottom: 25px;">
-  <%= form_with url: units_path, method: :get, class: "modern-search-form" do |f| %>
-    <div class="search-input-wrapper" style="display: flex; gap: 10px; align-items: center;">
-      <%= f.text_field :query, value: params[:query], placeholder: "Buscar por número ou bloco...", 
-          class: "form-input", style: "margin: 0; flex: 1; height: 42px;" %>
-      
-      <%= f.submit "Pesquisar", class: "btn-secondary", style: "
-        background-color: #f1f5f9; color: #475569; border: 1px solid #e2e8f0;
-        padding: 0 20px; border-radius: 8px; font-weight: 700; height: 42px; cursor: pointer;
-      " %>
-      
-      <% if params[:query].present? %>
-        <%= link_to "Limpar", units_path, class: "text-muted", style: "font-size: 0.85rem;" %>
-      <% end %>
+<div class="container-crud">
+  <div class="header-section">
+    <div>
+      <h1 class="brand-name">Unidades <span class="brand-bold">(Apartamentos)</span></h1>
+      <p class="login-subtitle">Gerencie os apartamentos, andares e moradores vinculados.</p>
     </div>
-  <% end %>
-</div>
+<%= link_to "+ Nova Unidade", new_unit_path, class: "btn-pro-size btn-edit-pro", style: "width: 220px !important;" %>
+  </div>
 
-<div class="card-table">
-  <table class="data-table" style="table-layout: fixed; width: 100%;">
-    <thead>
-      <tr>
-        <th style="width: 15%;">ETIQUETA</th>
-        <th style="width: 20%;">BLOCO</th>
-        <th style="width: 15%;">ANDAR</th>
-        <th style="width: 25%;">MORADOR(ES)</th>
-        <th style="width: 25%;">AÇÕES</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @units.each do |unit| %>
-        <tr>
-          <td class="font-bold"><%= unit.number %></td>
-          <td><%= unit.block.identification %></td>
-          <td class="text-muted"><%= unit.floor %>º andar</td>
-          <td>
-            <% if unit.users.any? %>
-              <span class="text-muted" style="font-size: 0.85rem;"><%= unit.users.first.email %></span>
-            <% else %>
-            <span style="color: #94a3b8; font-size: 1rem; letter-spacing: 1px;">--</span>
-            <% end %>
-          </td>
-          <td>
-            <div class="action-buttons" style="display: flex; gap: 8px; justify-content: flex-start; align-items: center;">
-              <%= link_to "Ver", unit_path(unit), class: "btn-action", style: "
-                background-color: #f1f5f9; color: #475569; padding: 6px 12px; 
-                border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 700;
-              " %>
-              <%= link_to "Editar", edit_unit_path(unit), class: "btn-action", style: "
-                background-color: #eef2ff; color: #4338ca; padding: 6px 12px; 
-                border-radius: 6px; text-decoration: none; font-size: 0.8rem; font-weight: 700;
-              " %>
-            </div>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <%# BUSCA LIMPA %>
+  <%= form_with url: units_path, method: :get, class: "search-row" do |f| %>
+    <%= f.text_field :query, value: params[:query], placeholder: "Buscar por número ou bloco...", class: "form-input-login" %>
+    <%= f.submit "Pesquisar", class: "btn-pro-size btn-edit-pro btn-search" %>
+  <% end %>
+
+  <div class="card-table">
+    <table class="data-table">
+     <thead>
+  <tr>
+    <th>ETIQUETA</th>
+    <th>BLOCO</th>
+    <th>ANDAR</th>
+    <th>MORADOR(ES)</th>
+    <th class="col-actions">AÇÕES</th> <%# SÓ AQUI %>
+  </tr>
+</thead>
+<tbody>
+  <% @units.each do |unit| %>
+    <tr>
+      <td><span class="unit-badge"><%= unit.number %></span></td>
+      <td><%= unit.block.identification %></td>
+      <td><%= unit.floor %>º andar</td>
+      <td><%= unit.users.map(&:email).join(", ") %></td>
+      
+      <td class="col-actions"> <%# SÓ AQUI %>
+        <div class="action-buttons-row">
+          <%= link_to "Ver", unit, class: "btn-action-pill btn-details-pill" %>
+          <%= link_to "Editar", edit_unit_path(unit), class: "btn-action-pill btn-details-pill" %>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+</tbody>
+    </table>
+  </div>
 </div>

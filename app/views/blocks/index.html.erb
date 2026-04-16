@@ -4,7 +4,7 @@
       <h1 class="brand-name" style="font-size: 2rem;">Gestão de <span class="brand-bold">Blocos</span></h1>
       <p class="login-subtitle" style="margin-top: 5px;">Visualize e gerencie as torres do condomínio.</p>
     </div>
-    <%= link_to "+ Novo Bloco", new_block_path, class: "btn-pro-size btn-edit-pro", style: "width: 180px !important;" %>
+<%= link_to "+ Novo Bloco", new_block_path, class: "btn-pro-size btn-edit-pro", style: "width: 220px !important;" %>
   </div>
 
   <div class="card-table">
@@ -31,7 +31,7 @@
           <td>
             <div class="action-buttons-row">
               <%= link_to "Detalhes", block, class: "btn-action-pill btn-details-pill" %>
-              <%= link_to "Editar", edit_block_path(block), class: "btn-action-pill btn-edit-pill" %>
+              <%= link_to "Editar", edit_block_path(block), class: "btn-action-pill btn-details-pill" %>
             </div>
           </td>
         </tr>

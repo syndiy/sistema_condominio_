@@ -35,15 +35,16 @@
         <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Marque as categorias que este colaborador atende:</p>
         
         <div class="checkbox-compact-grid">
-          <%= f.collection_check_boxes :ticket_type_ids, TicketType.all, :id, :title do |b| %>
-            <label class="chip-checkbox">
-              <%= b.check_box %>
-              <span class="chip-label">
-                <span class="chip-icon">+</span>
-                <%= b.text %>
-              </span>
-            </label>
-          <% end %>
+          <%# Alterado para bater com a associação 'assigned_categories' do seu model User %>
+<%= f.collection_check_boxes :assigned_category_ids, TicketType.all, :id, :title do |b| %>
+  <label class="chip-checkbox">
+    <%= b.check_box %>
+    <span class="chip-label">
+      <span class="chip-icon">+</span>
+      <%= b.text %>
+    </span>
+  </label>
+<% end %>
         </div>
       </div>
 

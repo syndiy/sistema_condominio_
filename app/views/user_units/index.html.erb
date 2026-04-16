@@ -1,27 +1,54 @@
-<h1>Moradores e suas Unidades</h1>
+<%# Reduzimos para 850px para não espalhar demais e tiramos alturas fixas %>
+<div class="container-crud" style="width: 90%; max-width: 850px; margin: 40px auto; min-height: auto;">
+  <div class="card-standard" style="padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;">
+    
+    <%# HEADER %>
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 35px;">
+      <div>
+        <h1 style="color: #13505B; font-weight: 800; font-size: 1.8rem; margin: 0;">Vínculos de Moradores</h1>
+        <p style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">Gerencie as unidades vinculadas a cada morador.</p>
+      </div>
+      <%= link_to "+ Vincular Novo Morador", new_user_unit_path, 
+          style: "background: #119DA4; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.85rem;" %>
+    </div>
 
-<table>
-  <thead>
-    <tr>
-      <th>E-mail do Morador</th>
-      <th>Unidade (Apartamento)</th>
-      <th>Ações</th>
-    </tr>
-  </thead>
+    <%# LISTA (Agora com gap menor e sem esticar) %>
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <% @user_units.each do |user_unit| %>
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
+          
+          <%# INFO MORADOR %>
+          <div style="display: flex; align-items: center; gap: 15px; flex: 2;">
+            <div style="width: 40px; height: 40px; background: #13505B; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">
+              <%= user_unit.user.name[0..1].upcase %>
+            </div>
+            <div>
+              <div style="font-weight: 700; color: #1e293b; font-size: 0.95rem;"><%= user_unit.user.name %></div>
+              <div style="font-size: 0.8rem; color: #64748b;"><%= user_unit.user.email %></div>
+            </div>
+          </div>
 
-  <tbody>
-    <% @user_units.each do |vinculo| %>
-      <tr>
-        <td><%= vinculo.user.email %></td>
-        <td><%= vinculo.unit.number %></td>
-        <td>
-          <%= link_to "Ver", vinculo %> |
-          <%= button_to "Remover Vínculo", vinculo, method: :delete, data: { confirm: "Tem certeza?" } %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+          <%# UNIDADE (Destaque discreto) %>
+          <div style="flex: 1; text-align: center;">
+            <div style="display: inline-block; background: #eefafa; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(17, 157, 164, 0.1);">
+              <span style="color: #119DA4; font-weight: 800; font-size: 0.9rem;">
+                <%= user_unit.unit.number %>
+              </span>
+              <span style="color: #64748b; font-size: 0.75rem; font-weight: 600;"> (<%= user_unit.unit.block.identification %>)</span>
+            </div>
+          </div>
 
-<br>
-<%= link_to "Vincular Novo Morador", new_user_unit_path %>
+          <%# AÇÕES %>
+          <div style="display: flex; gap: 8px; flex: 1; justify-content: flex-end;">
+            <%= link_to "Editar", edit_user_unit_path(user_unit), 
+                style: "padding: 6px 12px; background: #f1f5f9; color: #475569; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.75rem; border: 1px solid #e2e8f0;" %>
+            
+            <%= button_to "Remover", user_unit, method: :delete, 
+                data: { confirm: "Deseja remover este vínculo?" }, 
+                style: "padding: 6px 12px; background: #fee2e2; color: #ef4444; border: none; border-radius: 6px; font-weight: 700; font-size: 0.75rem; cursor: pointer;" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

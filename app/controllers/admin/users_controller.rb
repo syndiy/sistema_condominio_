@@ -66,7 +66,8 @@ end
     @user = User.find(params[:id])
   end
 
-  def user_params
-    params.require(:user).permit(:name, :email, :role, :password, :password_confirmation)
-  end
+ def user_params
+  # Adicione o assigned_category_ids: [] na lista de permissões
+  params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, assigned_category_ids: [])
+end
 end

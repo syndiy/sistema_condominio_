@@ -1,74 +1,67 @@
-<div class="header-section">
-  <h1 class="page-title">Gestão de Usuários</h1>
-  
-  <%= link_to new_admin_user_path, class: "btn-primary btn-with-icon" do %>
-   
-    Novo Usuário
-  <% end %>
-</div>
-
-<div class="card-table">
-<table class="data-table">
- <thead>
-  <tr>
-    <th>NOME</th>
-    <th>E-MAIL</th>
-    <th>CARGO</th>
-    <%# Adicione text-right aqui %>
-    <th class="text-right">AÇÕES</th>
-  </tr>
-</thead>
-<tbody>
-  <% @users.each do |user| %>
-    <tr>
-  <td class="font-bold"><%= user.name %></td>
-  <td class="text-muted"><%= user.email %></td>
-  
-  <td>
-    <span class="status-badge <%= user.role %>"><%= user.role %></span>
-  </td>
-
-    <td>
-    <div class="action-buttons" style="justify-content: flex-start; gap: 8px;">
-      <%= link_to 'Editar', edit_admin_user_path(user), class: "btn-action btn-edit" %>
-      <%# 1. O Botão que o usuário vê na tabela %>
-<button onclick="document.getElementById('modal-<%= user.id %>').style.display='flex'" class="btn-action-pill btn-delete-pill" style="border: none; cursor: pointer;">
-  Excluir
-</button>
-
-<%# 2. A "Div de Aviso" (Modal) - Fica escondida até o clique %>
-<%# ... (todo o resto do modal de aviso igual) ... %>
-<%# 2. A "Div de Aviso" (Modal) - Agora com a variável certa: user %>
-<div id="modal-<%= user.id %>" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-  <div class="card-standard" style="max-width: 400px; text-align: center; padding: 30px; border-top: 5px solid #ef4444;">
-    <span style="font-size: 3rem;">⚠️</span>
-    <h2 style="color: #13505B; margin: 15px 0;">Confirmar Exclusão?</h2>
-    <p style="color: #64748b; font-size: 0.9rem; line-height: 1.5; margin-bottom: 25px;">
-      Você está prestes a apagar permanentemente o usuário <strong><%= user.name %></strong>.<br>
-      Esta ação não pode ser desfeita e todos os dados vinculados sumirão.
-    </p>
-
-    <div style="display: flex; gap: 10px; justify-content: center; width: 100%;">
-      <%# BOTÃO DE VERDADE (AJUSTADO PARA USER) %>
-      <%= button_to "Sim, excluir", admin_user_path(user), 
-          method: :delete, 
-          class: "btn-pro-size btn-delete-pro", 
-          style: "width: 160px !important; display: flex; align-items: center; justify-content: center;" %>
-
-      <%# BOTÃO CANCELAR %>
-      <button onclick="document.getElementById('modal-<%= user.id %>').style.display='none'" 
-              class="btn-pro-size btn-secondary" 
-              style="width: 140px !important; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; background-color: #64748b !important; color: white !important;">
-        Cancelar
-      </button>
+<div class="container-crud">
+  <%# HEADER %>
+  <div class="header-section">
+    <div>
+      <h1 class="brand-name">Gestão de <span class="brand-bold">Usuários</span></h1>
+      <p class="login-subtitle">Controle quem acessa o sistema e seus respectivos cargos.</p>
     </div>
+<%= link_to "+ Novo Usuário", new_admin_user_path, class: "btn-pro-size btn-edit-pro", style: "width: 220px !important;" %>
   </div>
-</div>
-    </div>
-  </td>
 
-</tr>
-  <% end %>
-</tbody>
-</table>
+  <%# TABELA DE USUÁRIOS %>
+  <div class="card-table">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th class="expand">NOME</th>
+          <th>E-MAIL</th>
+          <th class="text-center">CARGO</th>
+          <%# AJUSTE: Usamos text-center e col-actions para alinhar o título %>
+          <th class="text-center col-actions">AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td class="expand">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="background: #eefafa; color: #119DA4; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem;">
+                  <%= user.name.first.upcase %>
+                </div>
+                <strong style="color: #13505B;"><%= user.name %></strong>
+              </div>
+            </td>
+            
+            <td style="color: #475569;"><%= user.email %></td>
+            
+            <td class="text-center">
+              <% 
+                badge_style = case user.role.downcase
+                when 'admin' then 'background: #fee2e2; color: #b91c1c;'
+                when 'morador' then 'background: #dcfce7; color: #166534;'
+                else 'background: #fef9c3; color: #854d0e;'
+                end
+              %>
+              <span style="<%= badge_style %> padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">
+                <%= user.role %>
+              </span>
+            </td>
+
+            <%# AJUSTE: text-center aqui garante que a div action-buttons-row fique centralizada na célula %>
+            <td class="text-center col-actions">
+              <div class="action-buttons-row">
+                <%= link_to "Editar", edit_admin_user_path(user), class: "btn-action-pill btn-details-pill" %>
+                
+                <button onclick="document.getElementById('modal-<%= user.id %>').style.display='flex'", class= "btn-action-pill btn-details-pill">
+                  Excluir
+                </button>
+              </div>
+
+              <%= render 'delete_modal', user: user %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </div>

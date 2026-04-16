@@ -3,7 +3,7 @@
   <div class="login-form-col">
     <div class="login-box">
       <div class="login-header">
-        <span class="brand-icon">🏢</span>
+  
         <h1 class="brand-name">Condomínio<span class="brand-bold">Pro</span></h1>
         <p class="login-subtitle">Bem-vindo de volta! Por favor, insira suas credenciais.</p>
       </div>
@@ -38,7 +38,7 @@
       <% end %>
 
       <div class="login-footer">
-        <p class="text-muted-sm">Ainda não tem acesso? <a href="#" class="login-link">Solicitar cadastro</a></p>
+        <%= link_to "Solicitar cadastro", new_registration_path(resource_name), class: "login-link" %>
       </div>
     </div>
   </div>

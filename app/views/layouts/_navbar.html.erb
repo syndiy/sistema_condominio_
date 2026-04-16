@@ -3,31 +3,48 @@
     
     <div class="navbar-left-group">
       <div class="navbar-logo">
-      
         <span class="logo-text">Condomínio<span class="logo-bold">Pro</span></span>
       </div>
 
-      <ul class="navbar-links">
-        <li><%= link_to "Início", root_path, class: "nav-item #{'active' if current_page?(root_path)}" %></li>
-        <li><%= link_to "Usuários", admin_users_path, class: "nav-item #{'active' if current_page?(admin_users_path)}" %></li>
-        <li><%= link_to "Blocos", blocks_path, class: "nav-item #{'active' if current_page?(blocks_path)}" %></li>
-        <li><%= link_to "Unidades", units_path, class: "nav-item #{'active' if current_page?(units_path)}" %></li>
-        <li><%= link_to "Chamados", tickets_path, class: "nav-item" %></li>
-        <li><%= link_to "Tipos/SLA", ticket_types_path, class: "nav-item" %></li>
-      </ul>
+      <% if user_signed_in? %>
+        <ul class="navbar-links">
+          <%# LINKS EXCLUSIVOS DE ADMIN %>
+          <% if current_user.admin? %>
+            <li><%= link_to "Usuários", admin_users_path, class: "nav-item #{'active' if current_page?(admin_users_path)}" %></li>
+            <li><%= link_to "Blocos", blocks_path, class: "nav-item #{'active' if current_page?(blocks_path)}" %></li>
+            <li><%= link_to "Unidades", units_path, class: "nav-item #{'active' if current_page?(units_path)}" %></li>
+            
+            <%# AQUI ESTÁ O VÍNCULO QUE FALTAVA %>
+            <li><%= link_to "Vincular Moradores", user_units_path, class: "nav-item #{'active' if current_page?(user_units_path)}" %></li>
+            
+            <li><%= link_to "Tipos/SLA", ticket_types_path, class: "nav-item" %></li>
+          <% end %>
+
+          <%# LINK QUE TODOS VEEM %>
+          <li>
+            <%= link_to current_user.morador? ? "Meus Chamados" : "Gerenciar Chamados", 
+                tickets_path, 
+                class: "nav-item #{'active' if current_page?(tickets_path)}" %>
+          </li>
+        </ul>
+      <% end %>
     </div>
 
     <div class="navbar-right-group">
-      <div class="user-profile-nav">
-        <div class="user-avatar-circle">
-          <%= current_user.email[0..1].upcase %>
+      <% if user_signed_in? %>
+        <div class="user-profile-nav">
+          <div class="user-avatar-circle">
+            <%= current_user.email[0..1].upcase %>
+          </div>
+          <div class="user-meta">
+            <span class="u-name"><%= current_user.email.split('@').first %></span>
+            <span class="u-role"><%= current_user.role.upcase %></span>
+          </div>
         </div>
-        <div class="user-meta">
-          <span class="u-name"><%= current_user.email.split('@').first %></span>
-          <span class="u-role">ADMINISTRADOR</span>
-        </div>
-      </div>
-      <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "btn-logout-nav" %>
+        <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "btn-logout-nav" %>
+      <% else %>
+        <%= link_to "Entrar", new_user_session_path, class: "btn-logout-nav", style: "text-decoration: none;" %>
+      <% end %>
     </div>
 
   </div>

@@ -35,7 +35,7 @@
         <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Selecione as categorias que este colaborador atende:</p>
         
         <div class="checkbox-compact-grid">
-          <%= f.collection_check_boxes :ticket_type_ids, TicketType.all, :id, :title do |b| %>
+          <%= f.collection_check_boxes :assigned_category_ids, TicketType.all, :id, :title do |b| %>
             <label class="chip-checkbox">
               <%= b.check_box %>
               <span class="chip-label">

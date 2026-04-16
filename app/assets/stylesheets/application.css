@@ -120,9 +120,24 @@ body {
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   overflow: hidden;
 }
-.data-table { 
-  width: 100%; 
-  border-collapse: collapse; 
+/* Garante que a tabela use o espaço todo sem buracos */
+.data-table {
+  width: 100% !important;
+  border-collapse: collapse;
+  table-layout: fixed; /* Isso aqui é o segredo para as colunas obedecerem a largura */
+}
+
+.col-sla-fixed {
+  width: 30%;
+  text-align: left !important;
+  color: #475569;
+  font-weight: 600;
+}
+
+.col-category {
+  width: 45%;
+  text-align: left !important;
+  padding-left: 20px !important;
 }
 
 .data-table th { 
@@ -154,9 +169,9 @@ body {
 
 /* Força a coluna de Ações a ficar toda para a direita */
 .col-actions {
-  text-align: right !important;
+  width: 180px !important;
+  text-align: center !important;
 }
-
 /* Alinha os botões Editar/Excluir com o título AÇÕES lá no topo */
 .action-buttons {
   display: flex;
@@ -1206,26 +1221,59 @@ body {
   margin-top: -2px; /* Pequeno ajuste de alinhamento vertical */
 }
 
-/* Container das ações na tabela */
 .action-buttons-row {
-  display: flex !important;
-  justify-content: flex-end !important;
-  gap: 8px !important;
-  padding-right: 15px !important;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.col-actions-fixed {
+  width: 25%;
+  text-align: right !important;
+  padding-right: 20px !important;
 }
 
-/* Base do botão estilo "Pill" (Pastilha) */
+.col-actions {
+    width: 220px !important; /* Aumentamos para caber os dois botões folgados */
+    text-align: center !important;
+}
+
+.data-table th, .data-table td {
+    padding: 15px 20px !important; /* Respiro nas laterais */
+}
+
+.data-table th:not(.col-actions),
+.data-table td:not(.col-actions) {
+  text-align: left;
+  padding: 15px;
+}
+
 .btn-action-pill {
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 6px 14px !important;
-  border-radius: 50px !important; /* Estilo arredondado */
-  font-size: 0.75rem !important;
-  font-weight: 700 !important;
-  text-decoration: none !important;
-  transition: all 0.2s ease !important;
-  border: 1px solid transparent !important;
+    width: 90px !important;
+    height: 32px !important;
+    padding: 0 !important; /* Remove paddings que variam entre link e botão */
+    margin: 0 !important;  /* Remove margens fantasmas */
+    border-radius: 50px !important;
+    font-size: 0.75rem !important;
+    font-weight: 700 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+    border: none !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+}
+
+form.button_to {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: contents; /* Faz o form não ocupar espaço próprio */
+}
+
+.btn-action-pill span, .btn-action-pill {
+    white-space: nowrap;
 }
 
 /* Botão Detalhes (Cinza/Teal Sutil) */
@@ -1258,33 +1306,13 @@ body {
 /* --- PADRONIZAÇÃO DE BOTÕES NA TABELA (ESTILO PILL) --- */
 
 /* Container para alinhar os botões na célula da tabela */
+/* Ajuste das 'pastilhas' de ação */
 .action-buttons-row {
-    display: flex !important;
-    justify-content: flex-end !important; /* Alinha os botões à direita */
-    gap: 8px !important; /* Espaço entre eles */
-    padding-right: 15px !important;
-}
-
-/* Base do botão estilo "Pill" (Pastilha) */
-.btn-action-pill {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    
-    /* Tamanho Fixo e Sutil */
-    padding: 6px 16px !important;
-    height: 32px !important;
-    
-    /* Estilo Arredondado */
-    border-radius: 50px !important;
-    
-    /* Fontes e Texto */
-    font-size: 0.75rem !important; /* Texto menor para não gritar */
-    font-weight: 700 !important;
-    text-decoration: none !important;
-    transition: all 0.2s ease !important;
-    border: none !important;
-    cursor: pointer !important;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 /* Cor: Detalhes (Cinza/Teal Sutil) */
@@ -1309,20 +1337,148 @@ body {
     filter: brightness(0.95); /* Escurece um tiquinho no hover */
 }
 
-/* Reduzi o padding de 16px para 12px para caber melhor na tabela */
-.btn-action-pill {
-    padding: 6px 12px !important; 
-    min-width: 80px !important; /* Garante um tamanho mínimo bacana */
-    white-space: nowrap !important; /* Impede o texto de quebrar linha */
-}
 
-/* Garante que a tabela use 100% do espaço sem espremer colunas */
+/* Força a tabela a ocupar o card todo e não esmagar as células */
 .data-table {
-    width: 100% !important;
-    table-layout: fixed !important; /* Isso obriga o navegador a respeitar as larguras em % que colocamos */
+  width: 100% !important;
+  border-collapse: collapse;
+  table-layout: auto; /* Deixa o conteúdo ditar o espaço necessário */
 }
 
-.data-table td {
-    overflow: hidden;
-    text-overflow: ellipsis; /* Se o texto for gigante, ele coloca "..." em vez de quebrar o layout */
+/* Dá um espaço extra na primeira coluna de ações para o botão não bater na borda */
+.data-table td:last-child {
+  padding-left: 20px !important;
 }
+
+
+/* Container de Busca */
+.search-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.search-row .form-input-login {
+  margin: 0;
+  flex: 1;
+  height: 45px;
+}
+
+.btn-search {
+  width: 140px;
+  height: 45px;
+  margin: 0 !important;
+}
+
+/* Estilos da Tabela de Unidades */
+.unit-badge {
+  font-weight: 800;
+  color: #1e293b;
+  background: #f1f5f9;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.unit-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+}
+
+.floor-text {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.occupant-list {
+  font-size: 0.85rem;
+  color: #13505B;
+  font-weight: 600;
+}
+
+.empty-state {
+  color: #cbd5e1;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.col-sla {
+  width: 200px !important;
+  text-align: center !important; /* Deixa o "4 horas" centralizado no meio da tabela */
+}
+
+/* Mantém a mola na primeira coluna */
+.expand {
+  width: auto;
+  text-align: left !important;
+}
+
+/* Container da Lista */
+.sla-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 10px;
+}
+
+/* A Linha (Row) */
+.sla-row {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 15px 25px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s;
+}
+
+.sla-row:hover {
+  border-color: #119DA4;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+/* Conteúdo da Categoria */
+.sla-main-info {
+  flex: 2; /* Ocupa mais espaço */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Conteúdo do Prazo */
+.sla-time-info {
+  flex: 1; /* Fica no meio */
+  color: #64748b;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Botões de Ação */
+.sla-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Botão de ação principal do cabeçalho (Novo...) */
+.btn-header-new {
+    width: 180px !important; /* Largura fixa para todos */
+    height: 45px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    border-radius: 8px !important; /* Arredondado suave igual ao login */
+    text-decoration: none !important;
+    transition: all 0.2s ease-in-out !important;
+}
+
+.btn-header-new:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(17, 157, 164, 0.3);
+    filter: brightness(1.1);
+}
+

@@ -1,4 +1,6 @@
 class UserUnitsController < ApplicationController
+  before_action :authorize_admin!
+  
   before_action :set_user_unit, only: %i[ show edit update destroy ]
 
   # GET /user_units or /user_units.json

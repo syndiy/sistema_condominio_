@@ -1,4 +1,6 @@
 class BlocksController < ApplicationController
+ 
+  before_action :authorize_admin!
   before_action :authenticate_user!
   # Nova trava: impede qualquer ação de quem não for Admin
   before_action :authorize_admin!

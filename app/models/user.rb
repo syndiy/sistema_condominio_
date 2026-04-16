@@ -1,16 +1,16 @@
 class User < ApplicationRecord
-  # Devise padrão
-  devise :database_authenticatable, :recoverable, :rememberable, :validatable
+  devise :database_authenticatable, :registerable, 
+         :recoverable, :rememberable, :validatable
   
-  # Roles
   enum :role, { morador: 0, colaborador: 1, admin: 2 }
 
-  # Associações
+  # Associações de Morador
   has_many :user_units, dependent: :destroy
   has_many :units, through: :user_units
   has_many :tickets, dependent: :destroy
 
-  # --- AQUI ESTAVA O ERRO (Ajustado para Português como seu Model) ---
+  # Associações de Colaborador (Escopo de Trabalho)
+  # Usaremos 'responsabilidades' como a tabela intermediária
   has_many :responsabilidades, dependent: :destroy
-  has_many :ticket_types, through: :responsabilidades
+  has_many :assigned_categories, through: :responsabilidades, source: :ticket_type
 end

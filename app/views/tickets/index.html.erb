@@ -1,10 +1,38 @@
 <div class="container-crud">
-  <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
     <div>
-      <h1 class="brand-name" style="font-size: 2rem;">Meus <span class="brand-bold">Chamados</span></h1>
-      <p class="login-subtitle" style="margin-top: 5px;">Acompanhe as solicitações de manutenção do condomínio.</p>
+      <h1 style="color: #13505B; font-weight: 800;">
+        <%# Admin e Colaborador veem 'Gerenciar', Morador vê 'Meus' %>
+        <%= current_user.morador? ? "Meus Chamados" : "Gerenciar Chamados" %>
+      </h1>
+      
+      <p style="color: #64748b;">
+        <%= current_user.morador? ? "Acompanhe suas solicitações." : "Painel de controle e gestão de chamados." %>
+      </p>
     </div>
-    <%= link_to "+ Abrir Novo Chamado", new_ticket_path, class: "btn-pro-size btn-edit-pro", style: "width: 220px !important;" %>
+
+    <%# BOTÃO DE NOVO CHAMADO: Liberado para Morador e Admin conforme as regras de gestão %>
+    <% if current_user.morador? || current_user.admin? %>
+      <%= link_to "+ Abrir Novo Chamado", new_ticket_path, class: "btn-pro-size btn-edit-pro", style: "width: 220px !important;" %>
+    <% end %>
+
+    <%# ESPECIALIDADES: Exibe o escopo de atuação do Colaborador conforme o PDF %>
+    <% if current_user.colaborador? %>
+      <div style="background: #eef2ff; padding: 15px; border-radius: 10px; border: 1px solid #e0e7ff;">
+        <h4 style="color: #4338ca; margin: 0; font-size: 0.8rem; text-transform: uppercase;">Minhas Especialidades:</h4>
+        <div style="display: flex; gap: 5px; margin-top: 8px;">
+          <% if current_user.assigned_categories.any? %>
+            <% current_user.assigned_categories.each do |cat| %>
+              <span style="background: #4338ca; color: white; padding: 2px 10px; border-radius: 20px; font-size: 0.75rem;">
+                <%= cat.title %>
+              </span>
+            <% end %>
+          <% else %>
+            <span style="color: #64748b; font-size: 0.8rem;">Nenhuma categoria designada.</span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 
 <div class="card-table">
@@ -55,7 +83,7 @@
             <%# Usei inline-flex aqui pra garantir que eles fiquem um do lado do outro sem frescura %>
             <div style="display: inline-flex; justify-content: flex-end; gap: 8px; width: 100%; white-space: nowrap;">
               <%= link_to "Detalhes", ticket, class: "btn-action-pill btn-details-pill" %>
-              <%= link_to "Mudar Status", edit_ticket_path(ticket), class: "btn-action-pill btn-edit-pill" %>
+              <%= link_to "Mudar Status", edit_ticket_path(ticket), class: "btn-action-pill btn-details-pill"  %>
             </div>
           </td>
         </tr>

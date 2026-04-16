@@ -16,8 +16,8 @@ class CommentsController < ApplicationController
 
   private
 
-  def comment_params
-    # Permitindo o conteúdo e a lista de mídias (fotos/vídeos)
-    params.require(:comment).permit(:content, medias: [])
-  end
+ def comment_params
+  # Mudamos de :medias => [] para medias: [] (sem os símbolos de hash tradicionais)
+  params.require(:comment).permit(:content, medias: [])
+end
 end

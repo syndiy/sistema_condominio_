@@ -1,4 +1,5 @@
 class TicketTypesController < ApplicationController
+  before_action :authorize_admin!
   before_action :set_ticket_type, only: %i[ show edit update destroy ]
 
   # GET /ticket_types or /ticket_types.json
