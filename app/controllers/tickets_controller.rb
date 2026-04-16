@@ -4,23 +4,34 @@ class TicketsController < ApplicationController
   before_action :authorize_criacao!, only: [:new, :create]
   before_action :set_unidades_disponiveis, only: [:new, :edit, :create, :update]
 
-  def index
-    if current_user.admin?
-      @tickets = Ticket.all
-    elsif current_user.colaborador?
-      @tickets = Ticket.where(ticket_type_id: current_user.assigned_category_ids)
-    else
-      @tickets = current_user.tickets
-    end
-    @tickets = @tickets.where(status_id: params[:status_id]) if params[:status_id].present?
+def index
+  # 1. Definimos o escopo inicial com 'includes' para performance
+  scope = Ticket.includes(:user, :unit, :ticket_type, :status)
+
+  # 2. Filtramos quem vê o quê
+  if current_user.admin?
+    @tickets = scope.all
+  elsif current_user.colaborador?
+    # Usando o nome padronizado assigned_category_ids que definimos no Model
+    @tickets = scope.where(ticket_type_id: current_user.assigned_category_ids)
+  else
+    @tickets = scope.where(user_id: current_user.id)
   end
 
-  def show
-    if current_user.morador? && @ticket.user != current_user
-      redirect_to tickets_path, alert: "Acesso negado."
-    end
-  end
+  # 3. Aplicamos o filtro de status se vier da URL
+  @tickets = @tickets.where(status_id: params[:status_id]) if params[:status_id].present?
 
+  # 4. A MÁGICA: Inverte a ordem para o mais novo aparecer primeiro
+  @tickets = @tickets.order(created_at: :desc)
+end
+
+def show
+  # O 'with_attached_attachments' e 'with_attached_resolution_media' 
+  # avisam ao Rails: "Já traz as fotos agora para eu não ter que buscar depois!"
+  @ticket = Ticket.with_attached_attachments
+                  .with_attached_resolution_media
+                  .find(params[:id])
+end
   def new
     @ticket = Ticket.new
   end
@@ -92,16 +103,17 @@ class TicketsController < ApplicationController
     @ticket = Ticket.find(params[:id])
   end
 
-  def ticket_params
-    # resolution_media: [] permite as fotos que o Rails estava bloqueando
-    common_params = [:title, :description, :unit_id, :ticket_type_id, :user_id, resolution_media: []]
-    
+def ticket_params
+    # Padronizado: attachments (fotos do problema) e resolution_media (fotos da solução)
+    morador_params = [:title, :description, :unit_id, :ticket_type_id, attachments: []]
+    tech_params = [:status_id, :tech_notes, resolution_media: []]
+
     if current_user.admin?
-      params.require(:ticket).permit(*common_params, :status_id, :tech_notes)
+      params.require(:ticket).permit(*(morador_params + tech_params + [:user_id]))
     elsif current_user.colaborador?
-      params.require(:ticket).permit(:status_id, :tech_notes, resolution_media: [])
+      params.require(:ticket).permit(*tech_params)
     else
-      params.require(:ticket).permit(:title, :description, :unit_id, :ticket_type_id, resolution_media: [])
+      params.require(:ticket).permit(*morador_params)
     end
   end
 end

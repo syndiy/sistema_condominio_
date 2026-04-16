@@ -1482,3 +1482,11 @@ form.button_to {
     filter: brightness(1.1);
 }
 
+.field_with_errors {
+  display: contents; 
+}
+
+/* Se quiser deixar o input vermelhinho quando errar */
+.field_with_errors input {
+  border: 2px solid #e74c3c !important;
+}

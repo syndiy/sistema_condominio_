@@ -1,0 +1,20 @@
+                    List of relations
+ Schema |              Name              | Type  | Owner 
+--------+--------------------------------+-------+-------
+ public | active_storage_attachments     | table | cindy
+ public | active_storage_blobs           | table | cindy
+ public | active_storage_variant_records | table | cindy
+ public | ar_internal_metadata           | table | cindy
+ public | blocks                         | table | cindy
+ public | comments                       | table | cindy
+ public | responsabilidades              | table | cindy
+ public | schema_migrations              | table | cindy
+ public | statuses                       | table | cindy
+ public | ticket_types                   | table | cindy
+ public | tickets                        | table | cindy
+ public | units                          | table | cindy
+ public | user_ticket_types              | table | cindy
+ public | user_units                     | table | cindy
+ public | users                          | table | cindy
+(15 rows)
+

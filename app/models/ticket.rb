@@ -4,21 +4,23 @@ class Ticket < ApplicationRecord
   belongs_to :ticket_type
   belongs_to :status
   has_many :comments, dependent: :destroy
-  has_many_attached :attachments
-  has_many_attached :resolution_media
+
+ has_many_attached :attachments       # Fotos do problema (Morador/Admin)
+  has_many_attached :resolution_media  # Fotos da solução (Colaborador)
   
-  # Validações básicas
+
   validates :title, :description, presence: true
 
-  # Gatilhos (Callbacks)
+
   before_validation :set_default_status, on: :create
   before_save :set_finished_at, if: :status_id_changed?
 
   # Método para calcular o Prazo Limite (SLA)
   # Isso mostra que você entendeu o requisito de "horas de prazo" do PDF
-  def prazo_limite
-    created_at + ticket_type.duration_hours.hours
-  end
+ # Método para calcular o Prazo Limite (SLA)
+def prazo_limite
+  created_at + ticket_type.sla_hours.hours
+end
 
   # Método para saber se está atrasado (UX para o Colaborador)
   def atrasado?

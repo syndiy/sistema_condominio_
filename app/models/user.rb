@@ -4,13 +4,13 @@ class User < ApplicationRecord
   
   enum :role, { morador: 0, colaborador: 1, admin: 2 }
 
-  # Associações de Morador
+  # Resident associations
   has_many :user_units, dependent: :destroy
   has_many :units, through: :user_units
   has_many :tickets, dependent: :destroy
 
-  # Associações de Colaborador (Escopo de Trabalho)
-  # Usaremos 'responsabilidades' como a tabela intermediária
-  has_many :responsabilidades, dependent: :destroy
-  has_many :assigned_categories, through: :responsabilidades, source: :ticket_type
+  # Technician associations (Work scope)
+  # Mudamos para 'responsibilities' (inglês), apontando para o model em português
+  has_many :responsibilities, class_name: 'Responsabilidade', dependent: :destroy
+  has_many :assigned_categories, through: :responsibilities, source: :ticket_type
 end
