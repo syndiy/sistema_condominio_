@@ -6,7 +6,7 @@ before_action :set_user, only: [:edit, :update, :destroy, :show]
   @users = User.all
 
   if params[:query].present?
-    # Busca por nome, email ou cargo (o enum no banco é número, então buscamos por texto)
+    # Busca por nome, email ou cargo 
     @users = @users.where("name LIKE ? OR email LIKE ? OR CAST(role AS TEXT) LIKE ?", 
                           "%#{params[:query]}%", "%#{params[:query]}%", "%#{params[:query]}%")
   end
@@ -15,12 +15,12 @@ end
     @user = User.new
   end
 
-  # ESTE MÉTODO ESTAVA FALTANDO:
+  
   def create
     @user = User.new(user_params)
     
-    # Definimos a senha padrão para o primeiro acesso do morador
-    senha_padrao = "123456"
+    # senha padrão para o primeiro acesso do morador
+    senha_padrao = "senha123"
     @user.password = senha_padrao
     @user.password_confirmation = senha_padrao
 
@@ -67,7 +67,7 @@ end
   end
 
  def user_params
-  # Adicione o assigned_category_ids: [] na lista de permissões
+ 
   params.require(:user).permit(:name, :email, :password, :password_confirmation, :role, assigned_category_ids: [])
 end
 end

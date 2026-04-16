@@ -2,7 +2,6 @@
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
     <div>
       <h1 style="color: #13505B; font-weight: 800;">
-        <%# Admin e Colaborador veem 'Gerenciar', Morador vê 'Meus' %>
         <%= current_user.morador? ? "Meus Chamados" : "Gerenciar Chamados" %>
       </h1>
       
@@ -53,7 +52,7 @@
             <div style="display: flex; flex-direction: column;">
               <strong style="color: #13505B; font-size: 0.95rem; line-height: 1.2;"><%= ticket.title %></strong>
               
-              <%# --- ADICIONADO: CATEGORIA EM DESTAQUE --- %>
+            
               <% if ticket.ticket_type.present? %>  
                 <span style="color: #64748b;font-size: 0.75rem; font-weight: 500; text-transform: uppercase; margin-top: 2px;">
                    <%= ticket.ticket_type.title %>
@@ -90,7 +89,7 @@
           <td>
             <div style="display: inline-flex; justify-content: flex-end; gap: 8px; width: 100%; white-space: nowrap;">
               <%= link_to "Detalhes", ticket, class: "btn-action-pill btn-details-pill" %>
-              <%# Só mostra Mudar Status se não for morador %>
+          
               <% if !current_user.morador? %>
                 <%= link_to "Mudar Status", edit_ticket_path(ticket), class: "btn-action-pill btn-details-pill" %>
               <% end %>

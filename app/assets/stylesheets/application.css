@@ -1,4 +1,4 @@
-/* application.css */
+
 :root {
   /* Cores principais da paleta */
   --primary: #119DA4;       /* Dark Cyan (Destaques e Botão Principal) */
@@ -58,10 +58,10 @@ body {
   padding: 0 20px;
 }
 
-/* O "Trilho" de alinhamento perfeito para as páginas de Detalhes */
+
 .main-content-layout {
   display: grid;
-  grid-template-columns: 85px 1fr; /* Coluna fixa pro Voltar | Resto pro conteúdo */
+  grid-template-columns: 85px 1fr; 
   gap: 20px;
   align-items: start;
 }
@@ -69,7 +69,7 @@ body {
 .card-back {
   display: flex;
   justify-content: flex-start;
-  padding-top: 8px; /* Alinha a bolha com o centro da primeira linha do título */
+  padding-top: 8px; 
 }
 
 .content-wrapper {
@@ -120,11 +120,11 @@ body {
   box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   overflow: hidden;
 }
-/* Garante que a tabela use o espaço todo sem buracos */
+
 .data-table {
   width: 100% !important;
   border-collapse: collapse;
-  table-layout: fixed; /* Isso aqui é o segredo para as colunas obedecerem a largura */
+  table-layout: fixed; 
 }
 
 .col-sla-fixed {
@@ -148,31 +148,30 @@ body {
   font-size: 0.75rem; 
   text-transform: uppercase; 
   font-weight: 700;
-  text-align: left; /* Garante que o título comece na esquerda */
+  text-align: left; 
 }
-
 .data-table td { 
   padding: 15px; 
   border-bottom: 1px solid var(--border); 
   font-size: 0.95rem; 
-  text-align: left; /* Garante que o conteúdo comece na esquerda */
+  text-align: left; 
   vertical-align: middle;
 }
 
-/* --- NOVAS REGRAS DE ALINHAMENTO --- */
 
-/* Força a coluna de Cargo a ficar bem alinhada com o título */
+
+
 .col-cargo {
   text-align: left !important;
   width: 150px;
 }
 
-/* Força a coluna de Ações a ficar toda para a direita */
+
 .col-actions {
   width: 180px !important;
   text-align: center !important;
 }
-/* Alinha os botões Editar/Excluir com o título AÇÕES lá no topo */
+
 .action-buttons {
   display: flex;
   gap: 8px;
@@ -253,7 +252,7 @@ body {
   box-shadow: 0 0 0 4px rgba(91, 33, 182, 0.1);
 }
 
-/* Info Sections (Show) */
+
 .info-section {
   margin-bottom: 25px;
   padding-bottom: 15px;
@@ -277,26 +276,26 @@ body {
 
 .info-value { font-size: 1.1rem; font-weight: 600; }
 
-/* Status Badges */
+
 .status-badge { padding: 4px 10px; border-radius: 50px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
 .status-badge.morador { background: #dcfce7; color: #166534; }
 .status-badge.admin { background: #fee2e2; color: #991b1b; }
 .status-badge.colaborador { background: #fef3c7; color: #92400e; }
 
-/* Auxiliares */
+
 .header-section { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
 .text-center { text-align: center; }
 .btn-full { width: 100%; }
 .inline-form { display: inline; }
 
-/* Container das ações para alinhar direitinho */
+
 .action-buttons {
   display: flex;
   gap: 10px;
   justify-content: flex-end;
 }
 
-/* Base dos botões de ação */
+
 .btn-action {
   display: inline-flex;
   align-items: center;
@@ -310,7 +309,7 @@ body {
   border: 1px solid transparent;
 }
 
-/* Botão Editar: Azul Suave / Indigo */
+
 .btn-edit {
   background-color: #eef2ff;
   color: #4338ca;
@@ -332,7 +331,7 @@ body {
   transform: translateY(-1px);
 }
 
-/* Pequeno ajuste na badge de cargo para ficar mais elegante */
+
 .status-badge {
   letter-spacing: 0.02em;
   padding: 4px 12px;
@@ -342,12 +341,11 @@ body {
 
 
 
-/* Container para alinhar os botões lado a lado */
+
 .form-actions-row {
   display: flex;
-  justify-content: center; /* Centraliza a dupla no meio do card */
-  align-items: center;
-  gap: 15px; /* Espaço entre eles */
+  justify-content: center; 
+  gap: 15px; 
   margin-top: 30px;
   padding-top: 20px;
   border-top: 1px solid var(--border);
@@ -356,10 +354,10 @@ body {
 /* Ajuste no botão principal */
 .btn-md {
   min-width: 160px;
-  flex: 0 1 auto; /* Não deixa ele ocupar a tela toda */
+  flex: 0 1 auto; 
 }
 
-/* O novo botão Cancelar cinza e chique */
+
 .btn-cancel {
   display: inline-flex;
   align-items: center;
@@ -449,15 +447,15 @@ body {
 
 /* Quando selecionado (Checked) */
 .chip-checkbox input:checked + .chip-label {
-  background-color: #eef2ff; /* Um roxo/azul bem clarinho */
+  background-color: #eef2ff; 
   border-color: var(--primary);
   color: var(--primary);
 }
 
 .chip-checkbox input:checked + .chip-label .chip-icon {
   color: var(--primary);
-  transform: rotate(45deg); /* O + vira um x ou apenas gira para indicar seleção */
-  content: "✓"; /* Opcional: mudar o ícone via JS ou manter o giro */
+  transform: rotate(45deg); 
+  content: "✓"; 
 }
 
 /* Ajuste para ocupar a linha toda se for ímpar (opcional) */
@@ -1197,9 +1195,9 @@ body {
 
 /* O SVG do Usuário (Tamanho e Cor) */
 .resident-icon-svg {
-  width: 28px !important; /* Tamanho idêntico ao emoji de 1.2rem */
+  width: 28px !important; 
   height: 28px !important;
-  flex-shrink: 0; /* Garante que ele não amasse se o nome for grande */
+  flex-shrink: 0; 
 }
 
 /* Informações do texto */
@@ -1218,7 +1216,7 @@ body {
 .resident-email {
   font-size: 0.8rem;
   color: #64748b;
-  margin-top: -2px; /* Pequeno ajuste de alinhamento vertical */
+  margin-top: -2px; 
 }
 
 .action-buttons-row {
@@ -1235,12 +1233,12 @@ body {
 }
 
 .col-actions {
-    width: 220px !important; /* Aumentamos para caber os dois botões folgados */
+    width: 220px !important; 
     text-align: center !important;
 }
 
 .data-table th, .data-table td {
-    padding: 15px 20px !important; /* Respiro nas laterais */
+    padding: 15px 20px !important; 
 }
 
 .data-table th:not(.col-actions),
@@ -1252,8 +1250,8 @@ body {
 .btn-action-pill {
     width: 90px !important;
     height: 32px !important;
-    padding: 0 !important; /* Remove paddings que variam entre link e botão */
-    margin: 0 !important;  /* Remove margens fantasmas */
+    padding: 0 !important; 
+    margin: 0 !important;  
     border-radius: 50px !important;
     font-size: 0.75rem !important;
     font-weight: 700 !important;
@@ -1269,14 +1267,15 @@ body {
 form.button_to {
     margin: 0 !important;
     padding: 0 !important;
-    display: contents; /* Faz o form não ocupar espaço próprio */
+    display: contents; 
+
 }
 
 .btn-action-pill span, .btn-action-pill {
     white-space: nowrap;
 }
 
-/* Botão Detalhes (Cinza/Teal Sutil) */
+
 .btn-details-pill {
   background-color: #f1f5f9 !important;
   color: #119DA4 !important;
@@ -1299,14 +1298,9 @@ form.button_to {
   filter: brightness(0.95);
 }
 
-/* application.css */
 
-/* ... (seu código existente) ... */
 
-/* --- PADRONIZAÇÃO DE BOTÕES NA TABELA (ESTILO PILL) --- */
 
-/* Container para alinhar os botões na célula da tabela */
-/* Ajuste das 'pastilhas' de ação */
 .action-buttons-row {
     display: flex;
     gap: 8px;
@@ -1315,37 +1309,34 @@ form.button_to {
     width: 100%;
 }
 
-/* Cor: Detalhes (Cinza/Teal Sutil) */
+
 .btn-details-pill {
-    background-color: #f1f5f9 !important; /* Fundo cinza gelo */
-    color: #119DA4 !important;          /* Texto Teal */
+    background-color: #f1f5f9 !important; 
     border: 1px solid #e2e8f0 !important;
 }
 
 .btn-details-pill:hover {
-    background-color: #eefafa !important; /* Fundo teal clarinho */
+    background-color: #eefafa !important; 
     border-color: #119DA4 !important;
 }
 
-/* Cor: Editar (Azul Sutil) */
+
 .btn-edit-pill {
-    background-color: #eef2ff !important; /* Fundo índigo clarinho */
-    color: #4338ca !important;          /* Texto índigo */
+    background-color: #eef2ff !important; 
 }
 
 .btn-edit-pill:hover {
-    filter: brightness(0.95); /* Escurece um tiquinho no hover */
-}
+    filter: brightness(0.95); }
 
 
-/* Força a tabela a ocupar o card todo e não esmagar as células */
+
 .data-table {
   width: 100% !important;
   border-collapse: collapse;
-  table-layout: auto; /* Deixa o conteúdo ditar o espaço necessário */
+  table-layout: auto; 
 }
 
-/* Dá um espaço extra na primeira coluna de ações para o botão não bater na borda */
+
 .data-table td:last-child {
   padding-left: 20px !important;
 }
@@ -1405,7 +1396,7 @@ form.button_to {
 
 .col-sla {
   width: 200px !important;
-  text-align: center !important; /* Deixa o "4 horas" centralizado no meio da tabela */
+  text-align: center !important;
 }
 
 /* Mantém a mola na primeira coluna */
@@ -1440,7 +1431,7 @@ form.button_to {
 
 /* Conteúdo da Categoria */
 .sla-main-info {
-  flex: 2; /* Ocupa mais espaço */
+  flex: 2; 
   display: flex;
   align-items: center;
   gap: 12px;
@@ -1448,7 +1439,7 @@ form.button_to {
 
 /* Conteúdo do Prazo */
 .sla-time-info {
-  flex: 1; /* Fica no meio */
+  flex: 1; 
   color: #64748b;
   font-weight: 600;
   display: flex;
@@ -1464,14 +1455,14 @@ form.button_to {
 
 /* Botão de ação principal do cabeçalho (Novo...) */
 .btn-header-new {
-    width: 180px !important; /* Largura fixa para todos */
+    width: 180px !important; 
     height: 45px !important;
     display: flex !important;
     align-items: center;
     justify-content: center;
     font-weight: 700 !important;
     font-size: 0.9rem !important;
-    border-radius: 8px !important; /* Arredondado suave igual ao login */
+    border-radius: 8px !important; 
     text-decoration: none !important;
     transition: all 0.2s ease-in-out !important;
 }
@@ -1486,7 +1477,8 @@ form.button_to {
   display: contents; 
 }
 
-/* Se quiser deixar o input vermelhinho quando errar */
+
 .field_with_errors input {
   border: 2px solid #e74c3c !important;
 }
+

@@ -54,13 +54,13 @@
     </div>
 
     <div class="actions-container" style="margin-top: 30px; display: flex; gap: 15px; justify-content: center;">
-  <%# Botão Voltar %>
+ 
   <%= link_to "Voltar", units_path, class: "btn-pro-size btn-back-style", style: "text-decoration: none; display: flex; align-items: center; justify-content: center; background: #f1f5f9; color: #475569;" %>
 
-  <%# Botão Editar %>
+  
   <%= link_to "Editar", edit_unit_path(@unit), class: "btn-pro-size btn-edit-style", style: "text-decoration: none; display: flex; align-items: center; justify-content: center; background: #119DA4; color: white;" %>
 
-  <%# Botão EXCLUIR (Novo) %>
+ 
   <%= button_to "Excluir Unidade", @unit, method: :delete, 
       form: { data: { confirm: "Tem certeza que deseja excluir a unidade #{@unit.number}? Esta ação não pode ser desfeita." } }, 
       class: "btn-pro-size btn-delete-style", 

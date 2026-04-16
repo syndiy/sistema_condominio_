@@ -22,7 +22,6 @@
 
   <div>
     <%= form.label :block_id, "Bloco Correspondente" %>
-    <%# Aqui mostramos o nome e o total de aptos para não ficar confuso %>
     <%= form.collection_select :block_id, Block.all, :id, 
         ->(b) { "#{b.identification} (#{b.floors_count * b.apartments_per_floor} aptos no total)" }, 
         { prompt: "Selecione o Bloco" } %>

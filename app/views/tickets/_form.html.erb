@@ -7,7 +7,7 @@
 
     <%= form_with(model: @ticket, local: true, html: { multipart: true }) do |form| %>
       
-      <%# 1. MENSAGENS DE ERRO (Interface em PT) %>
+     
       <% if @ticket.errors.any? %>
         <div style="background: #fee2e2; color: #b91c1c; padding: 15px; border-radius: 8px; margin-bottom: 25px; font-size: 0.9rem; border: 1px solid #fecaca;">
           <strong style="display: block; margin-bottom: 5px;"><%= pluralize(@ticket.errors.count, "erro") %> impediram a gravação:</strong>
@@ -19,7 +19,7 @@
         </div>
       <% end %>
 
-      <%# 2. SELEÇÃO DO DONO (SÓ ADMIN) %>
+      
       <% if current_user.admin? %>
         <div style="background: #f0f9ff; padding: 20px; border-radius: 12px; margin-bottom: 30px; border: 1px solid #bae6fd;">
           <label class="form-label-login" style="color: #0369a1; font-weight: 800; font-size: 0.7rem;">👤 DONO DO CHAMADO</label>
@@ -29,7 +29,7 @@
         </div>
       <% end %>
 
-      <%# 3. DADOS BÁSICOS %>
+      
       <div class="form-group-login">
         <%= form.label :title, "ASSUNTO", class: "form-label-login" %>
         <%= form.text_field :title, class: "form-input-login", required: true,
@@ -68,8 +68,7 @@
         </div>
       </div>
 
-      <%# FOTOS DO PROBLEMA (Código: attachments | Interface: PT) %>
-      <%# 3.5 ANEXAR FOTOS DO PROBLEMA - TRAVA DE SEGURANÇA %>
+     
 <% if current_user.morador? || current_user.admin? %>
   <div class="form-group-login" style="margin-bottom: 25px;">
     <%= form.label :attachments, "📷 ANEXAR FOTOS DO PROBLEMA (OPCIONAL)", class: "form-label-login" %>
@@ -80,7 +79,7 @@
   </div>
 <% end %>
 
-      <%# PAINEL TÉCNICO %>
+     
       <% if current_user.admin? || current_user.colaborador? %>
         <div style="background: #fffdf5; border: 2px solid #fcd34d; padding: 25px; border-radius: 15px; margin-top: 20px; margin-bottom: 30px;">
           <h3 style="font-size: 0.85rem; font-weight: 800; color: #92400e; margin-bottom: 20px; text-transform: uppercase;">🛠️ Painel de Gestão Técnica</h3>

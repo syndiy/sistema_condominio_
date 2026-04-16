@@ -25,9 +25,6 @@
           <%= f.collection_select :block_id, Block.all, :id, :identification, { prompt: "Selecione..." }, class: "form-input-login" %>
         </div>
       </div>
-
-      <%# Se você tiver campos extras como metragem ou proprietário, adicione aqui com a classe form-input-login %>
-
       <div class="actions-container">
         <%= f.submit "Salvar Unidade", class: "btn-pro-size btn-edit-pro" %>
         <%= link_to "Cancelar", units_path, class: "btn-pro-size btn-delete-pro" %>

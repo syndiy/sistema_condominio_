@@ -29,7 +29,7 @@
         <%= f.select :role, User.roles.keys.map { |r| [r.humanize, r] }, {}, id: "role-select", class: "form-input-login" %>
       </div>
 
-      <%# Painel de Responsabilidades (Lógica mantida) %>
+      <%# Painel de Responsabilidades %>
       <div id="responsabilidades-section" style="display: none; background: #f8fafc; padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #e2e8f0;">
         <h3 style="font-size: 0.85rem; font-weight: 800; color: #13505B; margin-bottom: 10px; text-transform: uppercase;">Responsabilidades</h3>
         <p style="font-size: 0.85rem; color: #64748b; margin-bottom: 15px;">Selecione as categorias que este colaborador atende:</p>

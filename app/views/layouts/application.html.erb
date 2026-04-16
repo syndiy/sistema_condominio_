@@ -5,17 +5,17 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%# ESTA LINHA É A MAIS IMPORTANTE: %>
+ 
   <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
 </head>
 
   <body>
-    <%# Renderiza a Navbar que vamos criar abaixo %>
+    
     <%= render 'layouts/navbar' %>
 
     <main class="main-content">
       <div class="container">
-        <%# Alertas de Sucesso/Erro %>
+        
         <% if notice %> <p class="alert alert-success"><%= notice %></p> <% end %>
         <% if alert %> <p class="alert alert-danger"><%= alert %></p> <% end %>
 

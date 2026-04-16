@@ -16,9 +16,6 @@ class Ticket < ApplicationRecord
   before_save :set_finished_at, if: :status_id_changed?
 
   # Método para calcular o Prazo Limite (SLA)
-  # Isso mostra que você entendeu o requisito de "horas de prazo" do PDF
- # Método para calcular o Prazo Limite (SLA)
-# Antes estava duration_hours, mude para sla_hours
 def prazo_limite
   created_at + ticket_type.sla_hours.hours
 end
@@ -33,7 +30,6 @@ end
 
   def set_default_status
     # Busca o status "Aberto". 
-    # Dica: se não existir no banco, ele não quebra o código
     self.status ||= Status.find_by(name: "Aberto")
   end
 

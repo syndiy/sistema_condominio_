@@ -14,13 +14,14 @@
             <li><%= link_to "Blocos", blocks_path, class: "nav-item #{'active' if current_page?(blocks_path)}" %></li>
             <li><%= link_to "Unidades", units_path, class: "nav-item #{'active' if current_page?(units_path)}" %></li>
             
-            <%# AQUI ESTÁ O VÍNCULO QUE FALTAVA %>
+           
             <li><%= link_to "Vincular Moradores", user_units_path, class: "nav-item #{'active' if current_page?(user_units_path)}" %></li>
             
             <li><%= link_to "Tipos/SLA", ticket_types_path, class: "nav-item" %></li>
           <% end %>
-
-          <%# LINK QUE TODOS VEEM %>
+            <li><%= link_to "Status", statuses_path, class: "nav-item #{'active' if current_page?(statuses_path)}" %></li>
+    
+          
           <li>
             <%= link_to current_user.morador? ? "Meus Chamados" : "Gerenciar Chamados", 
                 tickets_path, 

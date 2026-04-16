@@ -1,14 +1,13 @@
 <div class="container-crud">
   <div class="card-standard">
     
-    <%# Header centralizado com o estilo que a gente definiu %>
     <div class="login-header" style="text-align: center; margin-bottom: 40px;">
-      <span class="brand-icon">🏢</span>
+     
       <h1 class="brand-name">Detalhes do <span class="brand-bold">Bloco</span></h1>
       <p class="login-subtitle">Informações técnicas e estrutura da torre.</p>
     </div>
 
-    <%# Grid de Informações limpo e sem bordas sobrando %>
+    <%# Grid de Informações%>
     <div class="info-section-pro" style="margin-bottom: 40px;">
       <h3 style="font-size: 0.85rem; font-weight: 800; color: #13505B; margin-bottom: 25px; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px;">
         Informações Técnicas
@@ -30,7 +29,7 @@
       </div>
     </div>
 
-    <%# Botões Gêmeos e Alinhados (Usando as classes que a gente consertou) %>
+    <%# Botões Gêmeos e Alinhados %>
     <div class="actions-container">
       <%= link_to "Editar", edit_block_path(@block), class: "btn-pro-size btn-edit-pro" %>
       

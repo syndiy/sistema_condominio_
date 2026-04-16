@@ -3,25 +3,25 @@ class UserUnitsController < ApplicationController
   
   before_action :set_user_unit, only: %i[ show edit update destroy ]
 
-  # GET /user_units or /user_units.json
+  
   def index
     @user_units = UserUnit.all
   end
 
-  # GET /user_units/1 or /user_units/1.json
+  
   def show
   end
 
-  # GET /user_units/new
+  
   def new
     @user_unit = UserUnit.new
   end
 
-  # GET /user_units/1/edit
+  
   def edit
   end
 
-  # POST /user_units or /user_units.json
+  
   def create
     @user_unit = UserUnit.new(user_unit_params)
 
@@ -36,7 +36,7 @@ class UserUnitsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /user_units/1 or /user_units/1.json
+  
   def update
     respond_to do |format|
       if @user_unit.update(user_unit_params)
@@ -49,7 +49,7 @@ class UserUnitsController < ApplicationController
     end
   end
 
-  # DELETE /user_units/1 or /user_units/1.json
+ 
   def destroy
     @user_unit.destroy!
 
@@ -60,14 +60,14 @@ class UserUnitsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
+   
     def set_user_unit
       @user_unit = UserUnit.find(params.expect(:id))
     end
 
-    # Only allow a list of trusted parameters through.
+   
    def user_unit_params
-  # Damos permissão para o ID do usuário e o ID da unidade
+ 
   params.require(:user_unit).permit(:user_id, :unit_id)
   end
 end

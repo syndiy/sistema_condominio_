@@ -2,7 +2,7 @@
 <div class="container-crud" style="width: 90%; max-width: 850px; margin: 40px auto; min-height: auto;">
   <div class="card-standard" style="padding: 40px; background: white; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #f1f5f9;">
     
-    <%# HEADER %>
+   
     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 35px;">
       <div>
         <h1 style="color: #13505B; font-weight: 800; font-size: 1.8rem; margin: 0;">Vínculos de Moradores</h1>
@@ -12,7 +12,7 @@
           style: "background: #119DA4; color: white; padding: 12px 20px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.85rem;" %>
     </div>
 
-    <%# LISTA (Agora com gap menor e sem esticar) %>
+    <%# LISTA %>
     <div style="display: flex; flex-direction: column; gap: 12px;">
       <% @user_units.each do |user_unit| %>
         <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
@@ -28,7 +28,7 @@
             </div>
           </div>
 
-          <%# UNIDADE (Destaque discreto) %>
+          <%# UNIDADE %>
           <div style="flex: 1; text-align: center;">
             <div style="display: inline-block; background: #eefafa; padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(17, 157, 164, 0.1);">
               <span style="color: #119DA4; font-weight: 800; font-size: 0.9rem;">
@@ -38,14 +38,14 @@
             </div>
           </div>
 
-          <%# AÇÕES %>
+         
           <div style="display: flex; gap: 8px; flex: 1; justify-content: flex-end;">
             <%= link_to "Editar", edit_user_unit_path(user_unit), 
-                style: "padding: 6px 12px; background: #f1f5f9; color: #475569; border-radius: 6px; text-decoration: none; font-weight: 700; font-size: 0.75rem; border: 1px solid #e2e8f0;" %>
+                class:"btn-action-pill btn-details-pill" %>
             
             <%= button_to "Remover", user_unit, method: :delete, 
                 data: { confirm: "Deseja remover este vínculo?" }, 
-                style: "padding: 6px 12px; background: #fee2e2; color: #ef4444; border: none; border-radius: 6px; font-weight: 700; font-size: 0.75rem; cursor: pointer;" %>
+                class: "btn-action-pill btn-details-pill" %>
           </div>
         </div>
       <% end %>

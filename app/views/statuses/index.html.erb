@@ -1,29 +1,46 @@
-<div class="page-shell">
-  <div class="card-base" style="max-width: 600px; margin: 0 auto;">
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
-      <h1 style="margin: 0; font-size: 1.5rem;">Status dos Chamados</h1>
-      <%= link_to "+ Novo Status", new_status_path, class: "btn btn-primary" %>
-    </div>
+<div class="container-crud">
+  <div class="header-section" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+  <div>
+    <h1 style="color: #13505B; font-size: 2rem; font-weight: 800; margin: 0;">Configurações de <span style="color: #119DA4;">Status</span></h1>
+    <p style="color: #64748b; margin-top: 5px;">Gerencie as etapas do fluxo de resolução por categoria.</p>
+  </div>
+  <%= link_to "+ Novo Status", new_status_path, class: "btn-pro-size btn-edit-pro", style: "width: 220px !important;" %>
+</div>
 
-    <table class="table-chique">
+  <div class="card-table">
+    <table class="data-table">
       <thead>
         <tr>
-          <th>NOME DO STATUS</th>
-          <th style="text-align: right;">AÇÕES</th>
+          <th style="width: 70%;">STATUS / NOME</th>
+          <th class="col-actions">AÇÕES</th>
         </tr>
       </thead>
       <tbody>
         <% @statuses.each do |status| %>
           <tr>
-            <td style="font-weight: 700; color: #1e293b;">
-              <%= status.name.upcase %>
+            <td>
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <div style="width: 10px; height: 10px; background-color: #119DA4; border-radius: 50%;"></div>
+                <span style="font-weight: 700; color: #1e293b;"><%= status.name %></span>
+              </div>
             </td>
-            <td style="text-align: right;">
-              <%= button_to "Excluir", status, method: :delete, class: "btn-danger-text", data: { turbo_confirm: "Remover este status?" } %>
+            <td class="col-actions">
+              <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                <%= link_to "Ver", status, class: "btn-action-view", 
+                    class: "btn-action-pill btn-details-pill" %>
+                
+                <%= link_to "Editar", edit_status_path(status), class: "btn-action-edit", 
+                    class: "btn-action-pill btn-details-pill" %>
+                
+                <%= button_to "Excluir", status, method: :delete, data: { confirm: "Tem certeza?" },
+                    class: "btn-action-pill btn-details-pill" %>
+              </div>
             </td>
           </tr>
         <% end %>
       </tbody>
     </table>
   </div>
+
+  
 </div>

@@ -3,8 +3,6 @@ class Unit < ApplicationRecord
   has_many :user_units
   has_many :users, through: :user_units
   has_many :tickets
-
-  # A trava que seu Controller está esperando:
   before_destroy :check_for_dependencies
 
   private

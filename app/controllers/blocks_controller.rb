@@ -2,7 +2,6 @@ class BlocksController < ApplicationController
  
   before_action :authorize_admin!
   before_action :authenticate_user!
-  # Nova trava: impede qualquer ação de quem não for Admin
   before_action :authorize_admin!
   before_action :set_block, only: %i[ show edit update destroy ]
 
@@ -24,7 +23,7 @@ def create
   @block = Block.new(block_params)
 
   if @block.save
-    # Usando parênteses para garantir que o Rails entenda o Hash do notice
+  
     redirect_to(blocks_path, notice: "Bloco e unidades gerados com sucesso conforme o padrão!")
   else
     render(:new, status: :unprocessable_entity)
@@ -43,12 +42,12 @@ end
     end
   end
 
- # app/controllers/blocks_controller.rb
+
 
 def destroy
   @block = Block.find(params[:id])
   
-  # Contamos quantos moradores e chamados existem através das unidades do bloco
+  # Conta quantos moradores e chamados existem através das unidades do bloco
   units_ids = @block.units.pluck(:id)
   moradores_count = UserUnit.where(unit_id: units_ids).count
   chamados_count = Ticket.where(unit_id: units_ids).count
@@ -65,11 +64,10 @@ def destroy
 end
   private
 
-  # Novo método de autorização exigido pelo PDF para gestão de estrutura
+  
 def authorize_admin!
-  # Se não for admin, em vez de redirecionar para o mesmo lugar (gerando o loop),
-  # redirecione para a área de chamados, que é onde o técnico trabalha!
-  unless current_user&.admin? # ou o método que você usa para checar admin
+  
+  unless current_user&.admin? 
     redirect_to tickets_path
   end
 end
