@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_16_042649) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_16_214437) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -108,15 +108,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_16_042649) do
     t.index ["block_id"], name: "index_units_on_block_id"
   end
 
-  create_table "user_ticket_types", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.bigint "ticket_type_id", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.index ["ticket_type_id"], name: "index_user_ticket_types_on_ticket_type_id"
-    t.index ["user_id"], name: "index_user_ticket_types_on_user_id"
-  end
-
   create_table "user_units", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "unit_id", null: false
@@ -151,8 +142,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_16_042649) do
   add_foreign_key "tickets", "units"
   add_foreign_key "tickets", "users"
   add_foreign_key "units", "blocks"
-  add_foreign_key "user_ticket_types", "ticket_types"
-  add_foreign_key "user_ticket_types", "users"
   add_foreign_key "user_units", "units"
   add_foreign_key "user_units", "users"
 end
