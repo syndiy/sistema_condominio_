@@ -1,16 +1,17 @@
-<div class="page-shell">
-  <div class="card-base" style="max-width: 400px; margin: 0 auto;">
-    <h1 style="margin-bottom: 20px;">Novo Status</h1>
+<div class="container-crud" style="max-width: 600px; margin: 40px auto;">
+  <div class="card-standard" style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+    <h1 style="color: #13505B; font-weight: 800; margin-bottom: 10px;">Novo <span style="color: #119DA4;">Status</span></h1>
+    <p style="color: #64748b; margin-bottom: 30px;">Defina uma nova etapa para o fluxo de chamados.</p>
 
-    <%= form_with(model: @status) do |f| %>
-      <div class="form-group" style="margin-bottom: 20px;">
-        <%= f.label :name, "Nome do Status (Ex: Em Análise)", class: "form-label" %>
-        <%= f.text_field :name, class: "form-input", placeholder: "Digite o status..." %>
+    <%= form_with(model: @status) do |form| %>
+      <div style="margin-bottom: 25px;">
+        <%= form.label :name, "Nome do Status (ex: Em Análise)", style: "display: block; color: #1e293b; font-weight: 700; margin-bottom: 8px;" %>
+        <%= form.text_field :name, placeholder: "Digite o nome do status...", style: "width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc;" %>
       </div>
 
-      <div style="display: flex; gap: 15px; align-items: center;">
-        <%= f.submit "Salvar Status", class: "btn btn-primary", style: "flex: 1;" %>
-        <%= link_to "Cancelar", statuses_path, class: "link-muted" %>
+      <div style="display: flex; gap: 15px; align-items: center; margin-top: 30px;">
+        <%= form.submit "Salvar Status", class: "btn-pro-size", style: "background: #119DA4; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer;" %>
+        <%= link_to "Cancelar", statuses_path, style: "color: #64748b; text-decoration: none; font-weight: 600;" %>
       </div>
     <% end %>
   </div>

@@ -1,12 +1,18 @@
-<% content_for :title, "Editing status" %>
+<div class="container-crud" style="max-width: 600px; margin: 40px auto;">
+  <div class="card-standard" style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+    <h1 style="color: #13505B; font-weight: 800; margin-bottom: 10px;">Editar <span style="color: #119DA4;">Status</span></h1>
+    <p style="color: #64748b; margin-bottom: 30px;">Altere o nome da etapa do fluxo.</p>
 
-<h1>Editing status</h1>
+    <%= form_with(model: @status) do |form| %>
+      <div style="margin-bottom: 25px;">
+        <%= form.label :name, "Nome do Status", style: "display: block; color: #1e293b; font-weight: 700; margin-bottom: 8px;" %>
+        <%= form.text_field :name, style: "width: 100%; padding: 12px 15px; border-radius: 10px; border: 1px solid #e2e8f0; background: #f8fafc;" %>
+      </div>
 
-<%= render "form", status: @status %>
-
-<br>
-
-<div>
-  <%= link_to "Show this status", @status %> |
-  <%= link_to "Back to statuses", statuses_path %>
+      <div style="display: flex; gap: 15px; align-items: center; margin-top: 30px;">
+        <%= form.submit "Atualizar Status", class: "btn-pro-size", style: "background: #119DA4; color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 700; cursor: pointer;" %>
+        <%= link_to "Voltar", statuses_path, style: "color: #64748b; text-decoration: none; font-weight: 600;" %>
+      </div>
+    <% end %>
+  </div>
 </div>

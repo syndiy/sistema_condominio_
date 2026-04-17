@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
-  resources :user_units
+  resources :user_units do
+    collection do
+      get :get_units_by_user
+    end
+  end
   resources :units
   # 1. Autenticação (Devise)
   devise_for :users
@@ -7,7 +11,7 @@ Rails.application.routes.draw do
   # 2. Página Inicial (Cai direto nos Blocos ao logar)
 # No config/routes.rb
 
-# Criamos um redirecionamento dinâmico no root
+# redirecionamento dinâmico no root
 root to: redirect { |params, request|
   user = request.env['warden'].user
   if user&.admin?

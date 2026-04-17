@@ -1,10 +1,29 @@
-<p style="color: green"><%= notice %></p>
+<div class="container-crud" style="max-width: 600px; margin: 40px auto;">
+  <div class="card-standard" style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;">
+    
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+     
+      <h1 style="color: #13505B; font-weight: 800; margin-bottom: 10px;">Detalhes do <span style="color: #119DA4;">Status</span></h1>
+    </div>
 
-<%= render @status %>
+    <div style="background: #f8fafc; padding: 25px; border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 30px;">
+      <p style="margin: 0; color: #64748b; font-size: 0.85rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em;">Nome da Etapa</p>
+      <p style="margin: 5px 0 0 0; color: #1e293b; font-size: 1.5rem; font-weight: 800; text-transform: uppercase;">
+        <%= @status.name %>
+      </p>
+    </div>
 
-<div>
-  <%= link_to "Edit this status", edit_status_path(@status) %> |
-  <%= link_to "Back to statuses", statuses_path %>
+    <div style="display: flex; gap: 12px; align-items: center; padding-top: 20px; border-top: 1px solid #f1f5f9;">
+      <%= link_to "Editar este status", edit_status_path(@status), class: "btn-pro-size", 
+          style: "background: #119DA4; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.9rem;" %>
+      
+      <%= link_to "Voltar para a lista", statuses_path, 
+          style: "color: #64748b; text-decoration: none; font-weight: 600; font-size: 0.9rem; margin-left: 10px;" %>
 
-  <%= button_to "Destroy this status", @status, method: :delete %>
+      <div style="margin-left: auto;">
+        <%= button_to "Excluir", @status, method: :delete, data: { confirm: "Tem certeza que deseja excluir este status?" }, 
+            style: "background: #fff1f2; color: #e11d48; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 0.9rem;" %>
+      </div>
+    </div>
+  </div>
 </div>

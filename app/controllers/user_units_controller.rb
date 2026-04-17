@@ -59,6 +59,18 @@ class UserUnitsController < ApplicationController
     end
   end
 
+
+  def get_units_by_user
+    @units = Unit.joins(:user_units).where(user_units: { user_id: params[:user_id] })
+    render json: @units.map { |u| 
+      { 
+        id: u.id, 
+        number: u.number, 
+        block_identification: u.block.identification 
+      } 
+    }
+  end
+
   private
    
     def set_user_unit
@@ -70,4 +82,7 @@ class UserUnitsController < ApplicationController
  
   params.require(:user_unit).permit(:user_id, :unit_id)
   end
+
+
+  
 end

@@ -31,11 +31,17 @@ def show
                   .with_attached_resolution_media
                   .find(params[:id])
 end
+
   def new
     @ticket = Ticket.new
+    # Filtra unidades: se for admin vê tudo, se for morador só as dele
+    @unidades_disponiveis = current_user.admin? ? Unit.all : current_user.units
   end
 
   def edit
+    @ticket = Ticket.find(params[:id])
+    # Filtra unidades: se for admin vê tudo, se for morador só as dele
+    @unidades_disponiveis = current_user.admin? ? Unit.all : current_user.units
   end
 
   def create

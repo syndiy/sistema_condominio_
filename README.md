@@ -90,7 +90,7 @@ A modelagem foi construída com foco em:
 * Relacionamentos N:N
 * Escalabilidade
 
-![Diagrama do Banco](./diagrama.png)
+![Diagrama do Banco](./DIAGRAMA.png)
 
 ### 🧾 Legenda
 
